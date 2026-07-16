@@ -239,17 +239,30 @@ export default function App() {
   // ---------- 畫面 ----------
   if (!supa) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Sans TC',sans-serif", color: "#8a3b4d", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
-        還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
-      </div>
+      <>
+        <style>{GLOBAL_STYLES}</style>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Sans TC',sans-serif", color: "#8a3b4d", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
+          還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
+        </div>
+      </>
     );
   }
   if (session === undefined) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>存摺開啟中…</div>;
+    return (
+      <>
+        <style>{GLOBAL_STYLES}</style>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>存摺開啟中…</div>
+      </>
+    );
   }
-  if (session === null) return <AuthScreen />;
+  if (session === null) return (<><style>{GLOBAL_STYLES}</style><AuthScreen /></>);
   if (!ready) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>資料同步中…</div>;
+    return (
+      <>
+        <style>{GLOBAL_STYLES}</style>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>資料同步中…</div>
+      </>
+    );
   }
 
   const counts = { spending: spending.length, quotes: quotes.length, budget: budget.length, notes: notes.length, vouchers: vouchers.length };

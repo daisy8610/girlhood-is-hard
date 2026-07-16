@@ -28,7 +28,7 @@ export function AuthScreen() {
     }
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "11px 12px", borderRadius: 8, border: "1px solid #EADFD4", fontSize: 15 };
+  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "11px 12px", borderRadius: 8, border: "1px solid #EADFD4", fontSize: 15, boxSizing: "border-box" };
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3ECE5", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Noto Sans TC', sans-serif", padding: 20 }}>

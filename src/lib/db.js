@@ -14,19 +14,18 @@ const providerName = (id) => {
   const p = PROVIDERS.find((p) => p.id === id);
   return p ? p.name : "";
 };
-// 同名但 kind 不同（例如詢價的診所跟其他消費地點）視為不同店家，避免誤判成同一家
-// providers.kind 資料庫有 check constraint，只能是 clinic/salon/store/other 其中之一
-const providerId = (name, kind) => {
+// 純用名稱比對去重（跟原本一樣）；kind 只在「新建店家」時才需要，
+// 且 providers.kind 資料庫有 check constraint，只能是 clinic/salon/store/other 其中之一
+const providerId = (name) => {
   const n = String(name || "").trim();
-  const k = kind || "other";
-  const p = PROVIDERS.find((p) => p.name === n && (p.kind || "other") === k);
+  const p = PROVIDERS.find((p) => p.name === n);
   return p ? p.id : null;
 };
 
 async function ensureProvider(name, kind) {
   const n = String(name || "").trim();
   if (!n) return null;
-  const existing = providerId(n, kind);
+  const existing = providerId(n);
   if (existing) return existing;
   const { data, error } = await supa
     .from("providers")
@@ -213,7 +212,7 @@ export async function bulkInsert(kind, appObjs) {
   const providerKind = kind === "quotes" ? "clinic" : "other";
   if (usesProvider(kind)) {
     const names = Array.from(new Set(appObjs.map((o) => String(o[m.placeKey] || "").trim()).filter(Boolean)));
-    const missing = names.filter((n) => !providerId(n, providerKind));
+    const missing = names.filter((n) => !providerId(n));
     if (missing.length) {
       const { data, error } = await supa
         .from("providers")
@@ -223,7 +222,7 @@ export async function bulkInsert(kind, appObjs) {
       PROVIDERS = [...PROVIDERS, ...data];
     }
   }
-  const rows = appObjs.map((o) => m.toDb(o, usesProvider(kind) ? providerId(o[m.placeKey], providerKind) : null));
+  const rows = appObjs.map((o) => m.toDb(o, usesProvider(kind) ? providerId(o[m.placeKey]) : null));
   for (let i = 0; i < rows.length; i += 100) {
     const { error } = await supa.from(m.table).insert(rows.slice(i, i + 100));
     if (error) throw error;

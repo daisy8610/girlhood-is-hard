@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-07-16（第十四次）
+- 撤回 providers 去重加 kind 比對的改動：既有店家的 kind 值可能跟新建預設值不一致，比對加 kind 反而可能把既有店家誤判成找不到、多建一筆重複的。恢復成純名稱比對（跟原本一樣），只保留 kind 值要符合資料庫限制（clinic/salon/store/other）這件事
+
 ## 2026-07-16（第十三次）
 - 修正 providers_kind_check 檢查限制失敗：kind 只能是 clinic/salon/store/other，改成詢價用 clinic、其他消費地點用 other（空字串跟中文「診所」都不符合限制）
 

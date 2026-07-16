@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-07-16（第十三次）
+- 修正 providers_kind_check 檢查限制失敗：kind 只能是 clinic/salon/store/other，改成詢價用 clinic、其他消費地點用 other（空字串跟中文「診所」都不符合限制）
+
 ## 2026-07-16（第十二次）
 - 修正新增消費/預算/儲值紀錄時「null value in column kind」失敗：providers.kind 是 NOT NULL，非詢價的地點改塞空字串而不是 null
 

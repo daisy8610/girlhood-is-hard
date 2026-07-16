@@ -14,12 +14,12 @@ const providerName = (id) => {
   const p = PROVIDERS.find((p) => p.id === id);
   return p ? p.name : "";
 };
-// 同名但 kind 不同（例如詢價的「診所」跟其他消費地點）視為不同店家，避免誤判成同一家
-// providers.kind 在資料庫是 NOT NULL，「沒有分類」一律用空字串代表，不能塞 null
+// 同名但 kind 不同（例如詢價的診所跟其他消費地點）視為不同店家，避免誤判成同一家
+// providers.kind 資料庫有 check constraint，只能是 clinic/salon/store/other 其中之一
 const providerId = (name, kind) => {
   const n = String(name || "").trim();
-  const k = kind || "";
-  const p = PROVIDERS.find((p) => p.name === n && (p.kind || "") === k);
+  const k = kind || "other";
+  const p = PROVIDERS.find((p) => p.name === n && (p.kind || "other") === k);
   return p ? p.id : null;
 };
 
@@ -30,7 +30,7 @@ async function ensureProvider(name, kind) {
   if (existing) return existing;
   const { data, error } = await supa
     .from("providers")
-    .insert({ name: n, kind: kind || "" })
+    .insert({ name: n, kind: kind || "other" })
     .select("id, name, kind")
     .single();
   if (error) throw error;
@@ -188,7 +188,7 @@ export async function fetchAll() {
 
 export async function insertOne(kind, appObj) {
   const m = MAP[kind];
-  const pid = usesProvider(kind) ? await ensureProvider(appObj[m.placeKey], kind === "quotes" ? "診所" : null) : null;
+  const pid = usesProvider(kind) ? await ensureProvider(appObj[m.placeKey], kind === "quotes" ? "clinic" : "other") : null;
   const { data, error } = await supa.from(m.table).insert(m.toDb(appObj, pid)).select("*").single();
   if (error) throw error;
   return m.toApp(data);
@@ -196,7 +196,7 @@ export async function insertOne(kind, appObj) {
 
 export async function updateOne(kind, id, appObj) {
   const m = MAP[kind];
-  const pid = usesProvider(kind) ? await ensureProvider(appObj[m.placeKey], kind === "quotes" ? "診所" : null) : null;
+  const pid = usesProvider(kind) ? await ensureProvider(appObj[m.placeKey], kind === "quotes" ? "clinic" : "other") : null;
   const { error } = await supa.from(m.table).update(m.toDb(appObj, pid)).eq("id", id);
   if (error) throw error;
 }
@@ -210,7 +210,7 @@ export async function deleteOne(kind, id) {
 export async function bulkInsert(kind, appObjs) {
   if (!appObjs.length) return;
   const m = MAP[kind];
-  const providerKind = kind === "quotes" ? "診所" : "";
+  const providerKind = kind === "quotes" ? "clinic" : "other";
   if (usesProvider(kind)) {
     const names = Array.from(new Set(appObjs.map((o) => String(o[m.placeKey] || "").trim()).filter(Boolean)));
     const missing = names.filter((n) => !providerId(n, providerKind));

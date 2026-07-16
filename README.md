@@ -21,9 +21,43 @@
 
 ---
 
+## 專案結構
+
+```
+├── index.html          網頁入口
+├── app.js              打包後的執行檔（GitHub Pages 實際載入這個）
+├── config.js            Supabase 連線設定（url + anon key）
+├── manifest.json        PWA 設定，讓手機能「加到主畫面」
+├── icon-*.png            App 圖示
+├── package.json
+└── src/                  原始碼
+    ├── main.jsx          進入點
+    ├── App.jsx           主要畫面邏輯、導覽列、狀態管理
+    ├── lib/
+    │   ├── supabaseClient.js   Supabase client 初始化
+    │   ├── db.js               資料層：App 欄位 <-> 資料庫 schema 轉換、CRUD
+    │   ├── format.js           格式化、下載、CSV 工具
+    │   ├── backup.js           JSON 備份格式驗證
+    │   └── markdown.jsx        筆記內文的輕量 markdown 渲染器
+    └── components/
+        ├── ui.jsx              共用小元件（Tag、表單、按鈕…）
+        ├── AuthScreen.jsx      登入/註冊
+        ├── Overview.jsx        總覽頁
+        ├── TrendChart.jsx      趨勢圖表
+        ├── VouchersPanel.jsx   儲值金／堂數面板
+        ├── SpendingTab.jsx     消費紀錄
+        ├── BudgetTab.jsx       預算計畫
+        ├── QuotesTab.jsx       詢價比較
+        ├── NotesTab.jsx        筆記區
+        ├── MoreMenu.jsx        「更多」選單
+        └── SettingsPage.jsx    設定頁
+```
+
+---
+
 ## 技術架構
 
-- **前端**：React（打包成單一 `app.js`，用 esbuild 建置），純手機優先的介面設計
+- **前端**：React 18，esbuild 打包成單一 `app.js`
 - **後端／資料庫**：[Supabase](https://supabase.com)（PostgreSQL + Auth）
 - **部署**：GitHub Pages（純靜態網站，這個 repo 本身）
 
@@ -36,22 +70,21 @@
 ## 隱私
 
 這個 repo 是 Public，但**不含任何個人資料**：
-- 網頁程式碼（`app.js`）只是純粹的介面邏輯，不夾帶任何消費紀錄、筆記內容
+- 原始碼與打包後的 `app.js` 只是純粹的介面邏輯，不夾帶任何消費紀錄、筆記內容
 - 所有實際資料只存在 Supabase 後台，受帳號登入與 Row Level Security 保護
-- `config.js` 裡的 `anon key` 設計上就是給前端公開使用的值，搭配 RLS 沒有安全疑慮
+- `config.js` 裡的 `anonKey` 設計上就是給前端公開使用的值，搭配 RLS 沒有安全疑慮
 
 ---
 
 ## 本機開發／更新
 
-原始碼在 `src/app.jsx`（如果有上傳到這個 repo 的話）。修改後重新打包：
-
 ```bash
-npx esbuild src/app.jsx --bundle --minify --loader:.jsx=jsx \
-  --define:process.env.NODE_ENV='"production"' --outfile=app.js
+npm install       # 安裝依賴
+npm run build     # 打包成 app.js
 ```
 
-把打包好的 `app.js` 覆蓋上傳到這個 repo 即可，網址不會變、GitHub Pages 會自動重新部署。
+改完程式碼、`npm run build` 之後，把新的 `app.js` 連同改過的 `src/` 一起
+commit、push 上去即可，GitHub Pages 會自動重新部署，網址不會變。
 
 ---
 

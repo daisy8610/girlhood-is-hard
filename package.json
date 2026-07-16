@@ -1,0 +1,18 @@
+{
+  "name": "girlhood-is-hard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "當女生好難 · 美容存摺 — 個人美容/醫美消費與預算追蹤 App",
+  "scripts": {
+    "build": "esbuild src/main.jsx --bundle --minify --loader:.jsx=jsx --define:process.env.NODE_ENV='\"production\"' --outfile=app.js",
+    "dev": "esbuild src/main.jsx --bundle --loader:.jsx=jsx --outfile=app.js --servedir=. --watch"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  }
+}

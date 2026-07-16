@@ -41,9 +41,21 @@ export function VouchersPanel({ data, h }) {
                 <div style={{ fontSize: 13, color: "#6b5f54" }}>{r.name}</div>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
-              <div className="mono" style={{ fontSize: 21, fontWeight: 600, marginTop: 4, color: "#8a3b4d" }}>
-                {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
-                {r.unit !== "元" && r.value != null && <span style={{ fontSize: 13, marginLeft: 3, color: "#6b5f54" }}>{r.unit}</span>}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                <div className="mono" style={{ fontSize: 21, fontWeight: 600, marginTop: 4, color: "#8a3b4d" }}>
+                  {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
+                  {r.unit !== "元" && r.value != null && <span style={{ fontSize: 13, marginLeft: 3, color: "#6b5f54" }}>{r.unit}</span>}
+                </div>
+                {r.value != null && r.value > 0 && (
+                  <button
+                    className="iconbtn"
+                    title="扣一次"
+                    onClick={() => h.update(r.id, { value: r.value - 1, updated: new Date().toISOString().slice(0, 10) })}
+                    style={{ border: "1px solid #EADFD4", borderRadius: 6, padding: "2px 8px", fontSize: 12 }}
+                  >
+                    − 用一次
+                  </button>
+                )}
               </div>
               <div style={{ fontSize: 11, color: "#9a8d80", marginTop: 4 }}>{r.updated || "—"}{r.note ? ` · ${r.note}` : ""}</div>
             </div>

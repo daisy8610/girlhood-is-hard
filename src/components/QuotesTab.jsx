@@ -12,7 +12,7 @@ const QUOTE_FIELDS = [
   { key: "note", label: "備註", type: "text" },
 ];
 
-function QuoteRow({ r, isLowest, editingId, setEditingId, h }) {
+function QuoteRow({ r, isLowest, editingId, setEditingId, h, onConvert }) {
   if (editingId === r.id) {
     return (
       <RecordForm fields={QUOTE_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
@@ -38,13 +38,14 @@ function QuoteRow({ r, isLowest, editingId, setEditingId, h }) {
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
         <span className="mono" style={{ fontSize: 13.5, whiteSpace: "nowrap" }}>{fmt(r.price)}</span>
+        <button className="iconbtn" title="轉為消費紀錄" onClick={() => onConvert(r)}>➜🧾</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
       </div>
     </div>
   );
 }
 
-export function QuotesTab({ data, h }) {
+export function QuotesTab({ data, h, onConvert }) {
   const [view, setView] = useState("group");
   const [search, setSearch] = useState("");
   const [adding, setAdding] = useState(false);
@@ -101,7 +102,7 @@ export function QuotesTab({ data, h }) {
                   </div>
                   {list.map((r, idx) => (
                     <QuoteRow key={r.id} r={r} isLowest={idx === 0 && list.length > 1 && r.price != null}
-                      editingId={editingId} setEditingId={setEditingId} h={h} />
+                      editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} />
                   ))}
                 </div>
               ))}
@@ -129,6 +130,7 @@ export function QuotesTab({ data, h }) {
                   </div>
                   <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                     <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.price)}</span>
+                    <button className="iconbtn" title="轉為消費紀錄" onClick={() => onConvert(r)}>➜🧾</button>
                     <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
                   </div>
                 </div>

@@ -7,7 +7,7 @@ const NOTE_FIELDS = [
   { key: "category", label: "分類", type: "select", options: ["身體狀況", "營養補充品", "皮膚／保養", "醫療檢查解讀", "其他"] },
   { key: "status", label: "狀態", type: "select", options: ["草稿", "已整理", "放棄／暫時不用"] },
   { key: "tags", label: "標籤（逗號分隔）", type: "tags" },
-  { key: "content", label: "內文（支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |）", type: "textarea" },
+  { key: "content", label: "內文（支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |）", type: "textarea", livePreview: true },
 ];
 
 function NoteCard({ r, h, editingId, setEditingId }) {

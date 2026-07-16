@@ -200,6 +200,18 @@ export default function App() {
     } catch (ex) { flash("儲存失敗：" + (ex.message || "")); }
   }
 
+  async function convertQuoteToExpense(q) {
+    await spendH.add({
+      date: new Date().toISOString().slice(0, 10),
+      main: "醫美",
+      sub: q.category || "",
+      item: q.product || q.category || "（未命名）",
+      place: q.clinic || "",
+      amount: q.price,
+      note: q.note || "",
+    });
+  }
+
   async function saveStrategy(strategy) {
     setSettings((prev) => ({ ...prev, strategy }));
     try {
@@ -293,7 +305,7 @@ export default function App() {
           {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} />}
           {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
           {tab === "more" && moreView === "quotes" && (
-            <SubPage title="詢價比較" back={() => setMoreView("menu")}><QuotesTab data={quotes} h={quoteH} /></SubPage>
+            <SubPage title="詢價比較" back={() => setMoreView("menu")}><QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} /></SubPage>
           )}
           {tab === "more" && moreView === "notes" && (
             <SubPage title="筆記區" back={() => setMoreView("menu")}><NotesTab data={notes} h={noteH} /></SubPage>

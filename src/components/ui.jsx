@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { renderMD } from "../lib/markdown";
 
 export function Tag({ children, color }) {
   return (
@@ -109,6 +110,16 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 <option value="">—</option>
                 {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
               </select>
+            ) : f.type === "textarea" && f.livePreview ? (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 8 }}>
+                <textarea
+                  value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={10}
+                  placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+                />
+                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#fff", fontSize: 13 }}>
+                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#9a8d80" }}>預覽</span>}
+                </div>
+              </div>
             ) : f.type === "textarea" ? (
               <textarea
                 value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={8}

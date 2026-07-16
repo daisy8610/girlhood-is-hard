@@ -52,6 +52,7 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [missingKinds, setMissingKinds] = useState([]);
   const [seeding, setSeeding] = useState(false);
+  const [googleLinked, setGoogleLinked] = useState(false);
 
   useEffect(() => {
     if (!supa) return;
@@ -84,6 +85,21 @@ export default function App() {
   }
 
   useEffect(() => { if (session) loadData(); }, [session]);
+
+  useEffect(() => {
+    if (!session) return;
+    supa.from("google_calendar_tokens").select("user_id").maybeSingle()
+      .then(({ data }) => setGoogleLinked(!!data))
+      .catch(() => {});
+  }, [session]);
+
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get("calendar");
+    if (!status) return;
+    if (status === "connected") { setGoogleLinked(true); flash("已連結 Google 日曆"); }
+    else if (status === "error") flash("連結 Google 日曆失敗，請重試");
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
 
   function flash(msg) { setToast(msg); setTimeout(() => setToast(null), 2600); }
 
@@ -226,6 +242,37 @@ export default function App() {
     });
   }
 
+  async function connectGoogleCalendar() {
+    const { data } = await supa.auth.getSession();
+    const token = data.session && data.session.access_token;
+    if (!token) return;
+    window.location.href = `${window.SUPA_CFG.url}/functions/v1/google-oauth-start?state=${encodeURIComponent(token)}`;
+  }
+
+  async function disconnectGoogleCalendar() {
+    const { data: u } = await supa.auth.getUser();
+    try {
+      const { error } = await supa.from("google_calendar_tokens").delete().eq("user_id", u.user.id);
+      if (error) throw error;
+      setGoogleLinked(false);
+      flash("已解除 Google 日曆連結");
+    } catch (ex) { flash("解除失敗：" + (ex.message || "")); }
+  }
+
+  async function syncBudgetToCalendar(r) {
+    if (!googleLinked || !r.date) return;
+    try {
+      await supa.functions.invoke("google-calendar-sync", {
+        body: { item: r.item, date: r.date, place: r.place, note: r.note },
+      });
+    } catch (ex) { /* 同步失敗不影響正常使用，靜默略過 */ }
+  }
+
+  async function addBudgetItem(r) {
+    await budgetH.add(r);
+    syncBudgetToCalendar(r);
+  }
+
   async function saveStrategy(strategy) {
     setSettings((prev) => ({ ...prev, strategy }));
     try {
@@ -329,7 +376,7 @@ export default function App() {
             <Overview totals={totals} budgetTotals={budgetTotals} spending={spending} budget={budget} vouchers={vouchers} voucherH={voucherH} />
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} />}
-          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} onConvert={convertBudgetToExpense} />}
+          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} onConvert={convertBudgetToExpense} onAdd={addBudgetItem} />}
           {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
           {tab === "more" && moreView === "quotes" && (
             <SubPage title="詢價比較" back={() => setMoreView("menu")}><QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} /></SubPage>
@@ -343,6 +390,7 @@ export default function App() {
                 settings={settings} saveCap={saveCap} exportJSON={exportJSON} exportCSV={exportCSV}
                 applyImport={applyImport} clearAllData={clearAllData_} counts={counts} providerCount={providerCount}
                 userEmail={session.user && session.user.email} logout={logout}
+                googleLinked={googleLinked} connectGoogleCalendar={connectGoogleCalendar} disconnectGoogleCalendar={disconnectGoogleCalendar}
               />
             </SubPage>
           )}

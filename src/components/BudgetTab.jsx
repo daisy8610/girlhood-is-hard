@@ -63,7 +63,7 @@ function StrategyBlock({ content, onSave }) {
   );
 }
 
-export function BudgetTab({ data, h, strategy, saveStrategy, onConvert }) {
+export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState("全部");
@@ -92,7 +92,7 @@ export function BudgetTab({ data, h, strategy, saveStrategy, onConvert }) {
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增計畫項目" />}
       {adding && (
         <RecordForm fields={BUDGET_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
-          onSubmit={(r) => { h.add({ status: "計劃中", ...r }); setAdding(false); }} />
+          onSubmit={(r) => { onAdd({ status: "計劃中", ...r }); setAdding(false); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
       <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>

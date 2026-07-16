@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-16（第十一次）
+- 新增 Google 日曆自動同步：新增「預算計畫」項目時，若已連結 Google 日曆會自動建立一筆全天事件（用計畫日期），不用再手動開日曆
+- 後端用 Supabase Edge Functions（google-oauth-start / google-oauth-callback / google-calendar-sync）處理 OAuth 授權與日曆寫入，refresh token 存在新表 google_calendar_tokens（RLS 保護）
+- 設定頁加「Google 日曆」卡片：連結／解除連結
+- 需要昕自行完成 Google Cloud Console 設定、Supabase Edge Function 部署、資料庫建表，見交接說明
+
 ## 2026-07-16（第十次）
 - 消費紀錄的子分類、地點欄位改成有歷史建議的輸入框（datalist），打字時會跳出之前打過的選項
 - 項目名稱留空時自動帶入子分類的值，不用重複打同樣的字

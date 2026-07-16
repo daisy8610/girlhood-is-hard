@@ -1,0 +1,9 @@
+project_id = "girlhood-is-hard"
+
+# 這兩個是靠瀏覽器直接導向（沒有辦法帶 Authorization header），
+# 所以關掉 Supabase 預設的 JWT 驗證，改成自己在程式裡驗證使用者身分（用 state 帶 JWT）。
+[functions.google-oauth-start]
+verify_jwt = false
+
+[functions.google-oauth-callback]
+verify_jwt = false

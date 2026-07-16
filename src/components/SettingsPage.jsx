@@ -15,6 +15,7 @@ function SettingsCard({ title, sub, children }) {
 export function SettingsPage({
   settings, saveCap, exportJSON, exportCSV, applyImport, clearAllData,
   counts, userEmail, logout, providerCount,
+  googleLinked, connectGoogleCalendar, disconnectGoogleCalendar,
 }) {
   const [capInput, setCapInput] = useState(String(settings.cap || 50000));
   const [clearConfirm, setClearConfirm] = useState(false);
@@ -55,6 +56,17 @@ export function SettingsPage({
 
       <SettingsCard title="帳號" sub={userEmail}>
         <button onClick={logout} style={btn}>登出</button>
+      </SettingsCard>
+
+      <SettingsCard title="Google 日曆" sub="連結後，新增「預算計畫」項目時會自動在你的 Google 日曆建一筆全天事件">
+        {googleLinked ? (
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span style={{ fontSize: 13, color: "#5a6e5f" }}>✓ 已連結</span>
+            <button onClick={disconnectGoogleCalendar} style={btn}>解除連結</button>
+          </div>
+        ) : (
+          <button onClick={connectGoogleCalendar} style={btnPrimary}>連結 Google 日曆</button>
+        )}
       </SettingsCard>
 
       <SettingsCard title="年度預算上限" sub="總覽的進度條會以這個數字計算">

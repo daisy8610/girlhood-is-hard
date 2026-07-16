@@ -2,23 +2,29 @@
 // 用存好的 refresh_token 換一個新的 access_token，然後在使用者的主要日曆新增一筆全天事件。
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+function json(body, status = 200) {
+  return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+}
+
 Deno.serve(async (req) => {
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "method_not_allowed" }), { status: 405 });
-  }
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   const authHeader = req.headers.get("Authorization") || "";
   const jwt = authHeader.replace(/^Bearer\s+/i, "");
-  if (!jwt) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 });
+  if (!jwt) return json({ error: "unauthorized" }, 401);
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL"),
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
   );
   const { data: userData, error: userErr } = await supabase.auth.getUser(jwt);
-  if (userErr || !userData.user) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 });
-  }
+  if (userErr || !userData.user) return json({ error: "unauthorized" }, 401);
 
   const { data: tokenRow } = await supabase
     .from("google_calendar_tokens")
@@ -27,7 +33,7 @@ Deno.serve(async (req) => {
     .maybeSingle();
   if (!tokenRow) {
     // 還沒連結 Google 日曆，靜默略過，不算錯誤
-    return new Response(JSON.stringify({ ok: false, reason: "not_linked" }), { status: 200 });
+    return json({ ok: false, reason: "not_linked" });
   }
 
   const clientId = Deno.env.get("GOOGLE_CLIENT_ID");
@@ -44,13 +50,13 @@ Deno.serve(async (req) => {
   });
   const refreshData = await refreshRes.json();
   if (!refreshData.access_token) {
-    return new Response(JSON.stringify({ ok: false, reason: "refresh_failed" }), { status: 200 });
+    return json({ ok: false, reason: "refresh_failed", detail: refreshData });
   }
 
   let body;
   try { body = await req.json(); } catch { body = {}; }
   const { item, date, place, note } = body;
-  if (!date) return new Response(JSON.stringify({ error: "missing_date" }), { status: 400 });
+  if (!date) return json({ error: "missing_date" }, 400);
 
   const eventRes = await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
     method: "POST",
@@ -68,8 +74,8 @@ Deno.serve(async (req) => {
   });
   const eventData = await eventRes.json();
   if (!eventRes.ok) {
-    return new Response(JSON.stringify({ ok: false, reason: "calendar_insert_failed", detail: eventData }), { status: 200 });
+    return json({ ok: false, reason: "calendar_insert_failed", detail: eventData });
   }
 
-  return new Response(JSON.stringify({ ok: true, eventId: eventData.id }), { status: 200 });
+  return json({ ok: true, eventId: eventData.id });
 });

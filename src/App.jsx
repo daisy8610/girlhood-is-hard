@@ -262,10 +262,13 @@ export default function App() {
   async function syncBudgetToCalendar(r) {
     if (!googleLinked || !r.date) return;
     try {
-      await supa.functions.invoke("google-calendar-sync", {
+      const { data, error } = await supa.functions.invoke("google-calendar-sync", {
         body: { item: r.item, date: r.date, place: r.place, note: r.note },
       });
-    } catch (ex) { /* 同步失敗不影響正常使用，靜默略過 */ }
+      if (error) { flash("同步日曆失敗：" + (error.message || "")); return; }
+      if (data && data.ok) flash("已同步到 Google 日曆");
+      else if (data) flash("同步日曆失敗：" + (data.reason || "未知原因"));
+    } catch (ex) { flash("同步日曆失敗：" + (ex.message || "")); }
   }
 
   async function addBudgetItem(r) {

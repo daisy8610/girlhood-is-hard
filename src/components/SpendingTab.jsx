@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui";
 
-const SPEND_FIELDS = [
-  { key: "date", label: "日期", type: "date", default: new Date().toISOString().slice(0, 10) },
-  { key: "main", label: "主分類", type: "select", options: ["醫美", "頭髮", "美容", "指甲"] },
-  { key: "sub", label: "子分類", type: "text" },
-  { key: "item", label: "項目名稱", type: "text" },
-  { key: "place", label: "地點", type: "text" },
-  { key: "amount", label: "金額", type: "number" },
-  { key: "note", label: "備註", type: "text" },
-];
+function uniqueValues(data, key) {
+  return Array.from(new Set(data.map((r) => r[key]).filter(Boolean))).sort();
+}
 
 export function SpendingTab({ data, h }) {
   const [filter, setFilter] = useState("全部");
@@ -25,6 +19,16 @@ export function SpendingTab({ data, h }) {
     setAdding(true);
   }
 
+  const fields = useMemo(() => [
+    { key: "date", label: "日期", type: "date", default: new Date().toISOString().slice(0, 10) },
+    { key: "main", label: "主分類", type: "select", options: ["醫美", "頭髮", "美容", "指甲"] },
+    { key: "sub", label: "子分類", type: "text", suggestions: uniqueValues(data, "sub") },
+    { key: "item", label: "項目名稱", type: "text", fallbackKey: "sub", placeholder: "留空會自動帶入子分類" },
+    { key: "place", label: "地點", type: "text", suggestions: uniqueValues(data, "place") },
+    { key: "amount", label: "金額", type: "number" },
+    { key: "note", label: "備註", type: "text" },
+  ], [data]);
+
   const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
   const q = search.trim().toLowerCase();
   const filtered = data.filter(
@@ -38,7 +42,7 @@ export function SpendingTab({ data, h }) {
       <SectionTitle sub={`共 ${data.length} 筆，顯示 ${filtered.length} 筆`}>消費紀錄</SectionTitle>
       {!adding && <AddButton onClick={() => { setCopyDraft(null); setAdding(true); }} label="新增消費紀錄" />}
       {adding && (
-        <RecordForm fields={SPEND_FIELDS} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}
+        <RecordForm fields={fields} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}
           onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
@@ -58,7 +62,7 @@ export function SpendingTab({ data, h }) {
       <div style={{ display: "flex", flexDirection: "column" }}>
         {filtered.map((r) =>
           editingId === r.id ? (
-            <RecordForm key={r.id} fields={SPEND_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
+            <RecordForm key={r.id} fields={fields} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
               onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
           ) : (
             <div key={r.id} className="row-hover" style={{

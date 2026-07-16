@@ -90,6 +90,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     const out = {};
     fields.forEach((f) => {
       let v = vals[f.key];
+      if (f.fallbackKey && (v === "" || v == null)) v = vals[f.fallbackKey];
       if (f.type === "number") v = v === "" || v === null ? null : Number(v);
       if (f.type === "tags") v = (v || "").split(",").map((s) => s.trim()).filter(Boolean);
       out[f.key] = v;
@@ -126,11 +127,19 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
               />
             ) : (
-              <input
-                type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
-                value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
-                placeholder={f.placeholder || ""} style={inputStyle}
-              />
+              <>
+                <input
+                  type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+                  value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
+                  placeholder={f.placeholder || ""} style={inputStyle}
+                  list={f.suggestions ? `dl-${f.key}` : undefined}
+                />
+                {f.suggestions && (
+                  <datalist id={`dl-${f.key}`}>
+                    {f.suggestions.map((s) => <option key={s} value={s} />)}
+                  </datalist>
+                )}
+              </>
             )}
           </label>
         ))}

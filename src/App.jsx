@@ -135,8 +135,10 @@ export default function App() {
 
   const budgetTotals = useMemo(() => {
     const planned = budget.reduce((s, r) => s + (r.budget || 0), 0);
-    const done = budget.filter((r) => r.status === "已完成").reduce((s, r) => s + (r.actual || r.budget || 0), 0);
-    return { planned, done, cap: settings.cap || 50000 };
+    const completed = budget.filter((r) => r.status === "已完成");
+    const done = completed.reduce((s, r) => s + (r.actual || r.budget || 0), 0);
+    const doneBudget = completed.reduce((s, r) => s + (r.budget || 0), 0);
+    return { planned, done, doneBudget, cap: settings.cap || 50000 };
   }, [budget, settings]);
 
   const backupPayload = () => ({ exportedAt: new Date().toISOString(), spending, quotes, budget, notes, vouchers });

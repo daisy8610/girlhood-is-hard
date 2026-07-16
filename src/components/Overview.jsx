@@ -8,6 +8,8 @@ export function Overview({ totals, budgetTotals, spending, budget, vouchers, vou
   const sorted = Object.entries(totals.byMain).sort((a, b) => b[1] - a[1]);
   const upcoming = budget.filter((r) => r.status !== "已完成").slice(0, 5);
   const pct = Math.min(100, Math.round((budgetTotals.planned / budgetTotals.cap) * 100));
+  const completedCount = budget.filter((r) => r.status === "已完成").length;
+  const gap = budgetTotals.done - budgetTotals.doneBudget;
 
   return (
     <div>
@@ -41,6 +43,12 @@ export function Overview({ totals, budgetTotals, spending, budget, vouchers, vou
           </div>
           <div style={{ fontSize: 10.5, opacity: 0.85, marginTop: 4, textAlign: "right" }} className="mono">{pct}% of {fmt(budgetTotals.cap)}</div>
         </div>
+        {completedCount > 0 && (
+          <div style={{ position: "relative", marginTop: 10, fontSize: 11.5, opacity: 0.9 }}>
+            已完成 {completedCount} 項：預算 {fmt(budgetTotals.doneBudget)}，實際花 {fmt(budgetTotals.done)}
+            {gap !== 0 && <span className="mono"> （{gap > 0 ? `超支 ${fmt(gap)}` : `省下 ${fmt(-gap)}`}）</span>}
+          </div>
+        )}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 24 }}>

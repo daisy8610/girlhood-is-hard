@@ -14,15 +14,18 @@ const providerName = (id) => {
   const p = PROVIDERS.find((p) => p.id === id);
   return p ? p.name : "";
 };
-const providerId = (name) => {
-  const p = PROVIDERS.find((p) => p.name === String(name || "").trim());
+// 同名但 kind 不同（例如詢價的「診所」跟其他消費地點）視為不同店家，避免誤判成同一家
+const providerId = (name, kind) => {
+  const n = String(name || "").trim();
+  const k = kind || null;
+  const p = PROVIDERS.find((p) => p.name === n && (p.kind || null) === k);
   return p ? p.id : null;
 };
 
 async function ensureProvider(name, kind) {
   const n = String(name || "").trim();
   if (!n) return null;
-  const existing = providerId(n);
+  const existing = providerId(n, kind);
   if (existing) return existing;
   const { data, error } = await supa
     .from("providers")
@@ -206,19 +209,20 @@ export async function deleteOne(kind, id) {
 export async function bulkInsert(kind, appObjs) {
   if (!appObjs.length) return;
   const m = MAP[kind];
+  const providerKind = kind === "quotes" ? "診所" : null;
   if (usesProvider(kind)) {
     const names = Array.from(new Set(appObjs.map((o) => String(o[m.placeKey] || "").trim()).filter(Boolean)));
-    const missing = names.filter((n) => !providerId(n));
+    const missing = names.filter((n) => !providerId(n, providerKind));
     if (missing.length) {
       const { data, error } = await supa
         .from("providers")
-        .insert(missing.map((n) => ({ name: n, kind: kind === "quotes" ? "診所" : null })))
+        .insert(missing.map((n) => ({ name: n, kind: providerKind })))
         .select("id, name, kind");
       if (error) throw error;
       PROVIDERS = [...PROVIDERS, ...data];
     }
   }
-  const rows = appObjs.map((o) => m.toDb(o, usesProvider(kind) ? providerId(o[m.placeKey]) : null));
+  const rows = appObjs.map((o) => m.toDb(o, usesProvider(kind) ? providerId(o[m.placeKey], providerKind) : null));
   for (let i = 0; i < rows.length; i += 100) {
     const { error } = await supa.from(m.table).insert(rows.slice(i, i + 100));
     if (error) throw error;

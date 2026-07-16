@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-07-16（第十二次）
+- 修正新增消費/預算/儲值紀錄時「null value in column kind」失敗：providers.kind 是 NOT NULL，非詢價的地點改塞空字串而不是 null
+
 ## 2026-07-16（第十一次）
 - 新增 Google 日曆自動同步：新增「預算計畫」項目時，若已連結 Google 日曆會自動建立一筆全天事件（用計畫日期），不用再手動開日曆
 - 後端用 Supabase Edge Functions（google-oauth-start / google-oauth-callback / google-calendar-sync）處理 OAuth 授權與日曆寫入，refresh token 存在新表 google_calendar_tokens（RLS 保護）

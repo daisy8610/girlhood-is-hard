@@ -15,10 +15,11 @@ const providerName = (id) => {
   return p ? p.name : "";
 };
 // 同名但 kind 不同（例如詢價的「診所」跟其他消費地點）視為不同店家，避免誤判成同一家
+// providers.kind 在資料庫是 NOT NULL，「沒有分類」一律用空字串代表，不能塞 null
 const providerId = (name, kind) => {
   const n = String(name || "").trim();
-  const k = kind || null;
-  const p = PROVIDERS.find((p) => p.name === n && (p.kind || null) === k);
+  const k = kind || "";
+  const p = PROVIDERS.find((p) => p.name === n && (p.kind || "") === k);
   return p ? p.id : null;
 };
 
@@ -29,7 +30,7 @@ async function ensureProvider(name, kind) {
   if (existing) return existing;
   const { data, error } = await supa
     .from("providers")
-    .insert({ name: n, kind: kind || null })
+    .insert({ name: n, kind: kind || "" })
     .select("id, name, kind")
     .single();
   if (error) throw error;
@@ -209,7 +210,7 @@ export async function deleteOne(kind, id) {
 export async function bulkInsert(kind, appObjs) {
   if (!appObjs.length) return;
   const m = MAP[kind];
-  const providerKind = kind === "quotes" ? "診所" : null;
+  const providerKind = kind === "quotes" ? "診所" : "";
   if (usesProvider(kind)) {
     const names = Array.from(new Set(appObjs.map((o) => String(o[m.placeKey] || "").trim()).filter(Boolean)));
     const missing = names.filter((n) => !providerId(n, providerKind));

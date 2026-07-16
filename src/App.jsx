@@ -212,6 +212,18 @@ export default function App() {
     });
   }
 
+  async function convertBudgetToExpense(b) {
+    await spendH.add({
+      date: new Date().toISOString().slice(0, 10),
+      main: b.main || "",
+      sub: b.bucket || "",
+      item: b.item || "（未命名）",
+      place: b.place || "",
+      amount: b.actual != null ? b.actual : b.budget,
+      note: b.note || "",
+    });
+  }
+
   async function saveStrategy(strategy) {
     setSettings((prev) => ({ ...prev, strategy }));
     try {
@@ -302,7 +314,7 @@ export default function App() {
             <Overview totals={totals} budgetTotals={budgetTotals} spending={spending} budget={budget} vouchers={vouchers} voucherH={voucherH} />
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} />}
-          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} />}
+          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} onConvert={convertBudgetToExpense} />}
           {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
           {tab === "more" && moreView === "quotes" && (
             <SubPage title="詢價比較" back={() => setMoreView("menu")}><QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} /></SubPage>

@@ -63,11 +63,18 @@ function StrategyBlock({ content, onSave }) {
   );
 }
 
-export function BudgetTab({ data, h, strategy, saveStrategy }) {
+export function BudgetTab({ data, h, strategy, saveStrategy, onConvert }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState("全部");
   const [search, setSearch] = useState("");
+  const [confirmId, setConfirmId] = useState(null);
+
+  function toggleDone(r) {
+    const done = r.status !== "已完成";
+    h.update(r.id, { status: done ? "已完成" : "計劃中" });
+    setConfirmId(done ? r.id : null);
+  }
   const sorted = [...data].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
 
   const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
@@ -107,29 +114,54 @@ export function BudgetTab({ data, h, strategy, saveStrategy }) {
             <RecordForm key={r.id} fields={BUDGET_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
               onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
           ) : (
-            <div key={r.id} className="row-hover" style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "10px 4px", borderBottom: "1px dotted #EADFD4", gap: 6,
-              opacity: r.status === "已完成" ? 0.55 : 1,
-            }}>
-              <div style={{ display: "flex", gap: 10, alignItems: "center", minWidth: 0 }}>
-                <input
-                  type="checkbox" checked={r.status === "已完成"}
-                  onChange={() => h.update(r.id, { status: r.status === "已完成" ? "計劃中" : "已完成" })}
-                  style={{ width: 17, height: 17, accentColor: "#B5445B", flexShrink: 0 }}
-                />
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, textDecoration: r.status === "已完成" ? "line-through" : "none" }}>{r.item}</div>
-                  <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>
-                    <span style={{ color: MAIN_COLORS[r.main] || "#9a8d80" }}>{r.bucket}</span> · {r.date || "未定日期"} · {r.place || "—"}
-                    {r.note ? ` · ${r.note}` : ""}{r.actual != null ? ` · 實際 ${fmt(r.actual)}` : ""}
+            <div key={r.id}>
+              <div className="row-hover" style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "10px 4px", borderBottom: "1px dotted #EADFD4", gap: 6,
+                opacity: r.status === "已完成" ? 0.55 : 1,
+              }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", minWidth: 0 }}>
+                  <input
+                    type="checkbox" checked={r.status === "已完成"}
+                    onChange={() => toggleDone(r)}
+                    style={{ width: 17, height: 17, accentColor: "#B5445B", flexShrink: 0 }}
+                  />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 14, textDecoration: r.status === "已完成" ? "line-through" : "none" }}>{r.item}</div>
+                    <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>
+                      <span style={{ color: MAIN_COLORS[r.main] || "#9a8d80" }}>{r.bucket}</span> · {r.date || "未定日期"} · {r.place || "—"}
+                      {r.note ? ` · ${r.note}` : ""}{r.actual != null ? ` · 實際 ${fmt(r.actual)}` : ""}
+                    </div>
                   </div>
                 </div>
+                <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                  <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.budget)}</span>
+                  <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
+                </div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.budget)}</span>
-                <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
-              </div>
+              {confirmId === r.id && (
+                <div style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "8px 10px", margin: "0 0 4px", borderRadius: 8, background: "#FEFBF8",
+                  border: "1px dashed #EADFD4", fontSize: 12.5, color: "#6b5f54",
+                }}>
+                  <span>已完成！要新增一筆消費紀錄嗎？</span>
+                  <span style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                    <button
+                      onClick={() => { onConvert(r); setConfirmId(null); }}
+                      style={{ border: "none", background: "#B5445B", color: "#FBEDEF", borderRadius: 6, padding: "4px 10px", fontSize: 12 }}
+                    >
+                      新增
+                    </button>
+                    <button
+                      onClick={() => setConfirmId(null)}
+                      style={{ border: "1px solid #EADFD4", background: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12 }}
+                    >
+                      不用了
+                    </button>
+                  </span>
+                </div>
+              )}
             </div>
           )
         )}

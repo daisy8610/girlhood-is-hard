@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-07-16（續）
+- BudgetTab 補上搜尋框與分類篩選，跟消費紀錄、詢價比較一致
+
 ## 2026-07-16
 - 修正 Overview、BudgetTab 標題寫死 2026 的問題，改成自動取當年年份
 - 移除 quotes 的 `treatment_name` 殘留欄位（寫入後從未被讀回，屬未使用欄位）

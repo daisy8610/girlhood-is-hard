@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 import { renderMD } from "../lib/markdown";
-import { SectionTitle, AddButton, RecordForm, RowActions } from "./ui";
+import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui";
 
 const BUDGET_FIELDS = [
   { key: "date", label: "計劃日期", type: "date" },
@@ -66,19 +66,43 @@ function StrategyBlock({ content, onSave }) {
 export function BudgetTab({ data, h, strategy, saveStrategy }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [filter, setFilter] = useState("全部");
+  const [search, setSearch] = useState("");
   const sorted = [...data].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
+
+  const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
+  const q = search.trim().toLowerCase();
+  const filtered = sorted.filter(
+    (r) =>
+      (filter === "全部" || r.main === filter) &&
+      (!q || [r.item, r.place, r.note, r.bucket, r.main].some((v) => v && String(v).toLowerCase().includes(q)))
+  );
 
   return (
     <div>
-      <SectionTitle sub="勾選代表已完成；完成後也可以點編輯補上實際金額">{new Date().getFullYear()} 預算計畫</SectionTitle>
+      <SectionTitle sub={`勾選代表已完成；共 ${data.length} 筆，顯示 ${filtered.length} 筆`}>{new Date().getFullYear()} 預算計畫</SectionTitle>
       <StrategyBlock content={strategy} onSave={saveStrategy} />
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增計畫項目" />}
       {adding && (
         <RecordForm fields={BUDGET_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
           onSubmit={(r) => { h.add({ status: "計劃中", ...r }); setAdding(false); }} />
       )}
+      <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+        {cats.map((c) => (
+          <button
+            key={c} onClick={() => setFilter(c)}
+            style={{
+              padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #EADFD4",
+              background: filter === c ? "#8a3b4d" : "transparent", color: filter === c ? "#fff" : "#6b5f54",
+            }}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {sorted.map((r) =>
+        {filtered.map((r) =>
           editingId === r.id ? (
             <RecordForm key={r.id} fields={BUDGET_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
               onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
@@ -109,6 +133,7 @@ export function BudgetTab({ data, h, strategy, saveStrategy }) {
             </div>
           )
         )}
+        {filtered.length === 0 && <div style={{ color: "#9a8d80", fontSize: 13, padding: 12 }}>找不到符合的計畫項目</div>}
       </div>
     </div>
   );

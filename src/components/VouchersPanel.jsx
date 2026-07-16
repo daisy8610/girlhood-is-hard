@@ -41,7 +41,7 @@ export function VouchersPanel({ data, h }) {
                 <div style={{ fontSize: 13, color: "#6b5f54" }}>{r.name}</div>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
                 <div className="mono" style={{ fontSize: 21, fontWeight: 600, marginTop: 4, color: "#8a3b4d" }}>
                   {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
                   {r.unit !== "元" && r.value != null && <span style={{ fontSize: 13, marginLeft: 3, color: "#6b5f54" }}>{r.unit}</span>}

@@ -73,7 +73,6 @@ const quoteToDb = (o, providerId) => {
     quoted_on: o.date || null,
     provider_id: providerId,
     treatment_category: o.category || null,
-    treatment_name: o.category || null,
     product_name: o.product || null,
     quoted_amount: price,
     quantity: qty,
@@ -167,7 +166,7 @@ export async function fetchAll() {
     supa.from("budget_plans").select("*").order("planned_on", { ascending: true, nullsFirst: false }),
     supa.from("notes").select("*").order("created_at", { ascending: true }),
     supa.from("vouchers").select("*").order("created_at", { ascending: true }),
-    supa.from("profiles").select("id, annual_budget_cap").maybeSingle(),
+    supa.from("profiles").select("id, annual_budget_cap, annual_strategy").maybeSingle(),
   ]);
   for (const r of [ex, qu, bp, nt, vo]) if (r.error) throw r.error;
 
@@ -178,6 +177,7 @@ export async function fetchAll() {
     notes: (nt.data || []).map(noteToApp),
     vouchers: (vo.data || []).map(voucherToApp),
     cap: pf.data && pf.data.annual_budget_cap != null ? Number(pf.data.annual_budget_cap) : 50000,
+    strategy: pf.data && pf.data.annual_strategy != null ? pf.data.annual_strategy : "",
     profileId: pf.data ? pf.data.id : null,
   };
 }

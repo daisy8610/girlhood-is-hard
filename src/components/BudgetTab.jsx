@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
+import { renderMD } from "../lib/markdown";
 import { SectionTitle, AddButton, RecordForm, RowActions } from "./ui";
 
 const BUDGET_FIELDS = [
@@ -13,43 +14,64 @@ const BUDGET_FIELDS = [
   { key: "note", label: "備註", type: "text" },
 ];
 
-function StrategyBlock() {
+function StrategyBlock({ content, onSave }) {
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(content || "");
+  const year = new Date().getFullYear();
+
+  function startEdit(e) {
+    e.stopPropagation();
+    setDraft(content || "");
+    setEditing(true);
+    setOpen(true);
+  }
+  function save() {
+    onSave(draft);
+    setEditing(false);
+  }
+
   return (
     <div style={{ border: "1px solid #EADFD4", borderRadius: 10, marginBottom: 16, background: "#FEFBF8", overflow: "hidden" }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#8a3b4d" }}>📈 2026 年度目標與預算分配策略</div>
-        <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
+        <div style={{ fontSize: 14, fontWeight: 600, color: "#8a3b4d" }}>📈 {year} 年度目標與預算分配策略</div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {!editing && <button className="iconbtn" onClick={startEdit}>編輯</button>}
+          <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
+        </div>
       </div>
       {open && (
         <div style={{ padding: "4px 16px 16px", fontSize: 13.5, lineHeight: 1.8, borderTop: "1px dashed #EADFD4" }}>
-          <p style={{ margin: "10px 0 4px" }}><strong>年度目標</strong>：預算上限 NT$ 50,000｜目標節省 42%（vs 2025 年）｜月均預算 NT$ 4,167</p>
-          <p style={{ margin: "12px 0 4px" }}><strong>必要項目（62% = NT$ 31,194）</strong></p>
-          <ul style={{ margin: "4px 0", paddingLeft: 20 }}>
-            <li>🩸 醫美維護：NT$ 21,000 — 肉毒咀嚼肌 NT$ 7,000（每 6 個月）、玻尿酸補打 NT$ 14,000（視需要）、除毛 NT$ 0（還有堂數）</li>
-            <li>✂️ 頭髮護理：NT$ 0（使用儲值金）— 剪髮 NT$ 640（每 3 個月）</li>
-            <li>💅 基礎護理：NT$ 10,194 — 睫毛管理 NT$ 1,099（每 2 個月）、剪指甲 NT$ 300（每月）</li>
-          </ul>
-          <p style={{ margin: "12px 0 4px" }}><strong>彈性項目（38% = NT$ 18,806）</strong></p>
-          <ul style={{ margin: "4px 0", paddingLeft: 20 }}>
-            <li>🌟 進階保養：NT$ 18,806</li>
-          </ul>
-          <p style={{ margin: "12px 0 4px" }}><strong>定期檢視</strong>：每月 1 號檢視當月計劃｜15 號檢查執行與預約進度｜月底記錄支出並評估效果</p>
+          {editing ? (
+            <div>
+              <textarea
+                value={draft} onChange={(e) => setDraft(e.target.value)} rows={10}
+                placeholder="支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |"
+                style={{ width: "100%", border: "1px solid #EADFD4", borderRadius: 8, padding: 10, fontSize: 13.5, fontFamily: "inherit", resize: "vertical" }}
+              />
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <button onClick={save} style={{ border: "none", background: "#B5445B", color: "#FBEDEF", borderRadius: 6, padding: "6px 14px", fontSize: 13 }}>儲存</button>
+                <button onClick={() => setEditing(false)} style={{ border: "1px solid #EADFD4", background: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13 }}>取消</button>
+              </div>
+            </div>
+          ) : content ? renderMD(content) : (
+            <div style={{ color: "#9a8d80" }}>還沒有內容，點右上「編輯」開始寫今年的目標與分配策略。</div>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-export function BudgetTab({ data, h }) {
+export function BudgetTab({ data, h, strategy, saveStrategy }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const sorted = [...data].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
 
   return (
     <div>
-      <SectionTitle sub="勾選代表已完成；完成後也可以點編輯補上實際金額">2026 預算計畫</SectionTitle>
-      <StrategyBlock />
+      <SectionTitle sub="勾選代表已完成；完成後也可以點編輯補上實際金額">{new Date().getFullYear()} 預算計畫</SectionTitle>
+      <StrategyBlock content={strategy} onSave={saveStrategy} />
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增計畫項目" />}
       {adding && (
         <RecordForm fields={BUDGET_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}

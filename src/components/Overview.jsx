@@ -31,7 +31,7 @@ export function Overview({ totals, budgetTotals, spending, budget, vouchers, vou
             <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(budgetTotals.cap)}</div>
           </div>
           <div>
-            <div style={{ fontSize: 11, opacity: 0.8 }}>2026 已規劃</div>
+            <div style={{ fontSize: 11, opacity: 0.8 }}>{new Date().getFullYear()} 已規劃</div>
             <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(budgetTotals.planned)}</div>
           </div>
         </div>

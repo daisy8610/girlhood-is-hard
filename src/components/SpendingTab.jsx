@@ -17,6 +17,13 @@ export function SpendingTab({ data, h }) {
   const [search, setSearch] = useState("");
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [copyDraft, setCopyDraft] = useState(null);
+
+  function copyRow(r) {
+    setEditingId(null);
+    setCopyDraft({ ...r, date: new Date().toISOString().slice(0, 10) });
+    setAdding(true);
+  }
 
   const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
   const q = search.trim().toLowerCase();
@@ -29,10 +36,10 @@ export function SpendingTab({ data, h }) {
   return (
     <div>
       <SectionTitle sub={`共 ${data.length} 筆，顯示 ${filtered.length} 筆`}>消費紀錄</SectionTitle>
-      {!adding && <AddButton onClick={() => setAdding(true)} label="新增消費紀錄" />}
+      {!adding && <AddButton onClick={() => { setCopyDraft(null); setAdding(true); }} label="新增消費紀錄" />}
       {adding && (
-        <RecordForm fields={SPEND_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
-          onSubmit={(r) => { h.add(r); setAdding(false); }} />
+        <RecordForm fields={SPEND_FIELDS} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}
+          onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
       <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
@@ -67,6 +74,7 @@ export function SpendingTab({ data, h }) {
               </div>
               <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                 <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
+                <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => copyRow(r)}>⧉</button>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
             </div>

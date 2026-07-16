@@ -46,7 +46,7 @@ export function VouchersPanel({ data, h }) {
                   {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
                   {r.unit !== "元" && r.value != null && <span style={{ fontSize: 13, marginLeft: 3, color: "#6b5f54" }}>{r.unit}</span>}
                 </div>
-                {r.value != null && r.value > 0 && (
+                {r.value != null && r.value > 0 && r.unit !== "元" && (
                   <button
                     className="iconbtn"
                     title="扣一次"

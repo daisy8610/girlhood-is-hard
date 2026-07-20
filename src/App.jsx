@@ -318,6 +318,7 @@ export default function App() {
     { key: "overview", label: "總覽", icon: "📔" },
     { key: "spending", label: "紀錄", icon: "🧾" },
     { key: "budget", label: "預算", icon: "🎯" },
+    { key: "quotes", label: "詢價", icon: "💉" },
     { key: "more", label: "更多", icon: "☰" },
   ];
 
@@ -346,8 +347,8 @@ export default function App() {
             <span style={{ fontSize: 10, letterSpacing: 2, opacity: 0.8, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
           </div>
           <div style={{ fontSize: 12, opacity: 0.85 }}>
-            {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "budget" ? "預算計畫"
-              : moreView === "quotes" ? "詢價比較" : moreView === "notes" ? "筆記區" : moreView === "settings" ? "設定" : "更多"}
+            {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "budget" ? "預算計畫" : tab === "quotes" ? "詢價比較"
+              : moreView === "notes" ? "筆記區" : moreView === "settings" ? "設定" : "更多"}
           </div>
         </div>
 
@@ -375,13 +376,11 @@ export default function App() {
             <Overview totals={totals} budgetTotals={budgetTotals} spending={spending} budget={budget} vouchers={vouchers} voucherH={voucherH} />
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} />}
-          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} saveStrategy={saveStrategy} onConvert={convertBudgetToExpense} onAdd={addBudgetItem} />}
+          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} onConvert={convertBudgetToExpense} onAdd={addBudgetItem} />}
+          {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} />}
           {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
-          {tab === "more" && moreView === "quotes" && (
-            <SubPage title="詢價比較" back={() => setMoreView("menu")}><QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} /></SubPage>
-          )}
           {tab === "more" && moreView === "notes" && (
-            <SubPage title="筆記區" back={() => setMoreView("menu")}><NotesTab data={notes} h={noteH} /></SubPage>
+            <SubPage title="筆記區" back={() => setMoreView("menu")}><NotesTab data={notes} h={noteH} strategy={settings.strategy} saveStrategy={saveStrategy} /></SubPage>
           )}
           {tab === "more" && moreView === "settings" && (
             <SubPage title="設定" back={() => setMoreView("menu")}>

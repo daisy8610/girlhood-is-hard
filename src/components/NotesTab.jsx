@@ -10,6 +10,41 @@ const NOTE_FIELDS = [
   { key: "content", label: "內文（支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |）", type: "textarea", livePreview: true },
 ];
 
+const STRATEGY_FIELDS = [
+  { key: "content", label: "策略內容（支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |）", type: "textarea", livePreview: true },
+];
+
+function StrategyCard({ strategy, saveStrategy }) {
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const year = new Date().getFullYear();
+
+  return (
+    <div className="row-hover" style={{ border: "1px solid #EADFD4", borderRadius: 10, overflow: "hidden", background: "#FBF7F2", marginBottom: 14 }}>
+      <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: "#8a3b4d" }}>📈 {year} 年度目標與預算分配策略</div>
+        <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
+          {!editing && <button className="iconbtn" onClick={(e) => { e.stopPropagation(); setEditing(true); setOpen(true); }}>編輯</button>}
+          <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "▲" : "▼"}</span>
+        </div>
+      </div>
+      {open && (
+        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #EADFD4" }}>
+          {editing ? (
+            <RecordForm
+              fields={STRATEGY_FIELDS} initial={{ content: strategy }} submitLabel="儲存"
+              onCancel={() => setEditing(false)}
+              onSubmit={(patch) => { saveStrategy(patch.content); setEditing(false); }}
+            />
+          ) : strategy ? renderMD(strategy) : (
+            <div style={{ fontSize: 13, color: "#9a8d80" }}>還沒有內容，點右上「編輯」開始寫今年的目標與分配策略。</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function NoteCard({ r, h, editingId, setEditingId }) {
   const [open, setOpen] = useState(false);
   if (editingId === r.id) {
@@ -43,13 +78,14 @@ function NoteCard({ r, h, editingId, setEditingId }) {
   );
 }
 
-export function NotesTab({ data, h }) {
+export function NotesTab({ data, h, strategy, saveStrategy }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   return (
     <div>
       <SectionTitle sub="完整內文已從 Notion 搬過來，點筆記可以展開閱讀或編輯">筆記區</SectionTitle>
+      <StrategyCard strategy={strategy} saveStrategy={saveStrategy} />
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增筆記" />}
       {adding && (
         <RecordForm fields={NOTE_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}

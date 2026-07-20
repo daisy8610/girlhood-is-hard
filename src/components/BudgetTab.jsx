@@ -15,48 +15,20 @@ const BUDGET_FIELDS = [
   { key: "note", label: "備註", type: "text" },
 ];
 
-function StrategyBlock({ content, onSave }) {
+function StrategyBlock({ content }) {
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(content || "");
   const year = new Date().getFullYear();
-
-  function startEdit(e) {
-    e.stopPropagation();
-    setDraft(content || "");
-    setEditing(true);
-    setOpen(true);
-  }
-  function save() {
-    onSave(draft);
-    setEditing(false);
-  }
 
   return (
     <div style={{ border: "1px solid #EADFD4", borderRadius: 10, marginBottom: 16, background: "#FEFBF8", overflow: "hidden" }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: "#8a3b4d" }}>📈 {year} 年度目標與預算分配策略</div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {!editing && <button className="iconbtn" onClick={startEdit}>編輯</button>}
-          <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
-        </div>
+        <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
       </div>
       {open && (
         <div style={{ padding: "4px 16px 16px", fontSize: 13.5, lineHeight: 1.8, borderTop: "1px dashed #EADFD4" }}>
-          {editing ? (
-            <div>
-              <textarea
-                value={draft} onChange={(e) => setDraft(e.target.value)} rows={10}
-                placeholder="支援簡單 markdown：## 標題、- 清單、**粗體**、| 表格 |"
-                style={{ width: "100%", border: "1px solid #EADFD4", borderRadius: 8, padding: 10, fontSize: 13.5, fontFamily: "inherit", resize: "vertical" }}
-              />
-              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                <button onClick={save} style={{ border: "none", background: "#B5445B", color: "#FBEDEF", borderRadius: 6, padding: "6px 14px", fontSize: 13 }}>儲存</button>
-                <button onClick={() => setEditing(false)} style={{ border: "1px solid #EADFD4", background: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13 }}>取消</button>
-              </div>
-            </div>
-          ) : content ? renderMD(content) : (
-            <div style={{ color: "#9a8d80" }}>還沒有內容，點右上「編輯」開始寫今年的目標與分配策略。</div>
+          {content ? renderMD(content) : (
+            <div style={{ color: "#9a8d80" }}>還沒有內容，到「更多 → 筆記區」編輯今年的目標與分配策略。</div>
           )}
         </div>
       )}
@@ -64,15 +36,14 @@ function StrategyBlock({ content, onSave }) {
   );
 }
 
-export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd }) {
+export function BudgetTab({ data, h, strategy, onConvert, onAdd }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [confirmId, setConfirmId] = useState(null);
 
   function toggleDone(r) {
     const done = r.status !== "已完成";
     h.update(r.id, { status: done ? "已完成" : "計劃中" });
-    setConfirmId(done ? r.id : null);
+    if (done) onConvert(r);
   }
   const sorted = [...data].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
 
@@ -83,7 +54,7 @@ export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd })
   return (
     <div>
       <SectionTitle sub={`勾選代表已完成；共 ${data.length} 筆，顯示 ${filtered.length} 筆`}>{new Date().getFullYear()} 預算計畫</SectionTitle>
-      <StrategyBlock content={strategy} onSave={saveStrategy} />
+      <StrategyBlock content={strategy} />
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增計畫項目" />}
       {adding && (
         <RecordForm fields={BUDGET_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
@@ -122,29 +93,6 @@ export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd })
                   <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
                 </div>
               </div>
-              {confirmId === r.id && (
-                <div style={{
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "8px 10px", margin: "0 0 4px", borderRadius: 8, background: "#FEFBF8",
-                  border: "1px dashed #EADFD4", fontSize: 12.5, color: "#6b5f54",
-                }}>
-                  <span>已完成！要新增一筆消費紀錄嗎？</span>
-                  <span style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                    <button
-                      onClick={() => { onConvert(r); setConfirmId(null); }}
-                      style={{ border: "none", background: "#B5445B", color: "#FBEDEF", borderRadius: 6, padding: "4px 10px", fontSize: 12 }}
-                    >
-                      新增
-                    </button>
-                    <button
-                      onClick={() => setConfirmId(null)}
-                      style={{ border: "1px solid #EADFD4", background: "none", borderRadius: 6, padding: "4px 10px", fontSize: 12 }}
-                    >
-                      不用了
-                    </button>
-                  </span>
-                </div>
-              )}
             </div>
           )
         )}

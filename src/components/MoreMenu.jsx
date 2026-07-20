@@ -3,7 +3,6 @@ import { SectionTitle } from "./ui";
 
 export function MoreMenu({ counts, go }) {
   const items = [
-    { key: "quotes", icon: "💉", label: "詢價比較", sub: `${counts.quotes} 筆醫美詢價，分組比價` },
     { key: "notes", icon: "🩺", label: "筆記區", sub: `${counts.notes} 篇健康與保養筆記` },
     { key: "settings", icon: "⚙️", label: "設定", sub: "預算上限、備份還原、清空資料" },
   ];

@@ -12,7 +12,7 @@ const QUOTE_FIELDS = [
   { key: "note", label: "備註", type: "text" },
 ];
 
-function QuoteRow({ r, isLowest, editingId, setEditingId, h, onConvert }) {
+function QuoteRow({ r, editingId, setEditingId, h, onConvert }) {
   if (editingId === r.id) {
     return (
       <RecordForm fields={QUOTE_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
@@ -23,17 +23,9 @@ function QuoteRow({ r, isLowest, editingId, setEditingId, h, onConvert }) {
     <div className="row-hover" style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
       padding: "8px 4px", borderBottom: "1px dotted #F1E9E0", gap: 6,
-      background: isLowest ? "#6E8E7612" : "transparent",
     }}>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 13.5 }}>
-          {r.clinic}
-          {isLowest && (
-            <span style={{ fontSize: 10, background: "#6E8E76", color: "#fff", borderRadius: 10, padding: "1px 7px", marginLeft: 6, verticalAlign: "middle" }}>
-              最低價
-            </span>
-          )}
-        </div>
+        <div style={{ fontSize: 13.5 }}>{r.clinic}</div>
         <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>{r.date || "—"}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
@@ -69,7 +61,7 @@ export function QuotesTab({ data, h, onConvert }) {
 
   return (
     <div>
-      <SectionTitle sub="同一產品跨診所比價，綠底為該產品最低價（注意單位數量可能不同）">詢價比較</SectionTitle>
+      <SectionTitle sub="同一產品跨診所比價，價格由低到高排序（注意單位數量可能不同）">詢價比較</SectionTitle>
       {!adding && <AddButton onClick={() => setAdding(true)} label="新增詢價紀錄" />}
       {adding && (
         <RecordForm fields={QUOTE_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
@@ -100,9 +92,8 @@ export function QuotesTab({ data, h, onConvert }) {
                   <div style={{ fontSize: 12.5, fontWeight: 600, color: "#6b5f54", margin: "6px 0 2px" }}>
                     {prod} <span style={{ fontWeight: 400, color: "#9a8d80" }}>（{list.length} 筆）</span>
                   </div>
-                  {list.map((r, idx) => (
-                    <QuoteRow key={r.id} r={r} isLowest={idx === 0 && list.length > 1 && r.price != null}
-                      editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} />
+                  {list.map((r) => (
+                    <QuoteRow key={r.id} r={r} editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} />
                   ))}
                 </div>
               ))}

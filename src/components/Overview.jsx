@@ -2,6 +2,7 @@ import React from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 import { SectionTitle } from "./ui";
 import { TrendChart } from "./TrendChart";
+import { SubcategoryRanking } from "./SubcategoryRanking";
 import { VouchersPanel } from "./VouchersPanel";
 
 export function Overview({ totals, budgetTotals, spending, budget, vouchers, voucherH }) {
@@ -64,6 +65,7 @@ export function Overview({ totals, budgetTotals, spending, budget, vouchers, vou
       </div>
 
       <TrendChart spending={spending} />
+      <SubcategoryRanking spending={spending} />
       <VouchersPanel data={vouchers} h={voucherH} />
 
       <SectionTitle sub="尚未完成的預算項目">近期規劃</SectionTitle>

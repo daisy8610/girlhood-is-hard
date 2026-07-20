@@ -6,8 +6,8 @@ export function Tag({ children, color }) {
     <span
       style={{
         display: "inline-block", fontSize: 11, padding: "2px 8px", borderRadius: 20,
-        background: (color || "#8a7f74") + "1f", color: color || "#5a5044",
-        border: `1px solid ${(color || "#8a7f74")}55`,
+        background: (color || "#9C8288") + "1f", color: color || "#5a5044",
+        border: `1px solid ${(color || "#9C8288")}55`,
         fontFamily: "'Noto Sans TC',sans-serif", whiteSpace: "nowrap",
       }}
     >
@@ -19,8 +19,8 @@ export function Tag({ children, color }) {
 export function SectionTitle({ children, sub }) {
   return (
     <div style={{ marginBottom: 16 }}>
-      <h2 className="serif" style={{ fontSize: 19, fontWeight: 700, margin: 0, color: "#8a3b4d" }}>{children}</h2>
-      {sub && <div style={{ fontSize: 12, color: "#9a8d80", marginTop: 2 }}>{sub}</div>}
+      <h2 className="serif" style={{ fontSize: 19, fontWeight: 700, margin: 0, color: "#AD455E" }}>{children}</h2>
+      {sub && <div style={{ fontSize: 12, color: "#A88690", marginTop: 2 }}>{sub}</div>}
     </div>
   );
 }
@@ -30,7 +30,7 @@ export function AddButton({ onClick, label }) {
     <button
       onClick={onClick}
       style={{
-        border: "1px solid #B5445B", color: "#B5445B", background: "transparent", borderRadius: 8,
+        border: "1px solid #D9718A", color: "#AD455E", background: "transparent", borderRadius: 8,
         padding: "9px 16px", fontSize: 13, fontWeight: 600, marginBottom: 14,
       }}
     >
@@ -51,7 +51,7 @@ export function RowActions({ onEdit, onDelete }) {
     <span style={{ display: "inline-flex", gap: 2, marginLeft: 6, flexShrink: 0 }}>
       <button className="iconbtn" onClick={onEdit} title="編輯">✎</button>
       {confirming ? (
-        <button className="iconbtn" onClick={onDelete} style={{ color: "#B5445B", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
+        <button className="iconbtn" onClick={onDelete} style={{ color: "#AD455E", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
       ) : (
         <button className="iconbtn" onClick={() => setConfirming(true)} title="刪除">✕</button>
       )}
@@ -66,8 +66,8 @@ export function CategoryChips({ options, value, onChange }) {
         <button
           key={c} onClick={() => onChange(c)}
           style={{
-            padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #EADFD4",
-            background: value === c ? "#8a3b4d" : "transparent", color: value === c ? "#fff" : "#6b5f54",
+            padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #F3DCDF",
+            background: value === c ? "#C25B72" : "transparent", color: value === c ? "#fff" : "#7A5560",
           }}
         >
           {c}
@@ -83,7 +83,7 @@ export function SearchBox({ value, onChange, placeholder }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder || "搜尋…"}
-      style={{ width: "100%", padding: "9px 12px", borderRadius: 8, border: "1px solid #EADFD4", fontSize: 13, marginBottom: 12, background: "#fff" }}
+      style={{ width: "100%", padding: "9px 12px", borderRadius: 8, border: "1px solid #F3DCDF", fontSize: 13, marginBottom: 12, background: "#fff" }}
     />
   );
 }
@@ -116,13 +116,13 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     onSubmit(out);
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "8px 8px", borderRadius: 6, border: "1px solid #EADFD4", fontSize: 13 };
+  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "8px 8px", borderRadius: 6, border: "1px solid #F3DCDF", fontSize: 13 };
 
   return (
-    <form onSubmit={submit} style={{ border: "1px solid #EADFD4", borderRadius: 10, padding: 14, marginBottom: 14, background: "#FEFBF8" }}>
+    <form onSubmit={submit} style={{ border: "1px solid #F3DCDF", borderRadius: 10, padding: 14, marginBottom: 14, background: "#FFFCFA" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
-          <label key={f.key} style={{ fontSize: 12, color: "#6b5f54", gridColumn: f.type === "textarea" ? "1 / -1" : "auto" }}>
+          <label key={f.key} style={{ fontSize: 12, color: "#7A5560", gridColumn: f.type === "textarea" ? "1 / -1" : "auto" }}>
             {f.label}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>
@@ -136,7 +136,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 />
                 <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#fff", fontSize: 13 }}>
-                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#9a8d80" }}>預覽</span>}
+                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#A88690" }}>預覽</span>}
                 </div>
               </div>
             ) : f.type === "textarea" ? (
@@ -163,10 +163,10 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
         ))}
       </div>
       <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-        <button type="submit" style={{ background: "#B5445B", color: "#fff", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600 }}>
+        <button type="submit" style={{ background: "#D9718A", color: "#fff", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600 }}>
           {submitLabel || "儲存"}
         </button>
-        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #EADFD4", borderRadius: 8, padding: "9px 18px", fontSize: 13 }}>
+        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #F3DCDF", borderRadius: 8, padding: "9px 18px", fontSize: 13 }}>
           取消
         </button>
       </div>

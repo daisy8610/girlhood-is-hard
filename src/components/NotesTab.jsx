@@ -20,16 +20,16 @@ function StrategyCard({ strategy, saveStrategy }) {
   const year = new Date().getFullYear();
 
   return (
-    <div className="row-hover" style={{ border: "1px solid #EADFD4", borderRadius: 10, overflow: "hidden", background: "#FBF7F2", marginBottom: 14 }}>
+    <div className="row-hover" style={{ border: "1px solid #F3DCDF", borderRadius: 10, overflow: "hidden", background: "#FFF9F6", marginBottom: 14 }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#8a3b4d" }}>📈 {year} 年度目標與預算分配策略</div>
+        <div style={{ fontSize: 15, fontWeight: 600, color: "#AD455E" }}>📈 {year} 年度目標與預算分配策略</div>
         <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
           {!editing && <button className="iconbtn" onClick={(e) => { e.stopPropagation(); setEditing(true); setOpen(true); }}>編輯</button>}
-          <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "▲" : "▼"}</span>
+          <span style={{ fontSize: 12, color: "#A88690" }}>{open ? "▲" : "▼"}</span>
         </div>
       </div>
       {open && (
-        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #EADFD4" }}>
+        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #F3DCDF" }}>
           {editing ? (
             <RecordForm
               fields={STRATEGY_FIELDS} initial={{ content: strategy }} submitLabel="儲存"
@@ -37,7 +37,7 @@ function StrategyCard({ strategy, saveStrategy }) {
               onSubmit={(patch) => { saveStrategy(patch.content); setEditing(false); }}
             />
           ) : strategy ? renderMD(strategy) : (
-            <div style={{ fontSize: 13, color: "#9a8d80" }}>還沒有內容，點右上「編輯」開始寫今年的目標與分配策略。</div>
+            <div style={{ fontSize: 13, color: "#A88690" }}>還沒有內容，點右上「編輯」開始寫今年的目標與分配策略。</div>
           )}
         </div>
       )}
@@ -54,13 +54,13 @@ function NoteCard({ r, h, editingId, setEditingId }) {
     );
   }
   return (
-    <div className="row-hover" style={{ border: "1px solid #EADFD4", borderRadius: 10, overflow: "hidden", background: "#FBF7F2" }}>
+    <div className="row-hover" style={{ border: "1px solid #F3DCDF", borderRadius: 10, overflow: "hidden", background: "#FFF9F6" }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 6 }}>
           <div style={{ fontSize: 15, fontWeight: 600 }}>{r.title}</div>
           <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
             <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
-            <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "▲" : "▼"}</span>
+            <span style={{ fontSize: 12, color: "#A88690" }}>{open ? "▲" : "▼"}</span>
           </div>
         </div>
         <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -70,8 +70,8 @@ function NoteCard({ r, h, editingId, setEditingId }) {
         </div>
       </div>
       {open && (
-        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #EADFD4" }}>
-          {r.content ? renderMD(r.content) : <div style={{ fontSize: 13, color: "#9a8d80" }}>（沒有內文）</div>}
+        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #F3DCDF" }}>
+          {r.content ? renderMD(r.content) : <div style={{ fontSize: 13, color: "#A88690" }}>（沒有內文）</div>}
         </div>
       )}
     </div>

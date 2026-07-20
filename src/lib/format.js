@@ -2,10 +2,10 @@ export const fmt = (n) =>
   n == null ? "—" : (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString("zh-TW");
 
 export const MAIN_COLORS = {
-  "醫美": "#B5445B",
-  "頭髮": "#5C7A8A",
-  "美容": "#B08D57",
-  "指甲": "#6E8E76",
+  "醫美": "#D9718A",
+  "頭髮": "#2A78D6",
+  "美容": "#D68A2E",
+  "指甲": "#1BAF7A",
 };
 
 export const num = (v) => (v == null || v === "" ? null : Number(v));

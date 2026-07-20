@@ -20,15 +20,15 @@ function StrategyBlock({ content }) {
   const year = new Date().getFullYear();
 
   return (
-    <div style={{ border: "1px solid #EADFD4", borderRadius: 10, marginBottom: 16, background: "#FEFBF8", overflow: "hidden" }}>
+    <div style={{ border: "1px solid #F3DCDF", borderRadius: 10, marginBottom: 16, background: "#FFFCFA", overflow: "hidden" }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#8a3b4d" }}>📈 {year} 年度目標與預算分配策略</div>
-        <span style={{ fontSize: 12, color: "#9a8d80" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
+        <div style={{ fontSize: 14, fontWeight: 600, color: "#AD455E" }}>📈 {year} 年度目標與預算分配策略</div>
+        <span style={{ fontSize: 12, color: "#A88690" }}>{open ? "收合 ▲" : "展開 ▼"}</span>
       </div>
       {open && (
-        <div style={{ padding: "4px 16px 16px", fontSize: 13.5, lineHeight: 1.8, borderTop: "1px dashed #EADFD4" }}>
+        <div style={{ padding: "4px 16px 16px", fontSize: 13.5, lineHeight: 1.8, borderTop: "1px dashed #F3DCDF" }}>
           {content ? renderMD(content) : (
-            <div style={{ color: "#9a8d80" }}>還沒有內容，到「更多 → 筆記區」編輯今年的目標與分配策略。</div>
+            <div style={{ color: "#A88690" }}>還沒有內容，到「更多 → 筆記區」編輯今年的目標與分配策略。</div>
           )}
         </div>
       )}
@@ -71,19 +71,19 @@ export function BudgetTab({ data, h, strategy, onConvert, onAdd }) {
             <div key={r.id}>
               <div className="row-hover" style={{
                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "10px 4px", borderBottom: "1px dotted #EADFD4", gap: 6,
+                padding: "10px 4px", borderBottom: "1px dotted #F3DCDF", gap: 6,
                 opacity: r.status === "已完成" ? 0.55 : 1,
               }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", minWidth: 0 }}>
                   <input
                     type="checkbox" checked={r.status === "已完成"}
                     onChange={() => toggleDone(r)}
-                    style={{ width: 17, height: 17, accentColor: "#B5445B", flexShrink: 0 }}
+                    style={{ width: 17, height: 17, accentColor: "#D9718A", flexShrink: 0 }}
                   />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 14, textDecoration: r.status === "已完成" ? "line-through" : "none" }}>{r.item}</div>
-                    <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>
-                      <span style={{ color: MAIN_COLORS[r.main] || "#9a8d80" }}>{r.bucket}</span> · {r.date || "未定日期"} · {r.place || "—"}
+                    <div style={{ fontSize: 11, color: "#A88690", overflowWrap: "anywhere" }}>
+                      <span style={{ color: MAIN_COLORS[r.main] || "#A88690" }}>{r.bucket}</span> · {r.date || "未定日期"} · {r.place || "—"}
                       {r.note ? ` · ${r.note}` : ""}{r.actual != null ? ` · 實際 ${fmt(r.actual)}` : ""}
                     </div>
                   </div>
@@ -96,7 +96,7 @@ export function BudgetTab({ data, h, strategy, onConvert, onAdd }) {
             </div>
           )
         )}
-        {filtered.length === 0 && <div style={{ color: "#9a8d80", fontSize: 13, padding: 12 }}>找不到符合的計畫項目</div>}
+        {filtered.length === 0 && <div style={{ color: "#A88690", fontSize: 13, padding: 12 }}>找不到符合的計畫項目</div>}
       </div>
     </div>
   );

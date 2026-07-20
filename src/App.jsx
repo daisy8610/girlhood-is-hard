@@ -21,15 +21,15 @@ const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
   * { box-sizing: border-box; }
   ::-webkit-scrollbar { width:8px; height:8px; }
-  ::-webkit-scrollbar-thumb { background:#d8ccc2; border-radius:8px; }
+  ::-webkit-scrollbar-thumb { background:#E8CFD2; border-radius:8px; }
   .mono { font-family:'IBM Plex Mono', monospace; }
   .serif { font-family:'Noto Serif TC', serif; }
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
-  .row-hover:hover { background:#FBF7F2; }
-  .iconbtn { border:none; background:transparent; color:#b3a294; font-size:13px; padding:4px 6px; border-radius:6px; }
-  .iconbtn:hover { background:#F1E6DC; color:#8a3b4d; }
-  .menu-item:active { background:#F1E6DC; }
+  .row-hover:hover { background:#FFF9F6; }
+  .iconbtn { border:none; background:transparent; color:#B896A0; font-size:13px; padding:4px 6px; border-radius:6px; }
+  .iconbtn:hover { background:#FBE3E9; color:#AD455E; }
+  .menu-item:active { background:#FBE3E9; }
   @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
   @media (max-width: 640px) { .hide-sm { display: none; } }
 `;
@@ -289,7 +289,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Sans TC',sans-serif", color: "#8a3b4d", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Sans TC',sans-serif", color: "#AD455E", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
           還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
         </div>
       </>
@@ -299,7 +299,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>存摺開啟中…</div>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Serif TC',serif", color: "#B2607A" }}>存摺開啟中…</div>
       </>
     );
   }
@@ -308,7 +308,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F3ECE5", fontFamily: "'Noto Serif TC',serif", color: "#8a5a63" }}>資料同步中…</div>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Serif TC',serif", color: "#B2607A" }}>資料同步中…</div>
       </>
     );
   }
@@ -329,16 +329,16 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#EAE0D6", color: "#2B2420", fontFamily: "'Noto Sans TC', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#F7E9E3", color: "#2B2420", fontFamily: "'Noto Sans TC', sans-serif" }}>
       <style>{GLOBAL_STYLES}</style>
 
       <div style={{
-        maxWidth: 560, margin: "0 auto", minHeight: "100vh", background: "#F3ECE5",
+        maxWidth: 560, margin: "0 auto", minHeight: "100vh", background: "#FBF3EE",
         boxShadow: "0 0 40px rgba(90,60,50,0.12)", position: "relative",
         paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))",
       }}>
         <div style={{
-          background: "linear-gradient(135deg,#8a3b4d,#B5445B 70%)", color: "#FBEDEF",
+          background: "linear-gradient(135deg,#C25B72,#D9718A 70%)", color: "#FFF3F6",
           padding: "14px 18px 12px", position: "sticky", top: 0, zIndex: 20,
           display: "flex", justifyContent: "space-between", alignItems: "baseline",
         }}>
@@ -354,23 +354,23 @@ export default function App() {
 
         <div style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "#B5445B14", border: "1px solid #B5445B55", color: "#8a3b4d", fontSize: 13, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "#D9718A14", border: "1px solid #D9718A55", color: "#AD455E", fontSize: 13, lineHeight: 1.7 }}>
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#8a3b4d", textDecoration: "underline", fontSize: 13 }}>重試</button>
+              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#AD455E", textDecoration: "underline", fontSize: 13 }}>重試</button>
               {/budget_plans|vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
                 <div style={{ marginTop: 6, fontSize: 12 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 10, background: "#FEFBF8", border: "1px solid #EADFD4", fontSize: 13.5, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 10, background: "#FFFCFA", border: "1px solid #F3DCDF", fontSize: 13.5, lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: 12.5, color: "#9a8d80" }}>
+              <div style={{ marginTop: 8, fontSize: 12.5, color: "#A88690" }}>
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「更多 → 設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#8a5a63" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#B2607A" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} budgetTotals={budgetTotals} spending={spending} budget={budget} vouchers={vouchers} voucherH={voucherH} />
@@ -397,7 +397,7 @@ export default function App() {
         <div style={{
           position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
           width: "100%", maxWidth: 560, zIndex: 30,
-          background: "#FBF7F2", borderTop: "1px solid #EADFD4",
+          background: "#FFF9F6", borderTop: "1px solid #F3DCDF",
           boxShadow: "0 -4px 16px rgba(90,60,50,0.08)",
           display: "flex", padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
         }}>
@@ -407,7 +407,7 @@ export default function App() {
               style={{
                 flex: 1, border: "none", background: "transparent", padding: "6px 0 2px",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                color: tab === n.key ? "#8a3b4d" : "#9a8d80",
+                color: tab === n.key ? "#AD455E" : "#A88690",
               }}
             >
               <span style={{ fontSize: 20, filter: tab === n.key ? "none" : "grayscale(0.7) opacity(0.7)" }}>{n.icon}</span>
@@ -419,7 +419,7 @@ export default function App() {
         {toast && (
           <div style={{
             position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "#2B2420", color: "#FBF7F2", padding: "10px 20px", borderRadius: 20, fontSize: 13, maxWidth: "85%",
+            background: "#2B2420", color: "#FFF9F6", padding: "10px 20px", borderRadius: 20, fontSize: 13, maxWidth: "85%",
             animation: "printIn .2s ease-out", boxShadow: "0 6px 20px rgba(0,0,0,0.2)", zIndex: 50, textAlign: "center",
           }}>
             {toast}

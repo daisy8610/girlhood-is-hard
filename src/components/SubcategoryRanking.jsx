@@ -22,14 +22,14 @@ export function SubcategoryRanking({ spending }) {
   return (
     <div style={{ marginBottom: 26 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-        <div style={{ fontSize: 13, color: "#6b5f54" }}>子分類佔比排行</div>
+        <div style={{ fontSize: 13, color: "#7A5560" }}>子分類佔比排行</div>
         <div style={{ display: "flex", gap: 6 }}>
           {[["year", "今年"], ["all", "全部年度"]].map(([k, label]) => (
             <button
               key={k} onClick={() => setRange(k)}
               style={{
-                fontSize: 11, padding: "3px 10px", borderRadius: 20, border: "1px solid #EADFD4",
-                background: range === k ? "#8a3b4d" : "transparent", color: range === k ? "#fff" : "#6b5f54",
+                fontSize: 11, padding: "3px 10px", borderRadius: 20, border: "1px solid #F3DCDF",
+                background: range === k ? "#C25B72" : "transparent", color: range === k ? "#fff" : "#7A5560",
               }}
             >
               {label}
@@ -43,16 +43,16 @@ export function SubcategoryRanking({ spending }) {
           return (
             <div key={e.key} style={{ fontSize: 12.5 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-                <span style={{ color: "#6b5f54" }}>{i + 1}. {e.key}</span>
-                <span className="mono" style={{ color: "#6b5f54" }}>{fmt(e.total)}（{pct}%）</span>
+                <span style={{ color: "#7A5560" }}>{i + 1}. {e.key}</span>
+                <span className="mono" style={{ color: "#7A5560" }}>{fmt(e.total)}（{pct}%）</span>
               </div>
-              <div style={{ height: 6, background: "#EADFD4", borderRadius: 4, overflow: "hidden" }}>
-                <div style={{ height: "100%", width: pct + "%", background: MAIN_COLORS[e.main] || "#B5445B" }} />
+              <div style={{ height: 6, background: "#F3DCDF", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ height: "100%", width: pct + "%", background: MAIN_COLORS[e.main] || "#D9718A" }} />
               </div>
             </div>
           );
         })}
-        {ranked.list.length === 0 && <div style={{ color: "#9a8d80", fontSize: 13 }}>這段期間還沒有消費紀錄</div>}
+        {ranked.list.length === 0 && <div style={{ color: "#A88690", fontSize: 13 }}>這段期間還沒有消費紀錄</div>}
       </div>
     </div>
   );

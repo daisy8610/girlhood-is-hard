@@ -49,14 +49,14 @@ export function SpendingTab({ data, h }) {
           ) : (
             <div key={r.id} className="row-hover" style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "10px 4px", borderBottom: "1px dotted #EADFD4", gap: 6,
+              padding: "10px 4px", borderBottom: "1px dotted #F3DCDF", gap: 6,
             }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 14 }}>
                   <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: 7, background: MAIN_COLORS[r.main] || "#999", marginRight: 6 }} />
-                  {r.item} <span style={{ color: "#9a8d80", fontSize: 12 }}>{r.sub ? `· ${r.sub}` : ""}</span>
+                  {r.item} <span style={{ color: "#A88690", fontSize: 12 }}>{r.sub ? `· ${r.sub}` : ""}</span>
                 </div>
-                <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
+                <div style={{ fontSize: 11, color: "#A88690", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                 <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
@@ -66,7 +66,7 @@ export function SpendingTab({ data, h }) {
             </div>
           )
         )}
-        {filtered.length === 0 && <div style={{ color: "#9a8d80", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>}
+        {filtered.length === 0 && <div style={{ color: "#A88690", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>}
       </div>
     </div>
   );

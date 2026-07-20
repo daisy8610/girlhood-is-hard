@@ -24,13 +24,13 @@ export function renderMD(md) {
     const line = lines[i];
     if (line.trim() === "") { i++; continue; }
     if (line.trim() === "---") {
-      blocks.push(<hr key={i} style={{ border: "none", borderTop: "1px dashed #EADFD4", margin: "16px 0" }} />);
+      blocks.push(<hr key={i} style={{ border: "none", borderTop: "1px dashed #F3DCDF", margin: "16px 0" }} />);
       i++; continue;
     }
     if (/^#{2,3}\s/.test(line)) {
       const level = line.match(/^#+/)[0].length;
       blocks.push(
-        <div key={i} className="serif" style={{ fontSize: level === 2 ? 17 : 15, fontWeight: 700, color: "#8a3b4d", margin: "14px 0 8px" }}>
+        <div key={i} className="serif" style={{ fontSize: level === 2 ? 17 : 15, fontWeight: 700, color: "#AD455E", margin: "14px 0 8px" }}>
           {inlineMD(line.replace(/^#+\s/, ""))}
         </div>
       );
@@ -38,7 +38,7 @@ export function renderMD(md) {
     }
     if (line.trim().startsWith(">")) {
       blocks.push(
-        <div key={i} style={{ borderLeft: "3px solid #EADFD4", paddingLeft: 10, color: "#8a7f74", fontSize: 13, margin: "8px 0" }}>
+        <div key={i} style={{ borderLeft: "3px solid #F3DCDF", paddingLeft: 10, color: "#9C8288", fontSize: 13, margin: "8px 0" }}>
           {inlineMD(line.replace(/^>\s?/, ""))}
         </div>
       );
@@ -58,7 +58,7 @@ export function renderMD(md) {
             <thead>
               <tr>
                 {rows[0].map((c, ci) => (
-                  <th key={ci} style={{ textAlign: "left", padding: "6px 10px", background: "#F3ECE5", borderBottom: "2px solid #EADFD4", whiteSpace: "nowrap" }}>
+                  <th key={ci} style={{ textAlign: "left", padding: "6px 10px", background: "#FBF3EE", borderBottom: "2px solid #F3DCDF", whiteSpace: "nowrap" }}>
                     {inlineMD(c)}
                   </th>
                 ))}
@@ -68,7 +68,7 @@ export function renderMD(md) {
               {rows.slice(1).map((r, ri) => (
                 <tr key={ri}>
                   {r.map((c, ci) => (
-                    <td key={ci} style={{ padding: "6px 10px", borderBottom: "1px solid #F1E9E0", verticalAlign: "top" }}>
+                    <td key={ci} style={{ padding: "6px 10px", borderBottom: "1px solid #FBE8ED", verticalAlign: "top" }}>
                       {inlineMD(c)}
                     </td>
                   ))}

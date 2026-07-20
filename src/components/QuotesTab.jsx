@@ -22,11 +22,11 @@ function QuoteRow({ r, editingId, setEditingId, h, onConvert }) {
   return (
     <div className="row-hover" style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "8px 4px", borderBottom: "1px dotted #F1E9E0", gap: 6,
+      padding: "8px 4px", borderBottom: "1px dotted #FBE8ED", gap: 6,
     }}>
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: 13.5 }}>{r.clinic}</div>
-        <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>{r.date || "—"}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}</div>
+        <div style={{ fontSize: 11, color: "#A88690", overflowWrap: "anywhere" }}>{r.date || "—"}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
         <span className="mono" style={{ fontSize: 13.5, whiteSpace: "nowrap" }}>{fmt(r.price)}</span>
@@ -73,8 +73,8 @@ export function QuotesTab({ data, h, onConvert }) {
           <button
             key={k} onClick={() => setView(k)}
             style={{
-              fontSize: 12, padding: "6px 13px", borderRadius: 20, border: "1px solid #EADFD4",
-              background: view === k ? "#8a3b4d" : "transparent", color: view === k ? "#fff" : "#6b5f54",
+              fontSize: 12, padding: "6px 13px", borderRadius: 20, border: "1px solid #F3DCDF",
+              background: view === k ? "#C25B72" : "transparent", color: view === k ? "#fff" : "#7A5560",
             }}
           >
             {label}
@@ -86,11 +86,11 @@ export function QuotesTab({ data, h, onConvert }) {
         <div>
           {Object.entries(grouped).map(([cat, prods]) => (
             <div key={cat} style={{ marginBottom: 18 }}>
-              <div className="serif" style={{ fontSize: 15, fontWeight: 700, color: "#8a3b4d", borderBottom: "2px solid #EADFD4", paddingBottom: 4, marginBottom: 6 }}>{cat}</div>
+              <div className="serif" style={{ fontSize: 15, fontWeight: 700, color: "#AD455E", borderBottom: "2px solid #F3DCDF", paddingBottom: 4, marginBottom: 6 }}>{cat}</div>
               {Object.entries(prods).map(([prod, list]) => (
                 <div key={prod} style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: "#6b5f54", margin: "6px 0 2px" }}>
-                    {prod} <span style={{ fontWeight: 400, color: "#9a8d80" }}>（{list.length} 筆）</span>
+                  <div style={{ fontSize: 12.5, fontWeight: 600, color: "#7A5560", margin: "6px 0 2px" }}>
+                    {prod} <span style={{ fontWeight: 400, color: "#A88690" }}>（{list.length} 筆）</span>
                   </div>
                   {list.map((r) => (
                     <QuoteRow key={r.id} r={r} editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} />
@@ -99,7 +99,7 @@ export function QuotesTab({ data, h, onConvert }) {
               ))}
             </div>
           ))}
-          {Object.keys(grouped).length === 0 && <div style={{ color: "#9a8d80", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>}
+          {Object.keys(grouped).length === 0 && <div style={{ color: "#A88690", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>}
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -111,11 +111,11 @@ export function QuotesTab({ data, h, onConvert }) {
               ) : (
                 <div className="row-hover" style={{
                   display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "10px 4px", borderBottom: "1px dotted #EADFD4", gap: 6,
+                  padding: "10px 4px", borderBottom: "1px dotted #F3DCDF", gap: 6,
                 }}>
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 14 }}>{r.product} <span style={{ color: "#9a8d80", fontSize: 12 }}>· {r.clinic}</span></div>
-                    <div style={{ fontSize: 11, color: "#9a8d80", overflowWrap: "anywhere" }}>
+                    <div style={{ fontSize: 14 }}>{r.product} <span style={{ color: "#A88690", fontSize: 12 }}>· {r.clinic}</span></div>
+                    <div style={{ fontSize: 11, color: "#A88690", overflowWrap: "anywhere" }}>
                       {r.date || "—"} · {r.category}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}
                     </div>
                   </div>

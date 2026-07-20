@@ -1,14 +1,16 @@
 import React, { useState, useMemo } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
-import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui";
+import { useCategoryFilter } from "../lib/useCategoryFilter";
+import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, CategoryChips } from "./ui";
 
 function uniqueValues(data, key) {
   return Array.from(new Set(data.map((r) => r[key]).filter(Boolean))).sort();
 }
 
 export function SpendingTab({ data, h }) {
-  const [filter, setFilter] = useState("全部");
-  const [search, setSearch] = useState("");
+  const { filter, setFilter, search, setSearch, cats, filtered } = useCategoryFilter(data, {
+    searchKeys: ["item", "place", "note", "sub", "main"],
+  });
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [copyDraft, setCopyDraft] = useState(null);
@@ -29,14 +31,6 @@ export function SpendingTab({ data, h }) {
     { key: "note", label: "備註", type: "text" },
   ], [data]);
 
-  const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
-  const q = search.trim().toLowerCase();
-  const filtered = data.filter(
-    (r) =>
-      (filter === "全部" || r.main === filter) &&
-      (!q || [r.item, r.place, r.note, r.sub, r.main].some((v) => v && String(v).toLowerCase().includes(q)))
-  );
-
   return (
     <div>
       <SectionTitle sub={`共 ${data.length} 筆，顯示 ${filtered.length} 筆`}>消費紀錄</SectionTitle>
@@ -46,19 +40,7 @@ export function SpendingTab({ data, h }) {
           onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
-      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
-        {cats.map((c) => (
-          <button
-            key={c} onClick={() => setFilter(c)}
-            style={{
-              padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #EADFD4",
-              background: filter === c ? "#8a3b4d" : "transparent", color: filter === c ? "#fff" : "#6b5f54",
-            }}
-          >
-            {c}
-          </button>
-        ))}
-      </div>
+      <CategoryChips options={cats} value={filter} onChange={setFilter} />
       <div style={{ display: "flex", flexDirection: "column" }}>
         {filtered.map((r) =>
           editingId === r.id ? (

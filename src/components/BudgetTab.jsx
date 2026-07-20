@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 import { renderMD } from "../lib/markdown";
-import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui";
+import { useCategoryFilter } from "../lib/useCategoryFilter";
+import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, CategoryChips } from "./ui";
 
 const BUDGET_FIELDS = [
   { key: "date", label: "計劃日期", type: "date" },
@@ -66,8 +67,6 @@ function StrategyBlock({ content, onSave }) {
 export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd }) {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [filter, setFilter] = useState("全部");
-  const [search, setSearch] = useState("");
   const [confirmId, setConfirmId] = useState(null);
 
   function toggleDone(r) {
@@ -77,13 +76,9 @@ export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd })
   }
   const sorted = [...data].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
 
-  const cats = ["全部", ...Array.from(new Set(data.map((r) => r.main).filter(Boolean)))];
-  const q = search.trim().toLowerCase();
-  const filtered = sorted.filter(
-    (r) =>
-      (filter === "全部" || r.main === filter) &&
-      (!q || [r.item, r.place, r.note, r.bucket, r.main].some((v) => v && String(v).toLowerCase().includes(q)))
-  );
+  const { filter, setFilter, search, setSearch, cats, filtered } = useCategoryFilter(sorted, {
+    searchKeys: ["item", "place", "note", "bucket", "main"],
+  });
 
   return (
     <div>
@@ -95,19 +90,7 @@ export function BudgetTab({ data, h, strategy, saveStrategy, onConvert, onAdd })
           onSubmit={(r) => { onAdd({ status: "計劃中", ...r }); setAdding(false); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
-      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
-        {cats.map((c) => (
-          <button
-            key={c} onClick={() => setFilter(c)}
-            style={{
-              padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #EADFD4",
-              background: filter === c ? "#8a3b4d" : "transparent", color: filter === c ? "#fff" : "#6b5f54",
-            }}
-          >
-            {c}
-          </button>
-        ))}
-      </div>
+      <CategoryChips options={cats} value={filter} onChange={setFilter} />
       <div style={{ display: "flex", flexDirection: "column" }}>
         {filtered.map((r) =>
           editingId === r.id ? (

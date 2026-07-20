@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-20
+- 消費/預算分頁的分類篩選＋搜尋邏輯抽成共用的 useCategoryFilter hook 和 CategoryChips 元件，不再各自重複一份
+- 詢價、預算「轉為消費紀錄」的邏輯合併成共用的 convertToExpense 函式
+- 修正「更新失敗：Cannot read properties of undefined (reading 'place')」：update 函式原本靠 setState 的 updater 順便算出合併後的資料，但 React 不保證那個時機一定同步執行，導致送出的資料常是 undefined。改成直接從目前陣列裡找出該筆資料再合併，這個函式是消費/預算/詢價/筆記/儲值金共用的，全部一起修好
+
 ## 2026-07-16（第十五次）
 - 修正 google-calendar-sync 沒有 CORS 標頭，瀏覽器直接呼叫可能被擋掉且沒有任何錯誤訊息
 - 預算項目同步日曆改成一定會跳 toast（成功或失敗都會顯示），方便排查問題

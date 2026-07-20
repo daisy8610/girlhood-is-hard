@@ -103,7 +103,7 @@ export default function App() {
 
   function flash(msg) { setToast(msg); setTimeout(() => setToast(null), 2600); }
 
-  const mk = (kind, setter) => ({
+  const mk = (kind, arr, setter) => ({
     add: async (r) => {
       try {
         const saved = await insertOne(kind, r);
@@ -113,8 +113,8 @@ export default function App() {
       } catch (ex) { flash("新增失敗：" + (ex.message || "")); }
     },
     update: async (id, patch) => {
-      let merged;
-      setter((prev) => prev.map((r) => { if (r.id === id) { merged = { ...r, ...patch }; return merged; } return r; }));
+      const merged = { ...arr.find((r) => r.id === id), ...patch };
+      setter((prev) => prev.map((r) => (r.id === id ? merged : r)));
       try {
         await updateOne(kind, id, merged);
         setProviderCount(getProviderCount());
@@ -128,11 +128,11 @@ export default function App() {
     },
   });
 
-  const spendH = useMemo(() => mk("spending", setSpending), []);
-  const quoteH = useMemo(() => mk("quotes", setQuotes), []);
-  const budgetH = useMemo(() => mk("budget", setBudget), []);
-  const noteH = useMemo(() => mk("notes", setNotes), []);
-  const voucherH = useMemo(() => mk("vouchers", setVouchers), []);
+  const spendH = mk("spending", spending, setSpending);
+  const quoteH = mk("quotes", quotes, setQuotes);
+  const budgetH = mk("budget", budget, setBudget);
+  const noteH = mk("notes", notes, setNotes);
+  const voucherH = mk("vouchers", vouchers, setVouchers);
 
   const totals = useMemo(() => {
     const now = new Date();
@@ -218,27 +218,23 @@ export default function App() {
     } catch (ex) { flash("儲存失敗：" + (ex.message || "")); }
   }
 
-  async function convertQuoteToExpense(q) {
+  async function convertToExpense({ main = "", sub = "", item, place = "", amount, note = "" }) {
     await spendH.add({
       date: new Date().toISOString().slice(0, 10),
-      main: "醫美",
-      sub: q.category || "",
-      item: q.product || q.category || "（未命名）",
-      place: q.clinic || "",
-      amount: q.price,
-      note: q.note || "",
+      main, sub, item: item || "（未命名）", place, amount, note,
     });
   }
 
-  async function convertBudgetToExpense(b) {
-    await spendH.add({
-      date: new Date().toISOString().slice(0, 10),
-      main: b.main || "",
-      sub: b.bucket || "",
-      item: b.item || "（未命名）",
-      place: b.place || "",
-      amount: b.actual != null ? b.actual : b.budget,
-      note: b.note || "",
+  function convertQuoteToExpense(q) {
+    return convertToExpense({
+      main: "醫美", sub: q.category, item: q.product || q.category, place: q.clinic, amount: q.price, note: q.note,
+    });
+  }
+
+  function convertBudgetToExpense(b) {
+    return convertToExpense({
+      main: b.main, sub: b.bucket, item: b.item, place: b.place,
+      amount: b.actual != null ? b.actual : b.budget, note: b.note,
     });
   }
 

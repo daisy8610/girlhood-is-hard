@@ -59,6 +59,24 @@ export function RowActions({ onEdit, onDelete }) {
   );
 }
 
+export function CategoryChips({ options, value, onChange }) {
+  return (
+    <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+      {options.map((c) => (
+        <button
+          key={c} onClick={() => onChange(c)}
+          style={{
+            padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #EADFD4",
+            background: value === c ? "#8a3b4d" : "transparent", color: value === c ? "#fff" : "#6b5f54",
+          }}
+        >
+          {c}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function SearchBox({ value, onChange, placeholder }) {
   return (
     <input

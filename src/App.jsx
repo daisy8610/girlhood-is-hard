@@ -343,7 +343,7 @@ export default function App() {
       }}>
         <div style={{
           background: "linear-gradient(135deg,#C25B72,#D9718A 70%)", color: "#FFF3F6",
-          padding: "14px 18px 12px", position: "sticky", top: 0, zIndex: 20,
+          padding: "calc(14px + env(safe-area-inset-top, 0px)) 18px 12px", position: "sticky", top: 0, zIndex: 20,
           display: "flex", justifyContent: "space-between", alignItems: "baseline",
         }}>
           <div>

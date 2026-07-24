@@ -170,7 +170,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     <form onSubmit={submit} style={{ border: "1px solid #F3DCDF", borderRadius: 10, padding: 14, marginBottom: 14, background: "#FFFCFA" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
-          <label key={f.key} style={{ fontSize: 12, color: "#7A5560", gridColumn: f.type === "textarea" ? "1 / -1" : "auto" }}>
+          <label key={f.key} style={{ fontSize: 12, color: "#7A5560", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
             {f.label}{f.required && <span style={{ color: "#AD455E" }}> *</span>}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>

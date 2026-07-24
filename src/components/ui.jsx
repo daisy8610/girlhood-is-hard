@@ -77,6 +77,46 @@ export function CategoryChips({ options, value, onChange }) {
   );
 }
 
+// 下拉建議輸入框：電腦、手機行為一致，取代原生 datalist（手機瀏覽器支援不一）
+function SuggestInput({ value, onChange, suggestions, placeholder, style }) {
+  const [open, setOpen] = useState(false);
+  const q = String(value || "").toLowerCase();
+  const matches = suggestions.filter((s) => !q || s.toLowerCase().includes(q));
+
+  return (
+    <div style={{ position: "relative", marginTop: 4 }}>
+      <input
+        type="text"
+        value={value ?? ""}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        placeholder={placeholder || ""}
+        style={{ ...style, marginTop: 0 }}
+      />
+      {open && matches.length > 0 && (
+        <div style={{
+          position: "absolute", top: "100%", left: 0, right: 0, marginTop: 2, zIndex: 10,
+          background: "#fff", border: "1px solid #F3DCDF", borderRadius: 6,
+          maxHeight: 160, overflowY: "auto", boxShadow: "0 4px 12px rgba(90,60,50,0.12)",
+        }}>
+          {matches.map((s) => (
+            <div
+              key={s} className="row-hover"
+              onMouseDown={(e) => e.preventDefault()}
+              onTouchStart={(e) => e.preventDefault()}
+              onClick={() => { onChange(s); setOpen(false); }}
+              style={{ padding: "7px 10px", fontSize: 13, cursor: "pointer" }}
+            >
+              {s}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function SearchBox({ value, onChange, placeholder }) {
   return (
     <input
@@ -152,20 +192,17 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={8}
                 placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
               />
+            ) : f.suggestions ? (
+              <SuggestInput
+                value={vals[f.key]} onChange={(v) => set(f.key, v)}
+                suggestions={f.suggestions} placeholder={f.placeholder} style={inputStyle}
+              />
             ) : (
-              <>
-                <input
-                  type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
-                  value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
-                  placeholder={f.placeholder || ""} style={inputStyle}
-                  list={f.suggestions ? `dl-${f.key}` : undefined}
-                />
-                {f.suggestions && (
-                  <datalist id={`dl-${f.key}`}>
-                    {f.suggestions.map((s) => <option key={s} value={s} />)}
-                  </datalist>
-                )}
-              </>
+              <input
+                type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+                value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
+                placeholder={f.placeholder || ""} style={inputStyle}
+              />
             )}
           </label>
         ))}

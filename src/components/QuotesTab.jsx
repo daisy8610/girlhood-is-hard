@@ -4,15 +4,15 @@ import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui
 
 const QUOTE_FIELDS = [
   { key: "date", label: "詢價日期", type: "date", default: new Date().toISOString().slice(0, 10) },
-  { key: "clinic", label: "診所名稱", type: "text" },
+  { key: "clinic", label: "診所名稱", type: "text", required: true },
   { key: "category", label: "療程類別", type: "select", options: ["玻尿酸", "肉毒", "電音波", "皮秒", "除毛", "複合療程"] },
   { key: "product", label: "品牌/產品", type: "text" },
   { key: "qty", label: "單位數量", type: "number" },
-  { key: "price", label: "價格", type: "number" },
+  { key: "price", label: "價格", type: "number", required: true },
   { key: "note", label: "備註", type: "text" },
 ];
 
-function QuoteRow({ r, editingId, setEditingId, h, onConvert }) {
+function QuoteRow({ r, editingId, setEditingId, h, onConvert, onCopy }) {
   if (editingId === r.id) {
     return (
       <RecordForm fields={QUOTE_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
@@ -30,6 +30,7 @@ function QuoteRow({ r, editingId, setEditingId, h, onConvert }) {
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
         <span className="mono" style={{ fontSize: 13.5, whiteSpace: "nowrap" }}>{fmt(r.price)}</span>
+        <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
         <button className="iconbtn" title="轉為消費紀錄" onClick={() => onConvert(r)}>➜🧾</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
       </div>
@@ -42,6 +43,13 @@ export function QuotesTab({ data, h, onConvert }) {
   const [search, setSearch] = useState("");
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [copyDraft, setCopyDraft] = useState(null);
+
+  function copyRow(r) {
+    setEditingId(null);
+    setCopyDraft({ ...r, date: new Date().toISOString().slice(0, 10) });
+    setAdding(true);
+  }
 
   const q = search.trim().toLowerCase();
   const filtered = data.filter((r) => !q || [r.clinic, r.product, r.category, r.note].some((v) => v && String(v).toLowerCase().includes(q)));
@@ -55,17 +63,18 @@ export function QuotesTab({ data, h, onConvert }) {
       byCat[cat][prod] = byCat[cat][prod] || [];
       byCat[cat][prod].push(r);
     });
-    Object.values(byCat).forEach((prods) => Object.values(prods).forEach((list) => list.sort((a, b) => (a.price || Infinity) - (b.price || Infinity))));
+    const rank = (v) => (v == null ? Infinity : v);
+    Object.values(byCat).forEach((prods) => Object.values(prods).forEach((list) => list.sort((a, b) => rank(a.price) - rank(b.price))));
     return byCat;
   }, [filtered]);
 
   return (
     <div>
       <SectionTitle sub="同一產品跨診所比價，價格由低到高排序（注意單位數量可能不同）">詢價比較</SectionTitle>
-      {!adding && <AddButton onClick={() => setAdding(true)} label="新增詢價紀錄" />}
+      {!adding && <AddButton onClick={() => { setCopyDraft(null); setAdding(true); }} label="新增詢價紀錄" />}
       {adding && (
-        <RecordForm fields={QUOTE_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
-          onSubmit={(r) => { h.add(r); setAdding(false); }} />
+        <RecordForm fields={QUOTE_FIELDS} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}
+          onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋診所、產品、備註…" />
       <div style={{ marginBottom: 12, display: "flex", gap: 6 }}>
@@ -93,7 +102,7 @@ export function QuotesTab({ data, h, onConvert }) {
                     {prod} <span style={{ fontWeight: 400, color: "#A88690" }}>（{list.length} 筆）</span>
                   </div>
                   {list.map((r) => (
-                    <QuoteRow key={r.id} r={r} editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} />
+                    <QuoteRow key={r.id} r={r} editingId={editingId} setEditingId={setEditingId} h={h} onConvert={onConvert} onCopy={copyRow} />
                   ))}
                 </div>
               ))}
@@ -121,6 +130,7 @@ export function QuotesTab({ data, h, onConvert }) {
                   </div>
                   <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                     <span className="mono" style={{ fontSize: 14, whiteSpace: "nowrap" }}>{fmt(r.price)}</span>
+                    <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => copyRow(r)}>⧉</button>
                     <button className="iconbtn" title="轉為消費紀錄" onClick={() => onConvert(r)}>➜🧾</button>
                     <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
                   </div>

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { fmt, MAIN_COLORS } from "../lib/format";
+import { fmt, MAIN_COLORS, MAIN_CATEGORIES } from "../lib/format";
 import { renderMD } from "../lib/markdown";
 import { useCategoryFilter } from "../lib/useCategoryFilter";
 import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, CategoryChips } from "./ui";
 
 const BUDGET_FIELDS = [
   { key: "date", label: "計劃日期", type: "date" },
-  { key: "item", label: "項目名稱", type: "text" },
-  { key: "main", label: "主分類", type: "select", options: ["醫美", "頭髮", "美容", "指甲"] },
+  { key: "item", label: "項目名稱", type: "text", required: true },
+  { key: "main", label: "主分類", type: "select", options: MAIN_CATEGORIES },
   { key: "bucket", label: "預算分類", type: "select", options: ["必要項目", "彈性項目", "緊急預備"] },
-  { key: "budget", label: "預算金額", type: "number" },
+  { key: "budget", label: "預算金額", type: "number", required: true },
   { key: "actual", label: "實際金額", type: "number" },
   { key: "place", label: "地點", type: "text" },
   { key: "note", label: "備註", type: "text" },
@@ -42,6 +42,7 @@ export function BudgetTab({ data, h, strategy, onConvert, onAdd }) {
 
   function toggleDone(r) {
     const done = r.status !== "已完成";
+    if (!done && !window.confirm("取消勾選只會把狀態改回「計劃中」，不會刪除或改動已經記在消費紀錄裡的那筆錢，確定要取消嗎？")) return;
     h.update(r.id, { status: done ? "已完成" : "計劃中" });
     if (done) onConvert(r);
   }

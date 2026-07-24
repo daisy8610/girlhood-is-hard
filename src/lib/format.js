@@ -8,6 +8,8 @@ export const MAIN_COLORS = {
   "指甲": "#1BAF7A",
 };
 
+export const MAIN_CATEGORIES = Object.keys(MAIN_COLORS);
+
 export const num = (v) => (v == null || v === "" ? null : Number(v));
 
 export function download(filename, text, type) {

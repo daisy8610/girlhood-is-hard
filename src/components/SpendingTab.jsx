@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { fmt, MAIN_COLORS } from "../lib/format";
+import { fmt, MAIN_COLORS, MAIN_CATEGORIES } from "../lib/format";
 import { useCategoryFilter } from "../lib/useCategoryFilter";
 import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, CategoryChips } from "./ui";
 
@@ -23,11 +23,11 @@ export function SpendingTab({ data, h }) {
 
   const fields = useMemo(() => [
     { key: "date", label: "日期", type: "date", default: new Date().toISOString().slice(0, 10) },
-    { key: "main", label: "主分類", type: "select", options: ["醫美", "頭髮", "美容", "指甲"] },
+    { key: "main", label: "主分類", type: "select", options: MAIN_CATEGORIES },
     { key: "sub", label: "子分類", type: "text", suggestions: uniqueValues(data, "sub") },
-    { key: "item", label: "項目名稱", type: "text", fallbackKey: "sub", placeholder: "留空會自動帶入子分類" },
+    { key: "item", label: "項目名稱", type: "text", fallbackKey: "sub", placeholder: "留空會自動帶入子分類", required: true },
     { key: "place", label: "地點", type: "text", suggestions: uniqueValues(data, "place") },
-    { key: "amount", label: "金額", type: "number" },
+    { key: "amount", label: "金額", type: "number", required: true },
     { key: "note", label: "備註", type: "text" },
   ], [data]);
 

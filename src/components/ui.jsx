@@ -101,6 +101,8 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     return base;
   });
 
+  const [err, setErr] = useState("");
+
   function set(k, v) { setVals((prev) => ({ ...prev, [k]: v })); }
 
   function submit(e) {
@@ -113,6 +115,12 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
       if (f.type === "tags") v = (v || "").split(",").map((s) => s.trim()).filter(Boolean);
       out[f.key] = v;
     });
+    const missing = fields.filter((f) => f.required && (out[f.key] === "" || out[f.key] == null));
+    if (missing.length) {
+      setErr(missing.map((f) => f.label).join("、") + " 是必填欄位");
+      return;
+    }
+    setErr("");
     onSubmit(out);
   }
 
@@ -123,7 +131,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
           <label key={f.key} style={{ fontSize: 12, color: "#7A5560", gridColumn: f.type === "textarea" ? "1 / -1" : "auto" }}>
-            {f.label}
+            {f.label}{f.required && <span style={{ color: "#AD455E" }}> *</span>}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>
                 <option value="">—</option>
@@ -162,6 +170,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
           </label>
         ))}
       </div>
+      {err && <div style={{ marginTop: 10, fontSize: 12, color: "#AD455E" }}>⚠️ {err}</div>}
       <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
         <button type="submit" style={{ background: "#D9718A", color: "#fff", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600 }}>
           {submitLabel || "儲存"}

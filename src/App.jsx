@@ -103,7 +103,7 @@ export default function App() {
 
   function flash(msg) { setToast(msg); setTimeout(() => setToast(null), 2600); }
 
-  const mk = (kind, arr, setter) => ({
+  const mk = (kind, setter) => ({
     add: async (r) => {
       try {
         const saved = await insertOne(kind, r);
@@ -113,8 +113,12 @@ export default function App() {
       } catch (ex) { flash("新增失敗：" + (ex.message || "")); }
     },
     update: async (id, patch) => {
-      const merged = { ...arr.find((r) => r.id === id), ...patch };
-      setter((prev) => prev.map((r) => (r.id === id ? merged : r)));
+      let merged;
+      setter((prev) => prev.map((r) => {
+        if (r.id !== id) return r;
+        merged = { ...r, ...patch };
+        return merged;
+      }));
       try {
         await updateOne(kind, id, merged);
         setProviderCount(getProviderCount());
@@ -128,11 +132,11 @@ export default function App() {
     },
   });
 
-  const spendH = mk("spending", spending, setSpending);
-  const quoteH = mk("quotes", quotes, setQuotes);
-  const budgetH = mk("budget", budget, setBudget);
-  const noteH = mk("notes", notes, setNotes);
-  const voucherH = mk("vouchers", vouchers, setVouchers);
+  const spendH = mk("spending", setSpending);
+  const quoteH = mk("quotes", setQuotes);
+  const budgetH = mk("budget", setBudget);
+  const noteH = mk("notes", setNotes);
+  const voucherH = mk("vouchers", setVouchers);
 
   const totals = useMemo(() => {
     const now = new Date();

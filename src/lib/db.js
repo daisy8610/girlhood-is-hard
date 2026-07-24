@@ -79,7 +79,7 @@ const quoteToDb = (o, providerId) => {
     product_name: o.product || null,
     quoted_amount: price,
     quantity: qty,
-    unit_price: price != null && qty ? Number((price / qty).toFixed(2)) : null,
+    unit_price: price != null && qty > 0 ? Number((price / qty).toFixed(2)) : null,
     notes: o.note || null,
   };
 };
@@ -156,7 +156,11 @@ const MAP = {
   vouchers: { table: "vouchers", toApp: voucherToApp, toDb: voucherToDb, placeKey: "name" },
 };
 
-const usesProvider = (kind) => MAP[kind].placeKey && kind !== "vouchers";
+const usesProvider = (kind) => {
+  const m = MAP[kind];
+  if (!m) throw new Error(`未知的資料種類：${kind}`);
+  return m.placeKey && kind !== "vouchers";
+};
 
 export async function fetchAll() {
   const providersRes = await supa.from("providers").select("id, name, kind");

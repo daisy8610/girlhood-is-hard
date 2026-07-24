@@ -129,6 +129,7 @@ export function SettingsPage({
             </div>
             <div style={{ fontSize: 12, color: "#A88690", margin: "10px 0" }}>
               確認後，雲端的消費/詢價/預算/筆記/儲值資料會<strong>整份被備份檔取代</strong>（店家清單保留）；取代前會自動先下載一份現況備份。
+              <br />⚠️ 還原過程中如果網路中斷或寫入失敗，雲端資料可能會處於「舊資料已清空、新資料沒補齊」的中間狀態；建議在網路穩定時操作，還原後可到各頁面確認筆數是否正確，若不對可用剛下載的現況備份再還原一次。
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <button

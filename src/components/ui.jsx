@@ -197,9 +197,19 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 value={vals[f.key]} onChange={(v) => set(f.key, v)}
                 suggestions={f.suggestions} placeholder={f.placeholder} style={inputStyle}
               />
+            ) : f.type === "date" ? (
+              // iOS Safari 的 input[type=date] 渲染寬度有時會忽略 CSS 設定值、超出外框，
+              // 用 overflow:hidden 的容器裁掉超出部分，點擊行為不受影響
+              <div style={{ ...inputStyle, padding: 0, overflow: "hidden" }}>
+                <input
+                  type="date"
+                  value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
+                  style={{ width: "100%", boxSizing: "border-box", padding: "8px 8px", border: "none", borderRadius: 6 }}
+                />
+              </div>
             ) : (
               <input
-                type={f.type === "number" ? "number" : f.type === "date" ? "date" : "text"}
+                type={f.type === "number" ? "number" : "text"}
                 value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
                 placeholder={f.placeholder || ""} style={inputStyle}
               />

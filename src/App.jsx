@@ -266,8 +266,15 @@ export default function App() {
         body: { item: r.item, date: r.date, place: r.place, note: r.note },
       });
       if (error) { flash("同步日曆失敗：" + (error.message || "")); return; }
-      if (data && data.ok) flash("已同步到 Google 日曆");
-      else if (data) flash("同步日曆失敗：" + (data.reason || "未知原因"));
+      if (data && data.ok) { flash("已同步到 Google 日曆"); return; }
+      if (data && data.reason === "refresh_failed") {
+        const { data: u } = await supa.auth.getUser();
+        if (u.user) await supa.from("google_calendar_tokens").delete().eq("user_id", u.user.id);
+        setGoogleLinked(false);
+        flash("Google 日曆授權已過期，請重新連結");
+        return;
+      }
+      if (data) flash("同步日曆失敗：" + (data.reason || "未知原因"));
     } catch (ex) { flash("同步日曆失敗：" + (ex.message || "")); }
   }
 

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-08-24
+- 修正 keep-alive 排程：原本打 `/auth/v1/health` 不會真的碰到資料庫，不算 Supabase 判斷的「活動」，專案照樣被暫停；改成查詢 `profiles` 資料表，確保排程真的能延續資料庫的活躍狀態
+
 ## 2026-08-12
 - 新增 GitHub Actions 排程（每 3 天打一次 Supabase health 端點），避免免費方案因 7 天無活動自動暫停專案
 

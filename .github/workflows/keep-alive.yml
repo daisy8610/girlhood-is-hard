@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Query database to keep project active
         run: |
-          curl -sf "https://krwbiyrzspdroarnqykb.supabase.co/rest/v1/profiles?select=id&limit=1&_=$(date +%s)" \
+          curl -sf "https://krwbiyrzspdroarnqykb.supabase.co/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: sb_publishable_iKjlGqxvKeJ6rxupenT8Gw_S8fI6VoG"

@@ -243,7 +243,7 @@ export default function App() {
     if (!googleLinked || !r.date) return;
     try {
       const { data, error } = await supa.functions.invoke("google-calendar-sync", {
-        body: { item: r.item, date: r.date, place: r.place, note: r.note },
+        body: { item: r.item, date: r.date, time: r.time, place: r.place, note: r.note },
       });
       if (error) { flash("同步日曆失敗：" + (error.message || "")); return; }
       if (data && data.ok) { flash("已同步到 Google 日曆"); return; }

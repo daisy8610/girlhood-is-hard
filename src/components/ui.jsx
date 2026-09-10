@@ -150,7 +150,8 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     const out = {};
     fields.forEach((f) => {
       let v = vals[f.key];
-      if (f.fallbackKey && (v === "" || v == null)) v = vals[f.fallbackKey];
+      if (f.fallbackFn && (v === "" || v == null)) v = f.fallbackFn(vals);
+      else if (f.fallbackKey && (v === "" || v == null)) v = vals[f.fallbackKey];
       if (f.type === "number") v = v === "" || v === null ? null : Number(v);
       if (f.type === "tags") v = (v || "").split(",").map((s) => s.trim()).filter(Boolean);
       out[f.key] = v;
@@ -209,7 +210,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
               </div>
             ) : (
               <input
-                type={f.type === "number" ? "number" : "text"}
+                type={f.type === "number" ? "number" : f.type === "time" ? "time" : "text"}
                 value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
                 placeholder={f.placeholder || ""} style={inputStyle}
               />

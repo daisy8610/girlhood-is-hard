@@ -23,9 +23,10 @@ export function SpendingTab({ data, h, onAdd }) {
 
   const fields = useMemo(() => [
     { key: "date", label: "日期", type: "date", default: new Date().toISOString().slice(0, 10) },
+    { key: "time", label: "時間（選填，會用在日曆同步）", type: "time" },
     { key: "main", label: "主分類", type: "select", options: MAIN_CATEGORIES },
     { key: "sub", label: "子分類", type: "text", suggestions: uniqueValues(data, "sub") },
-    { key: "item", label: "項目名稱", type: "text", fallbackKey: "sub", placeholder: "留空會自動帶入子分類", required: true },
+    { key: "item", label: "項目名稱", type: "text", fallbackFn: (v) => [v.main, v.sub].filter(Boolean).join(" "), placeholder: "留空會自動帶入「主分類 子分類」", required: true },
     { key: "place", label: "地點", type: "text", suggestions: uniqueValues(data, "place") },
     { key: "amount", label: "金額", type: "number", required: true },
     { key: "note", label: "備註", type: "text" },

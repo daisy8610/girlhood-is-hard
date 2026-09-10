@@ -55,8 +55,24 @@ Deno.serve(async (req) => {
 
   let body;
   try { body = await req.json(); } catch { body = {}; }
-  const { item, date, place, note } = body;
+  const { item, date, time, place, note } = body;
   if (!date) return json({ error: "missing_date" }, 400);
+
+  // 有填時間就開一個帶時區的 1 小時行程，沒填時間維持全天事件
+  const timeZone = "Asia/Taipei";
+  let timeFields = { start: { date }, end: { date } };
+  if (time) {
+    const [y, mo, d] = date.split("-").map(Number);
+    const [h, mi] = time.split(":").map(Number);
+    const endMs = Date.UTC(y, mo - 1, d, h, mi) + 60 * 60 * 1000;
+    const end = new Date(endMs);
+    const pad = (n) => String(n).padStart(2, "0");
+    const endStr = `${end.getUTCFullYear()}-${pad(end.getUTCMonth() + 1)}-${pad(end.getUTCDate())}T${pad(end.getUTCHours())}:${pad(end.getUTCMinutes())}:00`;
+    timeFields = {
+      start: { dateTime: `${date}T${time}:00`, timeZone },
+      end: { dateTime: endStr, timeZone },
+    };
+  }
 
   const eventRes = await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
     method: "POST",
@@ -68,8 +84,7 @@ Deno.serve(async (req) => {
       summary: item || "（未命名計畫）",
       location: place || undefined,
       description: note || undefined,
-      start: { date },
-      end: { date },
+      ...timeFields,
     }),
   });
   const eventData = await eventRes.json();

@@ -30,6 +30,7 @@ export function SpendingTab({ data, h, onAdd }) {
     { key: "place", label: "地點", type: "text", suggestions: uniqueValues(data, "place") },
     { key: "amount", label: "金額", type: "number", required: true },
     { key: "note", label: "備註", type: "text" },
+    { key: "syncCalendar", label: "同步到 Google 日曆", type: "checkbox", default: false },
   ], [data]);
 
   return (

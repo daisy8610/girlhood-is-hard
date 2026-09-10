@@ -58,7 +58,7 @@ export function SettingsPage({
         <button onClick={logout} style={btn}>登出</button>
       </SettingsCard>
 
-      <SettingsCard title="Google 日曆" sub="連結後，新增消費紀錄且日期是未來時，會自動在你的 Google 日曆建一筆全天事件">
+      <SettingsCard title="Google 日曆" sub="連結後，新增消費紀錄時勾選「同步到 Google 日曆」，就會在你的日曆建一筆行程">
         {googleLinked ? (
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <span style={{ fontSize: 13, color: "#5a6e5f" }}>✓ 已連結</span>

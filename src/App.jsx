@@ -266,8 +266,7 @@ export default function App() {
 
   async function addExpenseItem(r) {
     await spendH.add(r);
-    const today = new Date().toISOString().slice(0, 10);
-    if (r.date && r.date > today) syncToCalendar(r);
+    if (r.syncCalendar) syncToCalendar(r);
   }
 
   async function saveStrategy(strategy) {

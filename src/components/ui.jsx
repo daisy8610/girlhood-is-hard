@@ -199,6 +199,13 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 suggestions={typeof f.suggestions === "function" ? f.suggestions(vals) : f.suggestions}
                 placeholder={f.placeholder} style={inputStyle}
               />
+            ) : f.type === "checkbox" ? (
+              <div style={{ marginTop: 6 }}>
+                <input
+                  type="checkbox" checked={!!vals[f.key]} onChange={(e) => set(f.key, e.target.checked)}
+                  style={{ width: 16, height: 16, accentColor: "#D9718A", verticalAlign: "middle" }}
+                />
+              </div>
             ) : f.type === "date" || f.type === "time" ? (
               // iOS Safari 的 input[type=date] 渲染寬度有時會忽略 CSS 設定值、超出外框，
               // 用 overflow:hidden 的容器裁掉超出部分，點擊行為不受影響；time 欄位一併套用同樣的外框

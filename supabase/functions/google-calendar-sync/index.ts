@@ -55,8 +55,12 @@ Deno.serve(async (req) => {
 
   let body;
   try { body = await req.json(); } catch { body = {}; }
-  const { item, date, time, place, note } = body;
+  const { item, date, time, place, note, amount } = body;
   if (!date) return json({ error: "missing_date" }, 400);
+
+  const amountText = amount != null ? (amount < 0 ? "-$" : "$") + Math.abs(amount).toLocaleString("zh-TW") : null;
+  const firstLine = [note, amountText].filter(Boolean).join(" ");
+  const description = [firstLine, "#漂亮"].filter(Boolean).join("\n");
 
   // 有填時間就開一個帶時區的 1 小時行程，沒填時間維持全天事件
   const timeZone = "Asia/Taipei";
@@ -83,7 +87,7 @@ Deno.serve(async (req) => {
     body: JSON.stringify({
       summary: item || "（未命名計畫）",
       location: place || undefined,
-      description: [note, "#漂亮"].filter(Boolean).join("\n"),
+      description,
       ...timeFields,
     }),
   });

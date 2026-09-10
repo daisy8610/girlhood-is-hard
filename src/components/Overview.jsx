@@ -4,11 +4,10 @@ import { TrendChart } from "./TrendChart";
 import { SubcategoryRanking } from "./SubcategoryRanking";
 import { VouchersPanel } from "./VouchersPanel";
 
-export function Overview({ totals, budgetTotals, spending, budget, vouchers, voucherH }) {
+export function Overview({ totals, cap, spending, vouchers, voucherH }) {
   const sorted = Object.entries(totals.byMain).sort((a, b) => b[1] - a[1]);
-  const pct = Math.min(100, Math.round((budgetTotals.planned / budgetTotals.cap) * 100));
-  const completedCount = budget.filter((r) => r.status === "已完成").length;
-  const gap = budgetTotals.done - budgetTotals.doneBudget;
+  const pct = Math.min(100, Math.round((totals.ytd / cap) * 100));
+  const remaining = cap - totals.ytd;
 
   return (
     <div>
@@ -29,25 +28,19 @@ export function Overview({ totals, budgetTotals, spending, budget, vouchers, vou
           </div>
           <div>
             <div style={{ fontSize: 11, opacity: 0.8 }}>年度預算上限</div>
-            <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(budgetTotals.cap)}</div>
+            <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(cap)}</div>
           </div>
           <div>
-            <div style={{ fontSize: 11, opacity: 0.8 }}>{new Date().getFullYear()} 已規劃</div>
-            <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(budgetTotals.planned)}</div>
+            <div style={{ fontSize: 11, opacity: 0.8 }}>剩餘額度</div>
+            <div className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{fmt(remaining)}</div>
           </div>
         </div>
         <div style={{ position: "relative", marginTop: 12 }}>
           <div style={{ height: 7, background: "rgba(255,255,255,0.25)", borderRadius: 8, overflow: "hidden" }}>
             <div style={{ height: "100%", width: pct + "%", background: "#FFF3F6" }} />
           </div>
-          <div style={{ fontSize: 10.5, opacity: 0.85, marginTop: 4, textAlign: "right" }} className="mono">{pct}% of {fmt(budgetTotals.cap)}</div>
+          <div style={{ fontSize: 10.5, opacity: 0.85, marginTop: 4, textAlign: "right" }} className="mono">已花 {pct}% of {fmt(cap)}</div>
         </div>
-        {completedCount > 0 && (
-          <div style={{ position: "relative", marginTop: 10, fontSize: 11.5, opacity: 0.9 }}>
-            已完成 {completedCount} 項：預算 {fmt(budgetTotals.doneBudget)}，實際花 {fmt(budgetTotals.done)}
-            {gap !== 0 && <span className="mono"> （{gap > 0 ? `超支 ${fmt(gap)}` : `省下 ${fmt(-gap)}`}）</span>}
-          </div>
-        )}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 24 }}>

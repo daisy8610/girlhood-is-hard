@@ -58,7 +58,7 @@ export function SettingsPage({
         <button onClick={logout} style={btn}>登出</button>
       </SettingsCard>
 
-      <SettingsCard title="Google 日曆" sub="連結後，新增「預算計畫」項目時會自動在你的 Google 日曆建一筆全天事件">
+      <SettingsCard title="Google 日曆" sub="連結後，新增消費紀錄且日期是未來時，會自動在你的 Google 日曆建一筆全天事件">
         {googleLinked ? (
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <span style={{ fontSize: 13, color: "#5a6e5f" }}>✓ 已連結</span>
@@ -128,7 +128,7 @@ export function SettingsPage({
               </table>
             </div>
             <div style={{ fontSize: 12, color: "#A88690", margin: "10px 0" }}>
-              確認後，雲端的消費/詢價/預算/筆記/儲值資料會<strong>整份被備份檔取代</strong>（店家清單保留）；取代前會自動先下載一份現況備份。
+              確認後，雲端的消費/詢價/筆記/儲值資料會<strong>整份被備份檔取代</strong>（店家清單保留）；取代前會自動先下載一份現況備份。
               <br />⚠️ 還原過程中如果網路中斷或寫入失敗，雲端資料可能會處於「舊資料已清空、新資料沒補齊」的中間狀態；建議在網路穩定時操作，還原後可到各頁面確認筆數是否正確，若不對可用剛下載的現況備份再還原一次。
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -164,7 +164,7 @@ export function SettingsPage({
       <SettingsCard title="關於">
         <div style={{ fontSize: 12.5, color: "#7A5560", lineHeight: 1.8 }}>
           「當女生好難」美容存摺・原始資料於 2026-07 從 Notion 匯出。<br />
-          資料表：expenses / quotes / budget_plans / notes / vouchers / providers（目前 {providerCount} 家店家）。<br />
+          資料表：expenses / quotes / notes / vouchers / providers（目前 {providerCount} 家店家）。<br />
           全部受 Row Level Security 保護，只有你的登入身分讀得到。
         </div>
       </SettingsCard>

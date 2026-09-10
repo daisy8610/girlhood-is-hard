@@ -1,9 +1,8 @@
-export const BACKUP_KEYS = ["spending", "quotes", "budget", "notes", "vouchers"];
+export const BACKUP_KEYS = ["spending", "quotes", "notes", "vouchers"];
 
 export const BACKUP_LABELS = {
   spending: "消費紀錄",
   quotes: "詢價比較",
-  budget: "預算計畫",
   notes: "筆記",
   vouchers: "儲值/堂數",
 };
@@ -11,7 +10,6 @@ export const BACKUP_LABELS = {
 const EXPECTED_FIELDS = {
   spending: ["date", "item", "amount"],
   quotes: ["clinic", "price", "product"],
-  budget: ["item", "budget", "status"],
   notes: ["title", "category"],
   vouchers: ["name", "value"],
 };

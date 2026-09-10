@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-// 消費/預算分頁共用：依主分類篩選 + 關鍵字搜尋
+// 依主分類篩選 + 關鍵字搜尋
 export function useCategoryFilter(data, { catKey = "main", searchKeys }) {
   const [filter, setFilter] = useState("全部");
   const [search, setSearch] = useState("");

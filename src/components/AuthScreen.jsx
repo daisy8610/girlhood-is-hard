@@ -36,7 +36,7 @@ export function AuthScreen() {
         <div style={{ textAlign: "center", marginBottom: 24 }}>
           <div style={{ fontSize: 11, letterSpacing: 3, color: "#C58A9A", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
           <div style={{ fontSize: 28, fontWeight: 900, color: "#AD455E", fontFamily: "'Noto Serif TC',serif" }}>當女生好難</div>
-          <div style={{ fontSize: 13, color: "#A88690", marginTop: 4 }}>美容・醫美・預算 一本通</div>
+          <div style={{ fontSize: 13, color: "#A88690", marginTop: 4 }}>美容・醫美・花費 一本通</div>
         </div>
         <form onSubmit={go} style={{ background: "#FFF9F6", border: "1px solid #F3DCDF", borderRadius: 14, padding: 20 }}>
           <label style={{ fontSize: 12, color: "#7A5560" }}>

@@ -9,7 +9,6 @@ import {
 import { AuthScreen } from "./components/AuthScreen";
 import { Overview } from "./components/Overview";
 import { SpendingTab } from "./components/SpendingTab";
-import { BudgetTab } from "./components/BudgetTab";
 import { QuotesTab } from "./components/QuotesTab";
 import { NotesTab } from "./components/NotesTab";
 import { MoreMenu, SubPage } from "./components/MoreMenu";
@@ -41,7 +40,6 @@ export default function App() {
 
   const [spending, setSpending] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [budget, setBudget] = useState([]);
   const [notes, setNotes] = useState([]);
   const [vouchers, setVouchers] = useState([]);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
@@ -65,7 +63,7 @@ export default function App() {
     setReady(false); setLoadErr(null);
     try {
       const d = await fetchAll();
-      setSpending(d.spending); setQuotes(d.quotes); setBudget(d.budget);
+      setSpending(d.spending); setQuotes(d.quotes);
       setNotes(d.notes); setVouchers(d.vouchers);
       setSettings({ cap: d.cap, strategy: d.strategy });
       setProviderCount(getProviderCount());
@@ -73,7 +71,6 @@ export default function App() {
       const missing = [];
       if (d.spending.length === 0) missing.push("spending");
       if (d.quotes.length === 0) missing.push("quotes");
-      if (d.budget.length === 0) missing.push("budget");
       if (d.notes.length === 0) missing.push("notes");
       if (d.vouchers.length === 0) missing.push("vouchers");
       setMissingKinds(missing);
@@ -134,7 +131,6 @@ export default function App() {
 
   const spendH = mk("spending", setSpending);
   const quoteH = mk("quotes", setQuotes);
-  const budgetH = mk("budget", setBudget);
   const noteH = mk("notes", setNotes);
   const voucherH = mk("vouchers", setVouchers);
 
@@ -153,15 +149,7 @@ export default function App() {
     return { ytd, all, byMain };
   }, [spending]);
 
-  const budgetTotals = useMemo(() => {
-    const planned = budget.reduce((s, r) => s + (r.budget || 0), 0);
-    const completed = budget.filter((r) => r.status === "已完成");
-    const done = completed.reduce((s, r) => s + (r.actual || r.budget || 0), 0);
-    const doneBudget = completed.reduce((s, r) => s + (r.budget || 0), 0);
-    return { planned, done, doneBudget, cap: settings.cap || 50000 };
-  }, [budget, settings]);
-
-  const backupPayload = () => ({ exportedAt: new Date().toISOString(), spending, quotes, budget, notes, vouchers });
+  const backupPayload = () => ({ exportedAt: new Date().toISOString(), spending, quotes, notes, vouchers });
 
   function exportJSON() {
     const ok = download("當女生好難-備份-" + new Date().toISOString().slice(0, 10) + ".json", JSON.stringify(backupPayload(), null, 2), "application/json");
@@ -183,7 +171,6 @@ export default function App() {
       await deleteAllData();
       await bulkInsert("spending", payload.spending);
       await bulkInsert("quotes", payload.quotes);
-      await bulkInsert("budget", payload.budget);
       await bulkInsert("notes", payload.notes);
       await bulkInsert("vouchers", payload.vouchers);
       await loadData();
@@ -235,13 +222,6 @@ export default function App() {
     });
   }
 
-  function convertBudgetToExpense(b) {
-    return convertToExpense({
-      main: b.main, sub: b.bucket, item: b.item, place: b.place,
-      amount: b.actual != null ? b.actual : b.budget, note: b.note,
-    });
-  }
-
   async function connectGoogleCalendar() {
     const { data } = await supa.auth.getSession();
     const token = data.session && data.session.access_token;
@@ -259,7 +239,7 @@ export default function App() {
     } catch (ex) { flash("解除失敗：" + (ex.message || "")); }
   }
 
-  async function syncBudgetToCalendar(r) {
+  async function syncToCalendar(r) {
     if (!googleLinked || !r.date) return;
     try {
       const { data, error } = await supa.functions.invoke("google-calendar-sync", {
@@ -278,9 +258,10 @@ export default function App() {
     } catch (ex) { flash("同步日曆失敗：" + (ex.message || "")); }
   }
 
-  async function addBudgetItem(r) {
-    await budgetH.add(r);
-    syncBudgetToCalendar(r);
+  async function addExpenseItem(r) {
+    await spendH.add(r);
+    const today = new Date().toISOString().slice(0, 10);
+    if (r.date && r.date > today) syncToCalendar(r);
   }
 
   async function saveStrategy(strategy) {
@@ -324,11 +305,10 @@ export default function App() {
     );
   }
 
-  const counts = { spending: spending.length, quotes: quotes.length, budget: budget.length, notes: notes.length, vouchers: vouchers.length };
+  const counts = { spending: spending.length, quotes: quotes.length, notes: notes.length, vouchers: vouchers.length };
   const NAV = [
     { key: "overview", label: "總覽", icon: "📔" },
     { key: "spending", label: "紀錄", icon: "🧾" },
-    { key: "budget", label: "預算", icon: "🎯" },
     { key: "quotes", label: "詢價", icon: "💉" },
     { key: "more", label: "更多", icon: "☰" },
   ];
@@ -358,7 +338,7 @@ export default function App() {
             <span style={{ fontSize: 10, letterSpacing: 2, opacity: 0.8, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
           </div>
           <div style={{ fontSize: 12, opacity: 0.85 }}>
-            {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "budget" ? "預算計畫" : tab === "quotes" ? "詢價比較"
+            {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "quotes" ? "詢價比較"
               : moreView === "notes" ? "筆記區" : moreView === "settings" ? "設定" : "更多"}
           </div>
         </div>
@@ -368,7 +348,7 @@ export default function App() {
             <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "#D9718A14", border: "1px solid #D9718A55", color: "#AD455E", fontSize: 13, lineHeight: 1.7 }}>
               ⚠️ {loadErr}
               <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#AD455E", textDecoration: "underline", fontSize: 13 }}>重試</button>
-              {/budget_plans|vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
+              {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
                 <div style={{ marginTop: 6, fontSize: 12 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
@@ -384,10 +364,9 @@ export default function App() {
           {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#B2607A" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
-            <Overview totals={totals} budgetTotals={budgetTotals} spending={spending} budget={budget} vouchers={vouchers} voucherH={voucherH} />
+            <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
           )}
-          {tab === "spending" && <SpendingTab data={spending} h={spendH} />}
-          {tab === "budget" && <BudgetTab data={budget} h={budgetH} strategy={settings.strategy} onConvert={convertBudgetToExpense} onAdd={addBudgetItem} />}
+          {tab === "spending" && <SpendingTab data={spending} h={spendH} onAdd={addExpenseItem} />}
           {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} />}
           {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
           {tab === "more" && moreView === "notes" && (

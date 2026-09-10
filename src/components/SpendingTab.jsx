@@ -7,7 +7,7 @@ function uniqueValues(data, key) {
   return Array.from(new Set(data.map((r) => r[key]).filter(Boolean))).sort();
 }
 
-export function SpendingTab({ data, h }) {
+export function SpendingTab({ data, h, onAdd }) {
   const { filter, setFilter, search, setSearch, cats, filtered } = useCategoryFilter(data, {
     searchKeys: ["item", "place", "note", "sub", "main"],
   });
@@ -37,7 +37,7 @@ export function SpendingTab({ data, h }) {
       {!adding && <AddButton onClick={() => { setCopyDraft(null); setAdding(true); }} label="新增消費紀錄" />}
       {adding && (
         <RecordForm fields={fields} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}
-          onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
+          onSubmit={(r) => { onAdd(r); setAdding(false); setCopyDraft(null); }} />
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
       <CategoryChips options={cats} value={filter} onChange={setFilter} />

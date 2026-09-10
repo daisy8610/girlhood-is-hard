@@ -84,33 +84,6 @@ const quoteToDb = (o, providerId) => {
   };
 };
 
-// ---- budget_plans <-> 預算計畫 ----
-const budgetToApp = (r) => ({
-  id: r.id,
-  date: r.planned_on,
-  item: r.title,
-  main: r.main_category,
-  sub: r.subcategory,
-  bucket: r.bucket,
-  budget: num(r.budget_amount),
-  actual: num(r.actual_amount),
-  status: r.status || "計劃中",
-  place: providerName(r.provider_id),
-  note: r.notes || "",
-});
-const budgetToDb = (o, providerId) => ({
-  planned_on: o.date || null,
-  title: o.item || "（未命名）",
-  main_category: o.main || null,
-  subcategory: o.sub || null,
-  bucket: o.bucket || null,
-  budget_amount: num(o.budget),
-  actual_amount: num(o.actual),
-  status: o.status || "計劃中",
-  provider_id: providerId,
-  notes: o.note || null,
-});
-
 // ---- notes <-> 筆記區 ----
 const noteToApp = (r) => ({
   id: r.id,
@@ -151,7 +124,6 @@ const voucherToDb = (o, providerId) => ({
 const MAP = {
   spending: { table: "expenses", toApp: expenseToApp, toDb: expenseToDb, placeKey: "place" },
   quotes: { table: "quotes", toApp: quoteToApp, toDb: quoteToDb, placeKey: "clinic" },
-  budget: { table: "budget_plans", toApp: budgetToApp, toDb: budgetToDb, placeKey: "place" },
   notes: { table: "notes", toApp: noteToApp, toDb: noteToDb, placeKey: null },
   vouchers: { table: "vouchers", toApp: voucherToApp, toDb: voucherToDb, placeKey: "name" },
 };
@@ -167,20 +139,18 @@ export async function fetchAll() {
   if (providersRes.error) throw providersRes.error;
   PROVIDERS = providersRes.data || [];
 
-  const [ex, qu, bp, nt, vo, pf] = await Promise.all([
+  const [ex, qu, nt, vo, pf] = await Promise.all([
     supa.from("expenses").select("*").order("spent_on", { ascending: false, nullsFirst: false }),
     supa.from("quotes").select("*").order("quoted_on", { ascending: false, nullsFirst: false }),
-    supa.from("budget_plans").select("*").order("planned_on", { ascending: true, nullsFirst: false }),
     supa.from("notes").select("*").order("created_at", { ascending: true }),
     supa.from("vouchers").select("*").order("created_at", { ascending: true }),
     supa.from("profiles").select("id, annual_budget_cap, annual_strategy").maybeSingle(),
   ]);
-  for (const r of [ex, qu, bp, nt, vo]) if (r.error) throw r.error;
+  for (const r of [ex, qu, nt, vo]) if (r.error) throw r.error;
 
   return {
     spending: (ex.data || []).map(expenseToApp),
     quotes: (qu.data || []).map(quoteToApp),
-    budget: (bp.data || []).map(budgetToApp),
     notes: (nt.data || []).map(noteToApp),
     vouchers: (vo.data || []).map(voucherToApp),
     cap: pf.data && pf.data.annual_budget_cap != null ? Number(pf.data.annual_budget_cap) : 50000,

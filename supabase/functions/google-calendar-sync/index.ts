@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
     body: JSON.stringify({
       summary: item || "（未命名計畫）",
       location: place || undefined,
-      description: note || undefined,
+      description: [note, "#漂亮"].filter(Boolean).join("\n"),
       ...timeFields,
     }),
   });

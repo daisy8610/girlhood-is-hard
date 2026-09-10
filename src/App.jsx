@@ -29,6 +29,12 @@ const GLOBAL_STYLES = `
   .iconbtn { border:none; background:transparent; color:#B896A0; font-size:13px; padding:4px 6px; border-radius:6px; }
   .iconbtn:hover { background:#FBE3E9; color:#AD455E; }
   .menu-item:active { background:#FBE3E9; }
+  input[type="date"], input[type="time"] { color-scheme: light; }
+  input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; border-radius: 6px; padding: 3px; margin-left: 4px;
+    filter: invert(46%) sepia(52%) saturate(1000%) hue-rotate(300deg) brightness(95%) contrast(92%);
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:#FBE3E9; }
   @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
   @media (max-width: 640px) { .hide-sm { display: none; } }
 `;

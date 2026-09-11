@@ -11,7 +11,6 @@ import { Overview } from "./components/Overview";
 import { SpendingTab } from "./components/SpendingTab";
 import { QuotesTab } from "./components/QuotesTab";
 import { NotesTab } from "./components/NotesTab";
-import { MoreMenu, SubPage } from "./components/MoreMenu";
 import { SettingsPage } from "./components/SettingsPage";
 
 const DEFAULT_SETTINGS = { cap: 50000, strategy: "" };
@@ -28,7 +27,6 @@ const GLOBAL_STYLES = `
   .row-hover:hover { background:#FFF9F6; }
   .iconbtn { border:none; background:transparent; color:#B896A0; font-size:13px; padding:4px 6px; border-radius:6px; }
   .iconbtn:hover { background:#FBE3E9; color:#AD455E; }
-  .menu-item:active { background:#FBE3E9; }
   input[type="date"], input[type="time"] { color-scheme: light; }
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer; border-radius: 6px; padding: 3px; margin-left: 4px;
@@ -42,7 +40,6 @@ const GLOBAL_STYLES = `
 export default function App() {
   const [session, setSession] = useState(undefined);
   const [tab, setTab] = useState("overview");
-  const [moreView, setMoreView] = useState("menu");
 
   const [spending, setSpending] = useState([]);
   const [quotes, setQuotes] = useState([]);
@@ -315,12 +312,12 @@ export default function App() {
     { key: "overview", label: "總覽", icon: "📔" },
     { key: "spending", label: "紀錄", icon: "🧾" },
     { key: "quotes", label: "詢價", icon: "💉" },
-    { key: "more", label: "更多", icon: "☰" },
+    { key: "notes", label: "筆記", icon: "🩺" },
+    { key: "settings", label: "設定", icon: "⚙️" },
   ];
 
   function goTab(k) {
     setTab(k);
-    if (k === "more") setMoreView("menu");
     try { window.scrollTo({ top: 0 }); } catch (e) {}
   }
 
@@ -344,7 +341,7 @@ export default function App() {
           </div>
           <div style={{ fontSize: 12, opacity: 0.85 }}>
             {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "quotes" ? "詢價比較"
-              : moreView === "notes" ? "筆記區" : moreView === "settings" ? "設定" : "更多"}
+              : tab === "notes" ? "筆記區" : "設定"}
           </div>
         </div>
 
@@ -362,7 +359,7 @@ export default function App() {
             <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 10, background: "#FFFCFA", border: "1px solid #F3DCDF", fontSize: 13.5, lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
               <div style={{ marginTop: 8, fontSize: 12.5, color: "#A88690" }}>
-                請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「更多 → 設定」用 JSON 備份匯入。
+                請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
@@ -373,19 +370,14 @@ export default function App() {
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} onAdd={addExpenseItem} />}
           {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} />}
-          {tab === "more" && moreView === "menu" && <MoreMenu counts={counts} go={setMoreView} />}
-          {tab === "more" && moreView === "notes" && (
-            <SubPage title="筆記區" back={() => setMoreView("menu")}><NotesTab data={notes} h={noteH} strategy={settings.strategy} saveStrategy={saveStrategy} /></SubPage>
-          )}
-          {tab === "more" && moreView === "settings" && (
-            <SubPage title="設定" back={() => setMoreView("menu")}>
-              <SettingsPage
-                settings={settings} saveCap={saveCap} exportJSON={exportJSON} exportCSV={exportCSV}
-                applyImport={applyImport} clearAllData={clearAllData_} counts={counts} providerCount={providerCount}
-                userEmail={session.user && session.user.email} logout={logout}
-                googleLinked={googleLinked} connectGoogleCalendar={connectGoogleCalendar} disconnectGoogleCalendar={disconnectGoogleCalendar}
-              />
-            </SubPage>
+          {tab === "notes" && <NotesTab data={notes} h={noteH} strategy={settings.strategy} saveStrategy={saveStrategy} />}
+          {tab === "settings" && (
+            <SettingsPage
+              settings={settings} saveCap={saveCap} exportJSON={exportJSON} exportCSV={exportCSV}
+              applyImport={applyImport} clearAllData={clearAllData_} counts={counts} providerCount={providerCount}
+              userEmail={session.user && session.user.email} logout={logout}
+              googleLinked={googleLinked} connectGoogleCalendar={connectGoogleCalendar} disconnectGoogleCalendar={disconnectGoogleCalendar}
+            />
           )}
         </div>
 

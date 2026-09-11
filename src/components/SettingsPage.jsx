@@ -168,6 +168,10 @@ export function SettingsPage({
           全部受 Row Level Security 保護，只有你的登入身分讀得到。
         </div>
       </SettingsCard>
+
+      <div style={{ textAlign: "center", fontSize: 11.5, color: "#A88690", marginTop: 8, lineHeight: 1.7 }}>
+        資料只存在 Supabase，這個網頁不含任何資料副本。<br />記得偶爾用上面的「下載完整備份」存一份。
+      </div>
     </div>
   );
 }

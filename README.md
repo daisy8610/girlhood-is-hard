@@ -1,6 +1,6 @@
 # 當女生好難 · 美容存摺
 
-個人的美容／醫美消費與預算追蹤 App。手機加到主畫面後，使用起來就像一個原生 App。
+個人的美容／醫美消費追蹤 App。手機加到主畫面後，使用起來就像一個原生 App。
 
 🔗 **網址**：https://daisy8610.github.io/girlhood-is-hard/
 
@@ -8,17 +8,16 @@
 
 ## 這是什麼
 
-一個記錄美容、醫美消費，順便管理預算和詢價比較的私人小工具。原本資料放在 Notion，
+一個記錄美容、醫美消費，順便做詢價比較的私人小工具。原本資料放在 Notion，
 覺得 Notion 在手機上不夠直覺，所以做成獨立的網頁 App。
 
 ### 功能
-- 📔 **總覽**：分類支出統計、近 12 個月趨勢圖、預算使用進度、儲值金與剩餘堂數
-- 🧾 **消費紀錄**：搜尋、篩選、新增／編輯／刪除
-- 🎯 **預算計畫**：逐項規劃、打勾標記完成、記錄實際花費
+- 📔 **總覽**：分類支出統計、近 12 個月趨勢圖、年度預算使用進度（今年累積支出 ÷ 預算上限）、儲值金與剩餘堂數
+- 🧾 **消費紀錄**：搜尋、篩選、新增／編輯／刪除，可選填時間、勾選同步到 Google 日曆
 - 💉 **詢價比較**：同一產品跨診所比價，自動標示最低價
 - 🩺 **筆記區**：保養／健康相關的長文筆記，支援簡單 markdown（表格、清單、粗體）
 - ⚙️ **設定**：年度預算上限、備份／還原（JSON）、清空資料、Google 日曆連結
-- 📅 **Google 日曆同步**：連結後，新增「預算計畫」項目（有填日期）會自動在 Google 日曆建一筆全天事件
+- 📅 **Google 日曆同步**：新增消費紀錄時勾選「同步到 Google 日曆」，就會依填的日期/時間建一筆行程（有時間就是 1 小時定時行程，沒填就是全天事件），說明欄自動帶入備註、金額，並固定加上 `#漂亮` 標籤方便日後搜尋
 
 ---
 
@@ -47,17 +46,16 @@
     │   ├── backup.js           JSON 備份格式驗證
     │   └── markdown.jsx        筆記內文的輕量 markdown 渲染器
     └── components/
-        ├── ui.jsx              共用小元件（Tag、表單、按鈕…）
-        ├── AuthScreen.jsx      登入/註冊
-        ├── Overview.jsx        總覽頁
-        ├── TrendChart.jsx      趨勢圖表
-        ├── VouchersPanel.jsx   儲值金／堂數面板
-        ├── SpendingTab.jsx     消費紀錄
-        ├── BudgetTab.jsx       預算計畫
-        ├── QuotesTab.jsx       詢價比較
-        ├── NotesTab.jsx        筆記區
-        ├── MoreMenu.jsx        「更多」選單
-        └── SettingsPage.jsx    設定頁
+        ├── ui.jsx                共用小元件（Tag、表單、按鈕…）
+        ├── AuthScreen.jsx        登入/註冊
+        ├── Overview.jsx          總覽頁
+        ├── TrendChart.jsx        趨勢圖表
+        ├── SubcategoryRanking.jsx 子分類佔比排行
+        ├── VouchersPanel.jsx     儲值金／堂數面板
+        ├── SpendingTab.jsx       消費紀錄
+        ├── QuotesTab.jsx         詢價比較
+        ├── NotesTab.jsx          筆記區
+        └── SettingsPage.jsx      設定頁
 ```
 
 ---
@@ -70,7 +68,7 @@
 - **Google 日曆整合**：Supabase Edge Functions 處理 OAuth 授權與 Calendar API 呼叫，
   Client ID/Secret 等敏感資訊存在 Supabase Function Secrets，不進 repo
 
-資料表：`expenses`（消費）、`quotes`（詢價）、`budget_plans`（預算計畫）、
+資料表：`expenses`（消費）、`quotes`（詢價）、
 `notes`（筆記）、`vouchers`（儲值金堂數）、`providers`（店家／診所）、`profiles`（個人設定）、
 `google_calendar_tokens`（Google 日曆授權，只有 Edge Function 用 service role 讀寫）。
 全部啟用 Row Level Security，只有登入本人能讀寫自己的資料。

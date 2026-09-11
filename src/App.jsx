@@ -13,7 +13,7 @@ import { QuotesTab } from "./components/QuotesTab";
 import { NotesTab } from "./components/NotesTab";
 import { SettingsPage } from "./components/SettingsPage";
 
-const DEFAULT_SETTINGS = { cap: 50000, strategy: "" };
+const DEFAULT_SETTINGS = { cap: 50000 };
 
 const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
@@ -68,7 +68,7 @@ export default function App() {
       const d = await fetchAll();
       setSpending(d.spending); setQuotes(d.quotes);
       setNotes(d.notes); setVouchers(d.vouchers);
-      setSettings({ cap: d.cap, strategy: d.strategy });
+      setSettings({ cap: d.cap });
       setProviderCount(getProviderCount());
 
       const missing = [];
@@ -266,16 +266,6 @@ export default function App() {
     if (r.syncCalendar) syncToCalendar(r);
   }
 
-  async function saveStrategy(strategy) {
-    setSettings((prev) => ({ ...prev, strategy }));
-    try {
-      const { data: u } = await supa.auth.getUser();
-      const { error } = await supa.from("profiles").upsert({ id: u.user.id, annual_strategy: strategy });
-      if (error) throw error;
-      flash("已更新年度策略");
-    } catch (ex) { flash("儲存失敗：" + (ex.message || "")); }
-  }
-
   async function logout() { await supa.auth.signOut(); }
 
   // ---------- 畫面 ----------
@@ -370,7 +360,7 @@ export default function App() {
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} onAdd={addExpenseItem} />}
           {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} />}
-          {tab === "notes" && <NotesTab data={notes} h={noteH} strategy={settings.strategy} saveStrategy={saveStrategy} />}
+          {tab === "notes" && <NotesTab data={notes} h={noteH} />}
           {tab === "settings" && (
             <SettingsPage
               settings={settings} saveCap={saveCap} exportJSON={exportJSON} exportCSV={exportCSV}

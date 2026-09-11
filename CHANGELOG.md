@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2026-09-11（第二次）
+拿掉筆記頁的「年度目標與預算分配策略」卡片：內容一直是空的沒寫過，跟預算計畫一起變得沒有意義。移除 `NotesTab.jsx` 的 `StrategyCard`、`App.jsx` 的 `saveStrategy`、`db.js` 查 `profiles.annual_strategy` 那段；筆記清單本身完全沒受影響。
+
 ## 2026-09-11
 把「筆記」從「更多」選單裡拉出來變成獨立分頁，「更多」直接變成「設定」：
 

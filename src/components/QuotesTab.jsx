@@ -5,7 +5,7 @@ import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui
 const QUOTE_FIELDS = [
   { key: "date", label: "詢價日期", type: "date", default: new Date().toISOString().slice(0, 10) },
   { key: "clinic", label: "診所名稱", type: "text", required: true },
-  { key: "category", label: "療程類別", type: "select", options: ["玻尿酸", "肉毒", "電音波", "皮秒", "除毛", "複合療程"] },
+  { key: "category", label: "療程類別", type: "select", options: ["玻尿酸", "肉毒", "電音波", "膚質雷射", "除毛"] },
   { key: "product", label: "品牌/產品", type: "text" },
   { key: "qty", label: "單位數量", type: "number" },
   { key: "price", label: "價格", type: "number", required: true },

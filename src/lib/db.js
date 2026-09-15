@@ -75,11 +75,11 @@ const quoteToDb = (o, providerId) => {
   return {
     quoted_on: o.date || null,
     provider_id: providerId,
+    treatment_name: [o.category, o.product].filter(Boolean).join(" ") || "（未命名）",
     treatment_category: o.category || null,
     product_name: o.product || null,
     quoted_amount: price,
     quantity: qty,
-    unit_price: price != null && qty > 0 ? Number((price / qty).toFixed(2)) : null,
     notes: o.note || null,
   };
 };

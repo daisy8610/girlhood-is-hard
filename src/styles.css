@@ -19,7 +19,8 @@
 ::-webkit-scrollbar { width:8px; height:8px; }
 ::-webkit-scrollbar-thumb { background:var(--ed-stone); border-radius:8px; }
 .mono { font-family:'IBM Plex Mono', monospace; }
-.serif { font-family:'Noto Serif TC', serif; }
+/* 標題字體：昭源圓體 */
+.title-font { font-family:'Chiron GoRound TC','Noto Sans TC',sans-serif; }
 .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
 button { font-family: inherit; cursor:pointer; }
 input, select, textarea { font-family: inherit; }

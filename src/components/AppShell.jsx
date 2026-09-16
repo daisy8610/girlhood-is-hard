@@ -24,7 +24,7 @@ export function AppShell({ tab, onTab, toast, children }) {
         <nav className="app-sidebar">
           <div className="app-sidebar__brand">
             <div className="brand-kicker">PASSBOOK</div>
-            <div className="serif app-sidebar__title">當女生好難</div>
+            <div className="title-font app-sidebar__title">當女生好難</div>
           </div>
           {NAV.map((n) => (
             <button key={n.key} onClick={() => goTab(n.key)} className={"side-nav-btn" + (tab === n.key ? " is-active" : "")}>
@@ -37,7 +37,7 @@ export function AppShell({ tab, onTab, toast, children }) {
         <div className="app-main-col">
           <div className="app-header">
             <div className="hide-md-up">
-              <span className="serif app-header__title">當女生好難</span>
+              <span className="title-font app-header__title">當女生好難</span>
               <span className="app-header__kicker">PASSBOOK</span>
             </div>
             <div className="app-header__page">{pageTitle}</div>

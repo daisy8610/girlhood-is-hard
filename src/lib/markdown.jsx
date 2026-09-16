@@ -30,7 +30,7 @@ export function renderMD(md) {
     if (/^#{2,3}\s/.test(line)) {
       const level = line.match(/^#+/)[0].length;
       blocks.push(
-        <div key={i} className={"serif md-h md-h--" + level}>
+        <div key={i} className={"title-font md-h md-h--" + level}>
           {inlineMD(line.replace(/^#+\s/, ""))}
         </div>
       );

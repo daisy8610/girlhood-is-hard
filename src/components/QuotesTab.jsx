@@ -178,7 +178,7 @@ export function QuotesTab({ data, h }) {
         <div>
           {Object.entries(grouped).map(([c, prods]) => (
             <div key={c} className="quote-cat">
-              <div className="serif quote-cat__title">{c}</div>
+              <div className="title-font quote-cat__title">{c}</div>
               {Object.entries(prods).map(([prod, list]) => (
                 <div key={prod} className="quote-prod">
                   <div className="quote-prod__title">
@@ -200,7 +200,7 @@ export function QuotesTab({ data, h }) {
           {byClinic.map(([clinic, list, latest]) => (
             <div key={clinic} className="clinic-card">
               <div className="clinic-card__head">
-                <div className="serif clinic-card__name">{clinic}</div>
+                <div className="title-font clinic-card__name">{clinic}</div>
                 <div className="clinic-card__info">
                   {list.length} 筆{latest ? ` · 最近詢價：${agoLabel(daysAgo(latest))}` : ""}
                 </div>

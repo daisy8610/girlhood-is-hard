@@ -10,7 +10,7 @@ export function Tag({ children, color }) {
 export function SectionTitle({ children, sub }) {
   return (
     <div className="section-title">
-      <h2 className="serif">{children}</h2>
+      <h2 className="title-font">{children}</h2>
       {sub && <div className="section-title__sub">{sub}</div>}
     </div>
   );

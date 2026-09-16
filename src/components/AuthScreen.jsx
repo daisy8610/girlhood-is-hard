@@ -33,7 +33,7 @@ export function AuthScreen() {
       <div className="auth__box">
         <div className="auth__brand">
           <div className="brand-kicker auth__kicker">PASSBOOK</div>
-          <div className="serif auth__title">當女生好難</div>
+          <div className="title-font auth__title">當女生好難</div>
           <div className="auth__tagline">美容・醫美・花費 一本通</div>
         </div>
         <form onSubmit={go} className="auth__form">

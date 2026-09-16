@@ -49,7 +49,7 @@ export default function App() {
   if (session === undefined) {
     return (
       <>
-        <div className="serif fullscreen-msg">存摺開啟中…</div>
+        <div className="title-font fullscreen-msg">存摺開啟中…</div>
       </>
     );
   }
@@ -57,7 +57,7 @@ export default function App() {
   if (!d.ready) {
     return (
       <>
-        <div className="serif fullscreen-msg">資料同步中…</div>
+        <div className="title-font fullscreen-msg">資料同步中…</div>
       </>
     );
   }

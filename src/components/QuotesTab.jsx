@@ -43,7 +43,7 @@ const productKey = (r) => (r.category || "其他") + "|" + (r.product || "未標
 
 function BestTag() {
   return (
-    <span style={{ fontSize: "var(--fs-xs)", padding: "1px 7px", borderRadius: 9999, background: "var(--ed-ink)", color: "#fff", marginLeft: 6, whiteSpace: "nowrap" }}>最划算</span>
+    <span className="best-tag">最划算</span>
   );
 }
 
@@ -58,20 +58,17 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy })
   const stale = days != null && days > STALE_DAYS;
   const up = unitPrice(r);
   return (
-    <div className="row-hover" style={{
-      display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "12px 4px", borderBottom: "1px solid var(--ed-stone)", gap: 6, opacity: stale ? 0.45 : 1,
-    }}>
-      <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: "var(--fs-lg)" }}>{title}{extra && <span style={{ color: "var(--ed-ash)", fontSize: "var(--fs-sm)" }}> · {extra}</span>}{best && <BestTag />}</div>
-        <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", overflowWrap: "anywhere" }}>
+    <div className={"row-hover list-row" + (stale ? " is-stale" : "")}>
+      <div className="list-row__main">
+        <div className="list-row__title">{title}{extra && <span className="list-row__extra"> · {extra}</span>}{best && <BestTag />}</div>
+        <div className="list-row__meta">
           {r.date || "—"}{days != null ? `（${agoLabel(days)}）` : ""}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}
         </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-        <div style={{ textAlign: "right" }}>
-          <div className="mono" style={{ fontSize: "var(--fs-lg)", whiteSpace: "nowrap" }}>{fmt(r.price)}</div>
-          {up != null && <div className="mono" style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
+      <div className="list-row__side">
+        <div className="list-row__prices">
+          <div className="mono list-row__amount">{fmt(r.price)}</div>
+          {up != null && <div className="mono list-row__sub-amount">{fmt(Math.round(up))}/單位</div>}
         </div>
         <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
@@ -153,7 +150,7 @@ export function QuotesTab({ data, h }) {
   }, [filtered]);
 
   const rowProps = { editingId, setEditingId, h, onCopy: copyRow };
-  const empty = <div style={{ color: "var(--ed-ash)", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>;
+  const empty = <div className="list-empty">找不到符合的紀錄</div>;
 
   return (
     <div>
@@ -164,14 +161,14 @@ export function QuotesTab({ data, h }) {
           onSubmit={(r) => { h.add(r); setAdding(false); setCopyDraft(null); }} />
       )}
       {presentCats.length > 0 && (
-        <div style={{ marginBottom: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <div className="chip-row quotes__cats">
           {["全部", ...presentCats].map((c) => (
             <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>
           ))}
         </div>
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋診所、產品、備註…" />
-      <div style={{ marginBottom: 12, display: "flex", gap: 6, flexWrap: "wrap" }}>
+      <div className="chip-row quotes__views">
         {[["group", "分組比價"], ["clinic", "依診所"], ["list", "依日期列表"]].map(([k, label]) => (
           <Chip key={k} active={view === k} onClick={() => setView(k)}>{label}</Chip>
         ))}
@@ -180,12 +177,12 @@ export function QuotesTab({ data, h }) {
       {view === "group" && (
         <div>
           {Object.entries(grouped).map(([c, prods]) => (
-            <div key={c} style={{ marginBottom: 18 }}>
-              <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)", borderBottom: "1px solid var(--ed-stone)", paddingBottom: 6, marginBottom: 8 }}>{c}</div>
+            <div key={c} className="quote-cat">
+              <div className="serif quote-cat__title">{c}</div>
               {Object.entries(prods).map(([prod, list]) => (
-                <div key={prod} style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: "var(--fs-md)", fontWeight: 500, color: "var(--ed-ink)", margin: "6px 0 2px" }}>
-                    {prod} <span style={{ fontWeight: 400, color: "var(--ed-ash)" }}>（{list.length} 筆）</span>
+                <div key={prod} className="quote-prod">
+                  <div className="quote-prod__title">
+                    {prod} <span className="quote-prod__count">（{list.length} 筆）</span>
                   </div>
                   {list.map((r) => (
                     <QuoteRow key={r.id} r={r} title={r.clinic} best={bestIds.has(r.id)} {...rowProps} />
@@ -201,10 +198,10 @@ export function QuotesTab({ data, h }) {
       {view === "clinic" && (
         <div>
           {byClinic.map(([clinic, list, latest]) => (
-            <div key={clinic} style={{ border: "1px solid var(--ed-stone)", borderRadius: "var(--r-md)", padding: "12px 14px", marginBottom: 12 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
-                <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)" }}>{clinic}</div>
-                <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", whiteSpace: "nowrap" }}>
+            <div key={clinic} className="clinic-card">
+              <div className="clinic-card__head">
+                <div className="serif clinic-card__name">{clinic}</div>
+                <div className="clinic-card__info">
                   {list.length} 筆{latest ? ` · 最近詢價：${agoLabel(daysAgo(latest))}` : ""}
                 </div>
               </div>
@@ -218,7 +215,7 @@ export function QuotesTab({ data, h }) {
       )}
 
       {view === "list" && (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className="list">
           {[...filtered].sort((a, b) => (b.date || "").localeCompare(a.date || "")).map((r) => (
             <QuoteRow key={r.id} r={r} title={r.product || "未標示"} extra={`${r.clinic} · ${r.category || "其他"}`} best={bestIds.has(r.id)} {...rowProps} />
           ))}

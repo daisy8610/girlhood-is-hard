@@ -43,32 +43,29 @@ export function SpendingTab({ data, h, onAdd }) {
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
       <CategoryChips options={cats} value={filter} onChange={setFilter} />
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="list">
         {filtered.map((r) =>
           editingId === r.id ? (
             <RecordForm key={r.id} fields={fields} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
               onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
           ) : (
-            <div key={r.id} className="row-hover" style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "12px 4px", borderBottom: "1px solid var(--ed-stone)", gap: 6,
-            }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: "var(--fs-lg)" }}>
-                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "var(--r-sm)", background: MAIN_COLORS[r.main] || "var(--ed-ash)", marginRight: 7 }} />
-                  {r.item} <span style={{ color: "var(--ed-ash)", fontSize: "var(--fs-sm)" }}>{r.sub ? `· ${r.sub}` : ""}</span>
+            <div key={r.id} className="row-hover list-row">
+              <div className="list-row__main">
+                <div className="list-row__title">
+                  <span className="cat-dot" style={{ background: MAIN_COLORS[r.main] || "var(--ed-ash)" }} />
+                  {r.item} <span className="list-row__extra">{r.sub ? `· ${r.sub}` : ""}</span>
                 </div>
-                <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
+                <div className="list-row__meta">{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="mono" style={{ fontSize: "var(--fs-lg)", whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
+              <div className="list-row__side">
+                <span className="mono list-row__amount">{fmt(r.amount)}</span>
                 <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => copyRow(r)}>⧉</button>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
             </div>
           )
         )}
-        {filtered.length === 0 && <div style={{ color: "var(--ed-ash)", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>}
+        {filtered.length === 0 && <div className="list-empty">找不到符合的紀錄</div>}
       </div>
     </div>
   );

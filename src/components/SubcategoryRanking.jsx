@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
+import { Chip } from "./ui";
 
 export function SubcategoryRanking({ spending }) {
   const [range, setRange] = useState("year");
@@ -22,18 +23,10 @@ export function SubcategoryRanking({ spending }) {
   return (
     <div style={{ marginBottom: 26 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-        <div style={{ fontSize: "var(--fs-md)", color: "#777169" }}>子分類佔比排行</div>
+        <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>子分類佔比排行</div>
         <div style={{ display: "flex", gap: 6 }}>
           {[["year", "今年"], ["all", "全部年度"]].map(([k, label]) => (
-            <button
-              key={k} onClick={() => setRange(k)}
-              style={{
-                fontSize: "var(--fs-xs)", padding: "3px 11px", borderRadius: 9999, border: "1px solid " + (range === k ? "#000" : "#EBE8E4"),
-                background: range === k ? "#000" : "transparent", color: range === k ? "#fff" : "#777169",
-              }}
-            >
-              {label}
-            </button>
+            <Chip key={k} small active={range === k} onClick={() => setRange(k)}>{label}</Chip>
           ))}
         </div>
       </div>
@@ -43,16 +36,16 @@ export function SubcategoryRanking({ spending }) {
           return (
             <div key={e.key} style={{ fontSize: "var(--fs-md)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-                <span style={{ color: "#777169" }}>{i + 1}. {e.key}</span>
-                <span className="mono" style={{ color: "#777169" }}>{fmt(e.total)}（{pct}%）</span>
+                <span style={{ color: "var(--ed-smoke)" }}>{i + 1}. {e.key}</span>
+                <span className="mono" style={{ color: "var(--ed-smoke)" }}>{fmt(e.total)}（{pct}%）</span>
               </div>
-              <div style={{ height: 5, background: "#EBE8E4", borderRadius: 4, overflow: "hidden" }}>
-                <div style={{ height: "100%", width: pct + "%", background: MAIN_COLORS[e.main] || "#000" }} />
+              <div style={{ height: 5, background: "var(--ed-stone)", borderRadius: "var(--r-sm)", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: pct + "%", background: MAIN_COLORS[e.main] || "var(--ed-ink)" }} />
               </div>
             </div>
           );
         })}
-        {ranked.list.length === 0 && <div style={{ color: "#7D776F", fontSize: "var(--fs-md)" }}>這段期間還沒有消費紀錄</div>}
+        {ranked.list.length === 0 && <div style={{ color: "var(--ed-ash)", fontSize: "var(--fs-md)" }}>這段期間還沒有消費紀錄</div>}
       </div>
     </div>
   );

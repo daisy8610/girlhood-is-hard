@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { fmt } from "../lib/format";
-import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox } from "./ui";
+import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, Chip } from "./ui";
 
 const CATEGORIES = ["玻尿酸", "肉毒", "電音波", "膚質雷射", "除毛"];
 
@@ -43,21 +43,7 @@ const productKey = (r) => (r.category || "其他") + "|" + (r.product || "未標
 
 function BestTag() {
   return (
-    <span style={{ fontSize: "var(--fs-xs)", padding: "1px 7px", borderRadius: 9999, background: "#000", color: "#fff", marginLeft: 6, whiteSpace: "nowrap" }}>最划算</span>
-  );
-}
-
-function Pill({ active, onClick, children }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontSize: "var(--fs-sm)", padding: "6px 14px", borderRadius: 9999, border: "1px solid " + (active ? "#000" : "#EBE8E4"),
-        background: active ? "#000" : "transparent", color: active ? "#fff" : "#777169",
-      }}
-    >
-      {children}
-    </button>
+    <span style={{ fontSize: "var(--fs-xs)", padding: "1px 7px", borderRadius: 9999, background: "var(--ed-ink)", color: "#fff", marginLeft: 6, whiteSpace: "nowrap" }}>最划算</span>
   );
 }
 
@@ -74,18 +60,18 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy })
   return (
     <div className="row-hover" style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "12px 4px", borderBottom: "1px solid #EBE8E4", gap: 6, opacity: stale ? 0.45 : 1,
+      padding: "12px 4px", borderBottom: "1px solid var(--ed-stone)", gap: 6, opacity: stale ? 0.45 : 1,
     }}>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: "var(--fs-lg)" }}>{title}{extra && <span style={{ color: "#7D776F", fontSize: "var(--fs-sm)" }}> · {extra}</span>}{best && <BestTag />}</div>
-        <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", overflowWrap: "anywhere" }}>
+        <div style={{ fontSize: "var(--fs-lg)" }}>{title}{extra && <span style={{ color: "var(--ed-ash)", fontSize: "var(--fs-sm)" }}> · {extra}</span>}{best && <BestTag />}</div>
+        <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", overflowWrap: "anywhere" }}>
           {r.date || "—"}{days != null ? `（${agoLabel(days)}）` : ""}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}
         </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
         <div style={{ textAlign: "right" }}>
           <div className="mono" style={{ fontSize: "var(--fs-lg)", whiteSpace: "nowrap" }}>{fmt(r.price)}</div>
-          {up != null && <div className="mono" style={{ fontSize: "var(--fs-xs)", color: "#7D776F", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
+          {up != null && <div className="mono" style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
         </div>
         <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
@@ -167,7 +153,7 @@ export function QuotesTab({ data, h }) {
   }, [filtered]);
 
   const rowProps = { editingId, setEditingId, h, onCopy: copyRow };
-  const empty = <div style={{ color: "#7D776F", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>;
+  const empty = <div style={{ color: "var(--ed-ash)", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>;
 
   return (
     <div>
@@ -180,14 +166,14 @@ export function QuotesTab({ data, h }) {
       {presentCats.length > 0 && (
         <div style={{ marginBottom: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
           {["全部", ...presentCats].map((c) => (
-            <Pill key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Pill>
+            <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>
           ))}
         </div>
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋診所、產品、備註…" />
       <div style={{ marginBottom: 12, display: "flex", gap: 6, flexWrap: "wrap" }}>
         {[["group", "分組比價"], ["clinic", "依診所"], ["list", "依日期列表"]].map(([k, label]) => (
-          <Pill key={k} active={view === k} onClick={() => setView(k)}>{label}</Pill>
+          <Chip key={k} active={view === k} onClick={() => setView(k)}>{label}</Chip>
         ))}
       </div>
 
@@ -195,11 +181,11 @@ export function QuotesTab({ data, h }) {
         <div>
           {Object.entries(grouped).map(([c, prods]) => (
             <div key={c} style={{ marginBottom: 18 }}>
-              <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "#000", borderBottom: "1px solid #EBE8E4", paddingBottom: 6, marginBottom: 8 }}>{c}</div>
+              <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)", borderBottom: "1px solid var(--ed-stone)", paddingBottom: 6, marginBottom: 8 }}>{c}</div>
               {Object.entries(prods).map(([prod, list]) => (
                 <div key={prod} style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: "var(--fs-md)", fontWeight: 500, color: "#000", margin: "6px 0 2px" }}>
-                    {prod} <span style={{ fontWeight: 400, color: "#7D776F" }}>（{list.length} 筆）</span>
+                  <div style={{ fontSize: "var(--fs-md)", fontWeight: 500, color: "var(--ed-ink)", margin: "6px 0 2px" }}>
+                    {prod} <span style={{ fontWeight: 400, color: "var(--ed-ash)" }}>（{list.length} 筆）</span>
                   </div>
                   {list.map((r) => (
                     <QuoteRow key={r.id} r={r} title={r.clinic} best={bestIds.has(r.id)} {...rowProps} />
@@ -215,10 +201,10 @@ export function QuotesTab({ data, h }) {
       {view === "clinic" && (
         <div>
           {byClinic.map(([clinic, list, latest]) => (
-            <div key={clinic} style={{ border: "1px solid #EBE8E4", borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+            <div key={clinic} style={{ border: "1px solid var(--ed-stone)", borderRadius: "var(--r-md)", padding: "12px 14px", marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
-                <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "#000" }}>{clinic}</div>
-                <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", whiteSpace: "nowrap" }}>
+                <div className="serif" style={{ fontSize: "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)" }}>{clinic}</div>
+                <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", whiteSpace: "nowrap" }}>
                   {list.length} 筆{latest ? ` · 最近詢價：${agoLabel(daysAgo(latest))}` : ""}
                 </div>
               </div>

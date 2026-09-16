@@ -24,13 +24,13 @@ export function renderMD(md) {
     const line = lines[i];
     if (line.trim() === "") { i++; continue; }
     if (line.trim() === "---") {
-      blocks.push(<hr key={i} style={{ border: "none", borderTop: "1px solid #EBE8E4", margin: "16px 0" }} />);
+      blocks.push(<hr key={i} style={{ border: "none", borderTop: "1px solid var(--ed-stone)", margin: "16px 0" }} />);
       i++; continue;
     }
     if (/^#{2,3}\s/.test(line)) {
       const level = line.match(/^#+/)[0].length;
       blocks.push(
-        <div key={i} className="serif" style={{ fontSize: level === 2 ? "var(--fs-2xl)" : "var(--fs-xl)", fontWeight: 500, color: "#000", margin: "14px 0 8px" }}>
+        <div key={i} className="serif" style={{ fontSize: level === 2 ? "var(--fs-2xl)" : "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)", margin: "14px 0 8px" }}>
           {inlineMD(line.replace(/^#+\s/, ""))}
         </div>
       );
@@ -38,7 +38,7 @@ export function renderMD(md) {
     }
     if (line.trim().startsWith(">")) {
       blocks.push(
-        <div key={i} style={{ borderLeft: "3px solid #EBE8E4", paddingLeft: 10, color: "#777169", fontSize: "var(--fs-md)", margin: "8px 0" }}>
+        <div key={i} style={{ borderLeft: "3px solid var(--ed-stone)", paddingLeft: 10, color: "var(--ed-smoke)", fontSize: "var(--fs-md)", margin: "8px 0" }}>
           {inlineMD(line.replace(/^>\s?/, ""))}
         </div>
       );
@@ -58,7 +58,7 @@ export function renderMD(md) {
             <thead>
               <tr>
                 {rows[0].map((c, ci) => (
-                  <th key={ci} style={{ textAlign: "left", padding: "6px 10px", background: "#F5F3F1", borderBottom: "1px solid #EBE8E4", whiteSpace: "nowrap" }}>
+                  <th key={ci} style={{ textAlign: "left", padding: "6px 10px", background: "var(--ed-surface)", borderBottom: "1px solid var(--ed-stone)", whiteSpace: "nowrap" }}>
                     {inlineMD(c)}
                   </th>
                 ))}
@@ -68,7 +68,7 @@ export function renderMD(md) {
               {rows.slice(1).map((r, ri) => (
                 <tr key={ri}>
                   {r.map((c, ci) => (
-                    <td key={ci} style={{ padding: "6px 10px", borderBottom: "1px solid #EBE8E4", verticalAlign: "top" }}>
+                    <td key={ci} style={{ padding: "6px 10px", borderBottom: "1px solid var(--ed-stone)", verticalAlign: "top" }}>
                       {inlineMD(c)}
                     </td>
                   ))}

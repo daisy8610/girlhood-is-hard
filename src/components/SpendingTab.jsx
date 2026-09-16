@@ -51,14 +51,14 @@ export function SpendingTab({ data, h, onAdd }) {
           ) : (
             <div key={r.id} className="row-hover" style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "12px 4px", borderBottom: "1px solid #EBE8E4", gap: 6,
+              padding: "12px 4px", borderBottom: "1px solid var(--ed-stone)", gap: 6,
             }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: "var(--fs-lg)" }}>
-                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: 7, background: MAIN_COLORS[r.main] || "#999", marginRight: 7 }} />
-                  {r.item} <span style={{ color: "#7D776F", fontSize: "var(--fs-sm)" }}>{r.sub ? `· ${r.sub}` : ""}</span>
+                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "var(--r-sm)", background: MAIN_COLORS[r.main] || "var(--ed-ash)", marginRight: 7 }} />
+                  {r.item} <span style={{ color: "var(--ed-ash)", fontSize: "var(--fs-sm)" }}>{r.sub ? `· ${r.sub}` : ""}</span>
                 </div>
-                <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
+                <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                 <span className="mono" style={{ fontSize: "var(--fs-lg)", whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
@@ -68,7 +68,7 @@ export function SpendingTab({ data, h, onAdd }) {
             </div>
           )
         )}
-        {filtered.length === 0 && <div style={{ color: "#7D776F", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>}
+        {filtered.length === 0 && <div style={{ color: "var(--ed-ash)", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>}
       </div>
     </div>
   );

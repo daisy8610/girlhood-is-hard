@@ -6,8 +6,8 @@ export function Tag({ children, color }) {
     <span
       style={{
         display: "inline-block", fontSize: "var(--fs-xs)", padding: "2px 9px", borderRadius: 9999,
-        background: "#F5F3F1", color: "#000",
-        border: "1px solid #EBE8E4", whiteSpace: "nowrap",
+        background: "var(--ed-surface)", color: "var(--ed-ink)",
+        border: "1px solid var(--ed-stone)", whiteSpace: "nowrap",
       }}
     >
       {children}
@@ -18,8 +18,8 @@ export function Tag({ children, color }) {
 export function SectionTitle({ children, sub }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <h2 className="serif" style={{ fontSize: "var(--fs-3xl)", fontWeight: 500, margin: 0, color: "#000" }}>{children}</h2>
-      {sub && <div style={{ fontSize: "var(--fs-sm)", color: "#777169", marginTop: 3, fontWeight: 400 }}>{sub}</div>}
+      <h2 className="serif" style={{ fontSize: "var(--fs-3xl)", fontWeight: 500, margin: 0, color: "var(--ed-ink)" }}>{children}</h2>
+      {sub && <div style={{ fontSize: "var(--fs-sm)", color: "var(--ed-smoke)", marginTop: 3, fontWeight: 400 }}>{sub}</div>}
     </div>
   );
 }
@@ -29,7 +29,7 @@ export function AddButton({ onClick, label }) {
     <button
       onClick={onClick}
       style={{
-        border: "1px solid #000", color: "#000", background: "transparent", borderRadius: 9999,
+        border: "1px solid var(--ed-ink)", color: "var(--ed-ink)", background: "transparent", borderRadius: 9999,
         padding: "9px 18px", fontSize: "var(--fs-md)", fontWeight: 500, marginBottom: 14,
       }}
     >
@@ -50,7 +50,7 @@ export function RowActions({ onEdit, onDelete }) {
     <span style={{ display: "inline-flex", gap: 2, marginLeft: 6, flexShrink: 0 }}>
       <button className="iconbtn" onClick={onEdit} title="編輯">✎</button>
       {confirming ? (
-        <button className="iconbtn" onClick={onDelete} style={{ color: "#000", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
+        <button className="iconbtn" onClick={onDelete} style={{ color: "var(--ed-ink)", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
       ) : (
         <button className="iconbtn" onClick={() => setConfirming(true)} title="刪除">✕</button>
       )}
@@ -58,19 +58,27 @@ export function RowActions({ onEdit, onDelete }) {
   );
 }
 
+// 藥丸形切換按鈕：選中是黑底白字
+export function Chip({ active, onClick, small, children }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: small ? "3px 11px" : "6px 14px", borderRadius: 9999, fontSize: small ? "var(--fs-xs)" : "var(--fs-sm)",
+        border: "1px solid " + (active ? "var(--ed-ink)" : "var(--ed-stone)"),
+        background: active ? "var(--ed-ink)" : "transparent", color: active ? "#fff" : "var(--ed-smoke)",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function CategoryChips({ options, value, onChange }) {
   return (
     <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
       {options.map((c) => (
-        <button
-          key={c} onClick={() => onChange(c)}
-          style={{
-            padding: "6px 14px", borderRadius: 9999, fontSize: "var(--fs-sm)", border: "1px solid " + (value === c ? "#000" : "#EBE8E4"),
-            background: value === c ? "#000" : "transparent", color: value === c ? "#fff" : "#777169",
-          }}
-        >
-          {c}
-        </button>
+        <Chip key={c} active={value === c} onClick={() => onChange(c)}>{c}</Chip>
       ))}
     </div>
   );
@@ -96,7 +104,7 @@ function SuggestInput({ value, onChange, suggestions, placeholder, style }) {
       {open && matches.length > 0 && (
         <div style={{
           position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, zIndex: 10,
-          background: "#fff", border: "1px solid #EBE8E4", borderRadius: 10,
+          background: "#fff", border: "1px solid var(--ed-stone)", borderRadius: "var(--r-md)",
           maxHeight: 160, overflowY: "auto", boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
         }}>
           {matches.map((s) => (
@@ -122,7 +130,7 @@ export function SearchBox({ value, onChange, placeholder }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder || "搜尋…"}
-      style={{ width: "100%", padding: "10px 14px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: "var(--fs-md)", marginBottom: 14, background: "#fff" }}
+      style={{ width: "100%", padding: "10px 14px", borderRadius: 9999, border: "1px solid var(--ed-stone)", fontSize: "var(--fs-md)", marginBottom: 14, background: "#fff" }}
     />
   );
 }
@@ -164,14 +172,14 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     onSubmit(out);
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 5, padding: "9px 10px", borderRadius: 10, border: "1px solid #EBE8E4", fontSize: "var(--fs-md)", background: "#fff" };
+  const inputStyle = { display: "block", width: "100%", marginTop: 5, padding: "9px 10px", borderRadius: "var(--r-md)", border: "1px solid var(--ed-stone)", fontSize: "var(--fs-md)", background: "#fff" };
 
   return (
-    <form onSubmit={submit} style={{ border: "1px solid #EBE8E4", borderRadius: 16, padding: 16, marginBottom: 14, background: "#fff" }}>
+    <form onSubmit={submit} style={{ border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", padding: 16, marginBottom: 14, background: "#fff" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
-          <label key={f.key} style={{ fontSize: "var(--fs-sm)", color: "#777169", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
-            {f.label}{f.required && <span style={{ color: "#000", fontWeight: 700 }}> *</span>}
+          <label key={f.key} style={{ fontSize: "var(--fs-sm)", color: "var(--ed-smoke)", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
+            {f.label}{f.required && <span style={{ color: "var(--ed-ink)", fontWeight: 700 }}> *</span>}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>
                 <option value="">—</option>
@@ -183,8 +191,8 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={10}
                   placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 />
-                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#F5F3F1", fontSize: "var(--fs-md)" }}>
-                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#7D776F" }}>預覽</span>}
+                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "var(--ed-surface)", fontSize: "var(--fs-md)" }}>
+                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "var(--ed-ash)" }}>預覽</span>}
                 </div>
               </div>
             ) : f.type === "textarea" ? (
@@ -202,7 +210,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
               <div style={{ marginTop: 8 }}>
                 <input
                   type="checkbox" checked={!!vals[f.key]} onChange={(e) => set(f.key, e.target.checked)}
-                  style={{ width: 16, height: 16, accentColor: "#000", verticalAlign: "middle" }}
+                  style={{ width: 16, height: 16, accentColor: "var(--ed-ink)", verticalAlign: "middle" }}
                 />
               </div>
             ) : f.type === "date" || f.type === "time" ? (
@@ -213,7 +221,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   type={f.type}
                   value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
                   className="mono"
-                  style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px", border: "none", borderRadius: 10, background: "#fff", fontSize: "var(--fs-lg)", color: "#000" }}
+                  style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px", border: "none", borderRadius: "var(--r-md)", background: "#fff", fontSize: "var(--fs-lg)", color: "var(--ed-ink)" }}
                 />
               </div>
             ) : (
@@ -226,12 +234,12 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
           </label>
         ))}
       </div>
-      {err && <div style={{ marginTop: 10, fontSize: "var(--fs-sm)", color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "8px 12px" }}>⚠️ {err}</div>}
+      {err && <div style={{ marginTop: 10, fontSize: "var(--fs-sm)", color: "var(--ed-ink)", background: "var(--ed-surface)", borderRadius: "var(--r-md)", padding: "8px 12px" }}>⚠️ {err}</div>}
       <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
-        <button type="submit" style={{ background: "#000", color: "#fff", border: "none", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", fontWeight: 500 }}>
+        <button type="submit" style={{ background: "var(--ed-ink)", color: "#fff", border: "none", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", fontWeight: 500 }}>
           {submitLabel || "儲存"}
         </button>
-        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #EBE8E4", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", color: "#777169" }}>
+        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid var(--ed-stone)", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>
           取消
         </button>
       </div>

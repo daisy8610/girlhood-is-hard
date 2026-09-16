@@ -17,9 +17,9 @@ export function VouchersPanel({ data, h }) {
   return (
     <div style={{ marginBottom: 26 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: "var(--fs-md)", color: "#777169" }}>儲值金與剩餘堂數</div>
+        <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>儲值金與剩餘堂數</div>
         {!adding && (
-          <button className="iconbtn" style={{ color: "#000", fontWeight: 500 }} onClick={() => setAdding(true)}>
+          <button className="iconbtn" style={{ color: "var(--ed-ink)", fontWeight: 500 }} onClick={() => setAdding(true)}>
             + 新增
           </button>
         )}
@@ -36,28 +36,28 @@ export function VouchersPanel({ data, h }) {
                 onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
             </div>
           ) : (
-            <div key={r.id} style={{ border: "1px solid #EBE8E4", borderRadius: 14, padding: "13px 15px", background: "#fff" }}>
+            <div key={r.id} style={{ border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", padding: "13px 15px", background: "#fff" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4 }}>
-                <div style={{ fontSize: "var(--fs-md)", color: "#777169" }}>{r.name}</div>
+                <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>{r.name}</div>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
-                <div className="mono" style={{ fontSize: "var(--fs-3xl)", fontWeight: 500, marginTop: 4, color: "#000" }}>
+                <div className="mono" style={{ fontSize: "var(--fs-3xl)", fontWeight: 500, marginTop: 4, color: "var(--ed-ink)" }}>
                   {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
-                  {r.unit !== "元" && r.value != null && <span style={{ fontSize: "var(--fs-md)", marginLeft: 3, color: "#777169" }}>{r.unit}</span>}
+                  {r.unit !== "元" && r.value != null && <span style={{ fontSize: "var(--fs-md)", marginLeft: 3, color: "var(--ed-smoke)" }}>{r.unit}</span>}
                 </div>
                 {r.value != null && r.value > 0 && r.unit !== "元" && (
                   <button
                     className="iconbtn"
                     title="扣一次"
                     onClick={() => h.update(r.id, { value: r.value - 1, updated: new Date().toISOString().slice(0, 10) })}
-                    style={{ border: "1px solid #EBE8E4", borderRadius: 9999, padding: "2px 10px", fontSize: "var(--fs-sm)" }}
+                    style={{ border: "1px solid var(--ed-stone)", borderRadius: 9999, padding: "2px 10px", fontSize: "var(--fs-sm)" }}
                   >
                     − 用一次
                   </button>
                 )}
               </div>
-              <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", marginTop: 4 }}>{r.updated || "—"}{r.note ? ` · ${r.note}` : ""}</div>
+              <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", marginTop: 4 }}>{r.updated || "—"}{r.note ? ` · ${r.note}` : ""}</div>
             </div>
           )
         )}

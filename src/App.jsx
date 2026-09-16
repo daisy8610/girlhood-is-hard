@@ -27,25 +27,28 @@ const GLOBAL_STYLES = `
     --fs-2xl: 18px; /* 區塊標題 */
     --fs-3xl: 21px; /* 頁面標題、導覽圖示 */
     --fs-4xl: 26px; /* 大數字、登入頁標題 */
+    /* 圓角 */
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+    /* 主題色：全站統一從這裡調整 */
     --ed-bg: #fdfcfc; --ed-surface: #f5f3f1; --ed-ink: #000000;
-    --ed-smoke: #777169; --ed-ash: #7D776F; --ed-stone: #ebe8e4;
+    --ed-smoke: #777169; --ed-ash: #7d776f; --ed-stone: #ebe8e4;
   }
   * { box-sizing: border-box; }
   ::-webkit-scrollbar { width:8px; height:8px; }
-  ::-webkit-scrollbar-thumb { background:#EBE8E4; border-radius:8px; }
+  ::-webkit-scrollbar-thumb { background:var(--ed-stone); border-radius:8px; }
   .mono { font-family:'IBM Plex Mono', monospace; }
   .serif { font-family:'Noto Serif TC', serif; }
   .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
-  .row-hover:hover { background:#F5F3F1; }
-  .iconbtn { border:none; background:transparent; color:#7D776F; font-size:var(--fs-md); padding:4px 6px; border-radius:6px; }
-  .iconbtn:hover { background:#F5F3F1; color:#000; }
+  .row-hover:hover { background:var(--ed-surface); }
+  .iconbtn { border:none; background:transparent; color:var(--ed-ash); font-size:var(--fs-md); padding:4px 6px; border-radius:6px; }
+  .iconbtn:hover { background:var(--ed-surface); color:var(--ed-ink); }
   input[type="date"], input[type="time"] { color-scheme: light; }
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer; border-radius: 6px; padding: 3px; margin-left: 4px;
   }
-  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:#F5F3F1; }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:var(--ed-surface); }
   @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
   @media (max-width: 640px) { .hide-sm { display: none; } }
 
@@ -287,7 +290,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div className="ed-sans" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#000", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
+        <div className="ed-sans" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-ink)", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
           還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
         </div>
       </>
@@ -297,7 +300,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#777169" }}>存摺開啟中…</div>
+        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>存摺開啟中…</div>
       </>
     );
   }
@@ -306,7 +309,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#777169" }}>資料同步中…</div>
+        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>資料同步中…</div>
       </>
     );
   }
@@ -372,23 +375,23 @@ export default function App() {
 
         <div className="content-col" style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: "var(--fs-md)", lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: "var(--r-md)", background: "var(--ed-surface)", color: "var(--ed-ink)", fontSize: "var(--fs-md)", lineHeight: 1.7 }}>
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: "var(--fs-md)" }}>重試</button>
+              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "var(--ed-ink)", textDecoration: "underline", fontSize: "var(--fs-md)" }}>重試</button>
               {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
                 <div style={{ marginTop: 6, fontSize: "var(--fs-sm)" }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: "var(--r-lg)", background: "#fff", border: "1px solid var(--ed-stone)", fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: "var(--fs-md)", color: "#777169" }}>
+              <div style={{ marginTop: 8, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: "var(--fs-md)", color: "#777169" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div style={{ marginBottom: 14, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
@@ -410,7 +413,7 @@ export default function App() {
         <div className="app-bottom-nav" style={{
           position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
           width: "100%", maxWidth: 560, zIndex: 30,
-          background: "#fff", borderTop: "1px solid #EBE8E4",
+          background: "#fff", borderTop: "1px solid var(--ed-stone)",
           padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
         }}>
           {NAV.map((n) => (
@@ -419,7 +422,7 @@ export default function App() {
               style={{
                 flex: 1, border: "none", background: "transparent", padding: "6px 0 2px",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                color: tab === n.key ? "#000" : "#7D776F",
+                color: tab === n.key ? "var(--ed-ink)" : "var(--ed-ash)",
               }}
             >
               <span style={{ fontSize: "var(--fs-3xl)", filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
@@ -431,7 +434,7 @@ export default function App() {
         {toast && (
           <div style={{
             position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: "var(--fs-md)", maxWidth: "85%",
+            background: "var(--ed-ink)", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: "var(--fs-md)", maxWidth: "85%",
             animation: "printIn .2s ease-out", zIndex: 50, textAlign: "center",
           }}>
             {toast}

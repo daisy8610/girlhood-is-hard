@@ -40,14 +40,17 @@
 └── src/                  原始碼
     ├── main.jsx          進入點
     ├── styles.css        全站樣式（字級、圓角、主題色變數在最上面）
-    ├── App.jsx           主要畫面邏輯、導覽列、狀態管理
+    ├── App.jsx           組合各部分：登入狀態、toast、分頁切換
     ├── lib/
     │   ├── supabaseClient.js   Supabase client 初始化
+    │   ├── useAppData.js       全站資料讀寫、備份匯出匯入
+    │   ├── useGoogleCalendar.js Google 日曆連結與同步
     │   ├── db.js               資料層：App 欄位 <-> 資料庫 schema 轉換、CRUD
     │   ├── format.js           格式化、下載、CSV 工具
     │   ├── backup.js           JSON 備份格式驗證
     │   └── markdown.jsx        筆記內文的輕量 markdown 渲染器
     └── components/
+        ├── AppShell.jsx          外框：側邊欄、頁首、底部導覽、toast
         ├── ui.jsx                共用小元件（Tag、表單、按鈕…）
         ├── AuthScreen.jsx        登入/註冊
         ├── Overview.jsx          總覽頁

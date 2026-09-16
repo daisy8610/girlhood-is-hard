@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-16（第二十次）
+金額、統計數字的字體從 IBM Plex Mono 改成 Inter 的等寬數字（`font-variant-numeric: tabular-nums`）：
+
+- 數字一樣上下對齊，外觀跟內文、標題比較一致
+- CSS class 從 `.mono` 改名為 `.num`；「PASSBOOK」小字也改用 Inter
+- 不再載入 IBM Plex Mono，全站剩 Inter、思源黑體、昭源圓體三套字體
+
 ## 2026-09-16（第十九次）
 標題字體從思源宋體（Noto Serif TC）換成昭源圓體（Chiron GoRound TC）：
 

@@ -71,7 +71,7 @@ export function SettingsPage({
           <span className="settings__currency">NT$</span>
           <input
             type="number" value={capInput} onChange={(e) => setCapInput(e.target.value)}
-            className="mono settings__cap-input"
+            className="num settings__cap-input"
           />
           <button onClick={() => { const v = Number(capInput); if (v > 0) saveCap(v); }} className="btn-outline is-primary">儲存</button>
         </div>
@@ -110,13 +110,13 @@ export function SettingsPage({
                   <tr>
                     <td className="restore__rowname">目前</td>
                     {BACKUP_KEYS.map((k) => (
-                      <td key={k} className="mono">{counts[k]}</td>
+                      <td key={k} className="num">{counts[k]}</td>
                     ))}
                   </tr>
                   <tr>
                     <td className="restore__rowname">備份檔</td>
                     {BACKUP_KEYS.map((k) => (
-                      <td key={k} className={"mono is-backup" + (pending.payload[k].length !== counts[k] ? " is-changed" : "")}>
+                      <td key={k} className={"num is-backup" + (pending.payload[k].length !== counts[k] ? " is-changed" : "")}>
                         {pending.payload[k].length}
                       </td>
                     ))}

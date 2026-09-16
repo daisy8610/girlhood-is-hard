@@ -18,7 +18,8 @@
 * { box-sizing: border-box; }
 ::-webkit-scrollbar { width:8px; height:8px; }
 ::-webkit-scrollbar-thumb { background:var(--ed-stone); border-radius:8px; }
-.mono { font-family:'IBM Plex Mono', monospace; }
+/* 金額、統計數字：用 Inter 的等寬數字，上下行的位數才會對齊 */
+.num { font-variant-numeric: tabular-nums; }
 /* 標題字體：昭源圓體 */
 .title-font { font-family:'Chiron GoRound TC','Noto Sans TC',sans-serif; }
 .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
@@ -226,7 +227,7 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .fullscreen-msg--setup { color: var(--ed-ink); padding: 24px; text-align: center; line-height: 1.8; }
 .app { min-height: 100vh; background: var(--ed-bg); color: var(--ed-ink); }
 .app-shell { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
-.brand-kicker { font-size: var(--fs-xs); letter-spacing: 2px; color: var(--ed-ash); font-family: 'IBM Plex Mono',monospace; }
+.brand-kicker { font-size: var(--fs-xs); letter-spacing: 2px; color: var(--ed-ash); }
 .app-sidebar {
   flex-direction: column; width: 220px; flex-shrink: 0; padding: 32px 16px;
   border-right: 1px solid var(--ed-stone); position: sticky; top: 0; height: 100vh; gap: 4px;
@@ -245,7 +246,7 @@ textarea.field { resize: vertical; line-height: 1.6; }
   display: flex; justify-content: space-between; align-items: baseline;
 }
 .app-header__title { font-size: var(--fs-2xl); font-weight: 700; letter-spacing: 1px; }
-.app-header__kicker { font-size: var(--fs-xs); letter-spacing: 2px; opacity: 0.6; margin-left: 8px; font-family: 'IBM Plex Mono',monospace; }
+.app-header__kicker { font-size: var(--fs-xs); letter-spacing: 2px; opacity: 0.6; margin-left: 8px; }
 .app-header__page { font-size: var(--fs-md); color: var(--ed-smoke); }
 .content-col { padding: 16px 14px 24px; }
 .notice { margin-bottom: 14px; padding: 10px 14px; border-radius: var(--r-md); background: var(--ed-surface); color: var(--ed-ink); font-size: var(--fs-md); line-height: 1.7; }

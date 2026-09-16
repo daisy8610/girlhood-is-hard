@@ -16,26 +16,26 @@ export function Overview({ totals, cap, spending, vouchers, voucherH }) {
         <div className="passbook__grid">
           <div>
             <div className="passbook__label">今年累積支出</div>
-            <div className="mono passbook__big">{fmt(totals.ytd)}</div>
+            <div className="num passbook__big">{fmt(totals.ytd)}</div>
           </div>
           <div>
             <div className="passbook__label">歷年總支出</div>
-            <div className="mono passbook__big">{fmt(totals.all)}</div>
+            <div className="num passbook__big">{fmt(totals.all)}</div>
           </div>
           <div>
             <div className="passbook__label">年度預算上限</div>
-            <div className="mono passbook__small">{fmt(cap)}</div>
+            <div className="num passbook__small">{fmt(cap)}</div>
           </div>
           <div>
             <div className="passbook__label">剩餘額度</div>
-            <div className="mono passbook__small">{fmt(remaining)}</div>
+            <div className="num passbook__small">{fmt(remaining)}</div>
           </div>
         </div>
         <div className="passbook__progress">
           <div className="bar-track bar-track--thin">
             <div className="bar-fill passbook__fill" style={{ width: pct + "%" }} />
           </div>
-          <div className="mono passbook__caption">已花 {pct}% of {fmt(cap)}</div>
+          <div className="num passbook__caption">已花 {pct}% of {fmt(cap)}</div>
         </div>
       </div>
 
@@ -46,7 +46,7 @@ export function Overview({ totals, cap, spending, vouchers, voucherH }) {
               <span className="main-card__dot" style={{ background: MAIN_COLORS[k] || "var(--ed-ash)" }} />
               <span className="main-card__name">{k}</span>
             </div>
-            <div className="mono main-card__amount">{fmt(v)}</div>
+            <div className="num main-card__amount">{fmt(v)}</div>
           </div>
         ))}
       </div>

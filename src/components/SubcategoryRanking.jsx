@@ -37,7 +37,7 @@ export function SubcategoryRanking({ spending }) {
             <div key={e.key} className="ranking__item">
               <div className="ranking__row">
                 <span className="ranking__text">{i + 1}. {e.key}</span>
-                <span className="mono ranking__text">{fmt(e.total)}（{pct}%）</span>
+                <span className="num ranking__text">{fmt(e.total)}（{pct}%）</span>
               </div>
               <div className="bar-track bar-track--ranking">
                 <div className="bar-fill" style={{ width: pct + "%", background: MAIN_COLORS[e.main] || "var(--ed-ink)" }} />

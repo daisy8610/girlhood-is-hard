@@ -58,7 +58,7 @@ export function SpendingTab({ data, h, onAdd }) {
                 <div className="list-row__meta">{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
               </div>
               <div className="list-row__side">
-                <span className="mono list-row__amount">{fmt(r.amount)}</span>
+                <span className="num list-row__amount">{fmt(r.amount)}</span>
                 <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => copyRow(r)}>⧉</button>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>

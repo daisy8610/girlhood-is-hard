@@ -190,7 +190,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 <input
                   type={f.type}
                   value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
-                  className="mono"
+                  className="num"
                 />
               </div>
             ) : (

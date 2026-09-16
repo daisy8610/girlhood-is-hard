@@ -63,14 +63,14 @@ export function TrendChart({ spending }) {
                           <span className="legend-dot" style={{ background: MAIN_COLORS[s.k] }} />
                           {s.k}
                         </span>
-                        <span className="mono trend__card-amount">{fmt(s.v)}</span>
+                        <span className="num trend__card-amount">{fmt(s.v)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
               {x.total > 0 && (
-                <div className="mono trend__total">{Math.round(x.total / 1000)}k</div>
+                <div className="num trend__total">{Math.round(x.total / 1000)}k</div>
               )}
               <button className="trend__bar" onClick={() => setOpenYear(isOpen ? null : x.y)} style={{ height: MAX_BAR_PX }}>
                 {segments.map((s, idx) => {

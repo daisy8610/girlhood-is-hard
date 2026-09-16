@@ -42,7 +42,7 @@ export function VouchersPanel({ data, h }) {
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
               <div className="voucher__body">
-                <div className="mono voucher__value">
+                <div className="num voucher__value">
                   {r.value == null ? "？" : r.unit === "元" ? fmt(r.value) : r.value}
                   {r.unit !== "元" && r.value != null && <span className="voucher__unit">{r.unit}</span>}
                 </div>

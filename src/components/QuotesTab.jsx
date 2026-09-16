@@ -67,8 +67,8 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy })
       </div>
       <div className="list-row__side">
         <div className="list-row__prices">
-          <div className="mono list-row__amount">{fmt(r.price)}</div>
-          {up != null && <div className="mono list-row__sub-amount">{fmt(Math.round(up))}/單位</div>}
+          <div className="num list-row__amount">{fmt(r.price)}</div>
+          {up != null && <div className="num list-row__sub-amount">{fmt(Math.round(up))}/單位</div>}
         </div>
         <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />

@@ -19,24 +19,24 @@ function NoteCard({ r, h, editingId, setEditingId }) {
     );
   }
   return (
-    <div className="row-hover" style={{ border: "1px solid #F3DCDF", borderRadius: 10, overflow: "hidden", background: "#FFF9F6" }}>
-      <div onClick={() => setOpen((o) => !o)} style={{ padding: "12px 14px", cursor: "pointer" }}>
+    <div className="row-hover" style={{ border: "1px solid #EBE8E4", borderRadius: 14, overflow: "hidden", background: "#fff" }}>
+      <div onClick={() => setOpen((o) => !o)} style={{ padding: "14px 16px", cursor: "pointer" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 6 }}>
-          <div style={{ fontSize: 15, fontWeight: 600 }}>{r.title}</div>
+          <div style={{ fontSize: 15, fontWeight: 500 }}>{r.title}</div>
           <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
             <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
-            <span style={{ fontSize: 12, color: "#A88690" }}>{open ? "▲" : "▼"}</span>
+            <span style={{ fontSize: 12, color: "#A59F97" }}>{open ? "▲" : "▼"}</span>
           </div>
         </div>
-        <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap" }}>
-          <Tag color="#B08D57">{r.category}</Tag>
+        <div style={{ marginTop: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <Tag>{r.category}</Tag>
           <Tag>{r.status}</Tag>
           {(r.tags || []).map((t) => <Tag key={t}>{t}</Tag>)}
         </div>
       </div>
       {open && (
-        <div style={{ padding: "4px 16px 16px", borderTop: "1px dashed #F3DCDF" }}>
-          {r.content ? renderMD(r.content) : <div style={{ fontSize: 13, color: "#A88690" }}>（沒有內文）</div>}
+        <div style={{ padding: "4px 16px 16px", borderTop: "1px solid #EBE8E4" }}>
+          {r.content ? renderMD(r.content) : <div style={{ fontSize: 13, color: "#A59F97" }}>（沒有內文）</div>}
         </div>
       )}
     </div>

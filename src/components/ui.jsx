@@ -5,10 +5,9 @@ export function Tag({ children, color }) {
   return (
     <span
       style={{
-        display: "inline-block", fontSize: 11, padding: "2px 8px", borderRadius: 20,
-        background: (color || "#9C8288") + "1f", color: color || "#5a5044",
-        border: `1px solid ${(color || "#9C8288")}55`,
-        fontFamily: "'Noto Sans TC',sans-serif", whiteSpace: "nowrap",
+        display: "inline-block", fontSize: 11, padding: "2px 9px", borderRadius: 9999,
+        background: "#F5F3F1", color: "#000",
+        border: "1px solid #EBE8E4", whiteSpace: "nowrap",
       }}
     >
       {children}
@@ -18,9 +17,9 @@ export function Tag({ children, color }) {
 
 export function SectionTitle({ children, sub }) {
   return (
-    <div style={{ marginBottom: 16 }}>
-      <h2 className="serif" style={{ fontSize: 19, fontWeight: 700, margin: 0, color: "#AD455E" }}>{children}</h2>
-      {sub && <div style={{ fontSize: 12, color: "#A88690", marginTop: 2 }}>{sub}</div>}
+    <div style={{ marginBottom: 18 }}>
+      <h2 className="serif" style={{ fontSize: 19, fontWeight: 500, margin: 0, color: "#000" }}>{children}</h2>
+      {sub && <div style={{ fontSize: 12, color: "#777169", marginTop: 3, fontWeight: 300 }}>{sub}</div>}
     </div>
   );
 }
@@ -30,8 +29,8 @@ export function AddButton({ onClick, label }) {
     <button
       onClick={onClick}
       style={{
-        border: "1px solid #D9718A", color: "#AD455E", background: "transparent", borderRadius: 8,
-        padding: "9px 16px", fontSize: 13, fontWeight: 600, marginBottom: 14,
+        border: "1px solid #000", color: "#000", background: "transparent", borderRadius: 9999,
+        padding: "9px 18px", fontSize: 13, fontWeight: 500, marginBottom: 14,
       }}
     >
       + {label || "新增一筆"}
@@ -51,7 +50,7 @@ export function RowActions({ onEdit, onDelete }) {
     <span style={{ display: "inline-flex", gap: 2, marginLeft: 6, flexShrink: 0 }}>
       <button className="iconbtn" onClick={onEdit} title="編輯">✎</button>
       {confirming ? (
-        <button className="iconbtn" onClick={onDelete} style={{ color: "#AD455E", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
+        <button className="iconbtn" onClick={onDelete} style={{ color: "#000", fontWeight: 700 }} title="再按一次確認刪除">確定刪除？</button>
       ) : (
         <button className="iconbtn" onClick={() => setConfirming(true)} title="刪除">✕</button>
       )}
@@ -66,8 +65,8 @@ export function CategoryChips({ options, value, onChange }) {
         <button
           key={c} onClick={() => onChange(c)}
           style={{
-            padding: "6px 13px", borderRadius: 20, fontSize: 12, border: "1px solid #F3DCDF",
-            background: value === c ? "#C25B72" : "transparent", color: value === c ? "#fff" : "#7A5560",
+            padding: "6px 14px", borderRadius: 9999, fontSize: 12, border: "1px solid " + (value === c ? "#000" : "#EBE8E4"),
+            background: value === c ? "#000" : "transparent", color: value === c ? "#fff" : "#777169",
           }}
         >
           {c}
@@ -96,9 +95,9 @@ function SuggestInput({ value, onChange, suggestions, placeholder, style }) {
       />
       {open && matches.length > 0 && (
         <div style={{
-          position: "absolute", top: "100%", left: 0, right: 0, marginTop: 2, zIndex: 10,
-          background: "#fff", border: "1px solid #F3DCDF", borderRadius: 6,
-          maxHeight: 160, overflowY: "auto", boxShadow: "0 4px 12px rgba(90,60,50,0.12)",
+          position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, zIndex: 10,
+          background: "#fff", border: "1px solid #EBE8E4", borderRadius: 10,
+          maxHeight: 160, overflowY: "auto", boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
         }}>
           {matches.map((s) => (
             <div
@@ -106,7 +105,7 @@ function SuggestInput({ value, onChange, suggestions, placeholder, style }) {
               onMouseDown={(e) => e.preventDefault()}
               onTouchStart={(e) => e.preventDefault()}
               onClick={() => { onChange(s); setOpen(false); }}
-              style={{ padding: "7px 10px", fontSize: 13, cursor: "pointer" }}
+              style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer" }}
             >
               {s}
             </div>
@@ -123,7 +122,7 @@ export function SearchBox({ value, onChange, placeholder }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder || "搜尋…"}
-      style={{ width: "100%", padding: "9px 12px", borderRadius: 8, border: "1px solid #F3DCDF", fontSize: 13, marginBottom: 12, background: "#fff" }}
+      style={{ width: "100%", padding: "10px 14px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: 13, marginBottom: 14, background: "#fff" }}
     />
   );
 }
@@ -165,14 +164,14 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     onSubmit(out);
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "8px 8px", borderRadius: 6, border: "1px solid #F3DCDF", fontSize: 13 };
+  const inputStyle = { display: "block", width: "100%", marginTop: 5, padding: "9px 10px", borderRadius: 10, border: "1px solid #EBE8E4", fontSize: 13, background: "#fff" };
 
   return (
-    <form onSubmit={submit} style={{ border: "1px solid #F3DCDF", borderRadius: 10, padding: 14, marginBottom: 14, background: "#FFFCFA" }}>
+    <form onSubmit={submit} style={{ border: "1px solid #EBE8E4", borderRadius: 16, padding: 16, marginBottom: 14, background: "#fff" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
-          <label key={f.key} style={{ fontSize: 12, color: "#7A5560", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
-            {f.label}{f.required && <span style={{ color: "#AD455E" }}> *</span>}
+          <label key={f.key} style={{ fontSize: 12, color: "#777169", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
+            {f.label}{f.required && <span style={{ color: "#000", fontWeight: 700 }}> *</span>}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>
                 <option value="">—</option>
@@ -184,8 +183,8 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={10}
                   placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 />
-                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#fff", fontSize: 13 }}>
-                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#A88690" }}>預覽</span>}
+                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#F5F3F1", fontSize: 13 }}>
+                  {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#A59F97" }}>預覽</span>}
                 </div>
               </div>
             ) : f.type === "textarea" ? (
@@ -200,10 +199,10 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                 placeholder={f.placeholder} style={inputStyle}
               />
             ) : f.type === "checkbox" ? (
-              <div style={{ marginTop: 6 }}>
+              <div style={{ marginTop: 8 }}>
                 <input
                   type="checkbox" checked={!!vals[f.key]} onChange={(e) => set(f.key, e.target.checked)}
-                  style={{ width: 16, height: 16, accentColor: "#D9718A", verticalAlign: "middle" }}
+                  style={{ width: 16, height: 16, accentColor: "#000", verticalAlign: "middle" }}
                 />
               </div>
             ) : f.type === "date" || f.type === "time" ? (
@@ -214,7 +213,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   type={f.type}
                   value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
                   className="mono"
-                  style={{ width: "100%", boxSizing: "border-box", padding: "8px 8px", border: "none", borderRadius: 6, background: "#fff", fontSize: 13.5, color: "#7A5560" }}
+                  style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px", border: "none", borderRadius: 10, background: "#fff", fontSize: 13.5, color: "#000" }}
                 />
               </div>
             ) : (
@@ -227,12 +226,12 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
           </label>
         ))}
       </div>
-      {err && <div style={{ marginTop: 10, fontSize: 12, color: "#AD455E" }}>⚠️ {err}</div>}
-      <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-        <button type="submit" style={{ background: "#D9718A", color: "#fff", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 600 }}>
+      {err && <div style={{ marginTop: 10, fontSize: 12, color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "8px 12px" }}>⚠️ {err}</div>}
+      <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
+        <button type="submit" style={{ background: "#000", color: "#fff", border: "none", borderRadius: 9999, padding: "9px 20px", fontSize: 13, fontWeight: 500 }}>
           {submitLabel || "儲存"}
         </button>
-        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #F3DCDF", borderRadius: 8, padding: "9px 18px", fontSize: 13 }}>
+        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #EBE8E4", borderRadius: 9999, padding: "9px 20px", fontSize: 13, color: "#777169" }}>
           取消
         </button>
       </div>

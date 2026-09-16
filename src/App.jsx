@@ -23,21 +23,20 @@ const GLOBAL_STYLES = `
   }
   * { box-sizing: border-box; }
   ::-webkit-scrollbar { width:8px; height:8px; }
-  ::-webkit-scrollbar-thumb { background:#E8CFD2; border-radius:8px; }
+  ::-webkit-scrollbar-thumb { background:#EBE8E4; border-radius:8px; }
   .mono { font-family:'IBM Plex Mono', monospace; }
   .serif { font-family:'Noto Serif TC', serif; }
   .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
-  .row-hover:hover { background:#FFF9F6; }
-  .iconbtn { border:none; background:transparent; color:#B896A0; font-size:13px; padding:4px 6px; border-radius:6px; }
-  .iconbtn:hover { background:#FBE3E9; color:#AD455E; }
+  .row-hover:hover { background:#F5F3F1; }
+  .iconbtn { border:none; background:transparent; color:#A59F97; font-size:13px; padding:4px 6px; border-radius:6px; }
+  .iconbtn:hover { background:#F5F3F1; color:#000; }
   input[type="date"], input[type="time"] { color-scheme: light; }
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer; border-radius: 6px; padding: 3px; margin-left: 4px;
-    filter: invert(46%) sepia(52%) saturate(1000%) hue-rotate(300deg) brightness(95%) contrast(92%);
   }
-  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:#FBE3E9; }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:#F5F3F1; }
   @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
   @media (max-width: 640px) { .hide-sm { display: none; } }
 
@@ -292,7 +291,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Sans TC',sans-serif", color: "#AD455E", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
+        <div className="ed-sans" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#000", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
           還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
         </div>
       </>
@@ -302,7 +301,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Serif TC',serif", color: "#B2607A" }}>存摺開啟中…</div>
+        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#777169" }}>存摺開啟中…</div>
       </>
     );
   }
@@ -311,7 +310,7 @@ export default function App() {
     return (
       <>
         <style>{GLOBAL_STYLES}</style>
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FBF3EE", fontFamily: "'Noto Serif TC',serif", color: "#B2607A" }}>資料同步中…</div>
+        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FDFCFC", color: "#777169" }}>資料同步中…</div>
       </>
     );
   }
@@ -377,23 +376,23 @@ export default function App() {
 
         <div className="content-col" style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "#D9718A14", border: "1px solid #D9718A55", color: "#AD455E", fontSize: 13, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: 13, lineHeight: 1.7 }}>
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#AD455E", textDecoration: "underline", fontSize: 13 }}>重試</button>
+              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: 13 }}>重試</button>
               {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
                 <div style={{ marginTop: 6, fontSize: 12 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 10, background: "#FFFCFA", border: "1px solid #F3DCDF", fontSize: 13.5, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: 13.5, lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: 12.5, color: "#A88690" }}>
+              <div style={{ marginTop: 8, fontSize: 12.5, color: "#777169" }}>
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#B2607A" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#777169" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
@@ -415,8 +414,7 @@ export default function App() {
         <div className="app-bottom-nav" style={{
           position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
           width: "100%", maxWidth: 560, zIndex: 30,
-          background: "#FFF9F6", borderTop: "1px solid #F3DCDF",
-          boxShadow: "0 -4px 16px rgba(90,60,50,0.08)",
+          background: "#fff", borderTop: "1px solid #EBE8E4",
           padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
         }}>
           {NAV.map((n) => (
@@ -425,11 +423,11 @@ export default function App() {
               style={{
                 flex: 1, border: "none", background: "transparent", padding: "6px 0 2px",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                color: tab === n.key ? "#AD455E" : "#A88690",
+                color: tab === n.key ? "#000" : "#A59F97",
               }}
             >
-              <span style={{ fontSize: 20, filter: tab === n.key ? "none" : "grayscale(0.7) opacity(0.7)" }}>{n.icon}</span>
-              <span style={{ fontSize: 11, fontWeight: tab === n.key ? 700 : 500 }}>{n.label}</span>
+              <span style={{ fontSize: 20, filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
+              <span style={{ fontSize: 11, fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
             </button>
           ))}
         </div>
@@ -437,8 +435,8 @@ export default function App() {
         {toast && (
           <div style={{
             position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "#2B2420", color: "#FFF9F6", padding: "10px 20px", borderRadius: 20, fontSize: 13, maxWidth: "85%",
-            animation: "printIn .2s ease-out", boxShadow: "0 6px 20px rgba(0,0,0,0.2)", zIndex: 50, textAlign: "center",
+            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: 13, maxWidth: "85%",
+            animation: "printIn .2s ease-out", zIndex: 50, textAlign: "center",
           }}>
             {toast}
           </div>

@@ -19,7 +19,7 @@ const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
   :root {
     --ed-bg: #fdfcfc; --ed-surface: #f5f3f1; --ed-ink: #000000;
-    --ed-smoke: #777169; --ed-ash: #a59f97; --ed-stone: #ebe8e4;
+    --ed-smoke: #777169; --ed-ash: #7D776F; --ed-stone: #ebe8e4;
   }
   * { box-sizing: border-box; }
   ::-webkit-scrollbar { width:8px; height:8px; }
@@ -30,7 +30,7 @@ const GLOBAL_STYLES = `
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
   .row-hover:hover { background:#F5F3F1; }
-  .iconbtn { border:none; background:transparent; color:#A59F97; font-size:13px; padding:4px 6px; border-radius:6px; }
+  .iconbtn { border:none; background:transparent; color:#7D776F; font-size:14px; padding:4px 6px; border-radius:6px; }
   .iconbtn:hover { background:#F5F3F1; color:#000; }
   input[type="date"], input[type="time"] { color-scheme: light; }
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
@@ -329,8 +329,8 @@ export default function App() {
           borderRight: "1px solid var(--ed-stone)", position: "sticky", top: 0, height: "100vh", gap: 4,
         }}>
           <div style={{ marginBottom: 28, paddingLeft: 4 }}>
-            <div style={{ fontSize: 10, letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
-            <div className="serif" style={{ fontSize: 20, fontWeight: 700 }}>當女生好難</div>
+            <div style={{ fontSize: 12, letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
+            <div className="serif" style={{ fontSize: 21, fontWeight: 700 }}>當女生好難</div>
           </div>
           {NAV.map((n) => (
             <button
@@ -338,11 +338,11 @@ export default function App() {
               style={{
                 display: "flex", alignItems: "center", gap: 10, textAlign: "left",
                 border: "none", background: tab === n.key ? "var(--ed-surface)" : "transparent",
-                borderRadius: 9999, padding: "9px 14px", fontSize: 14,
+                borderRadius: 9999, padding: "9px 14px", fontSize: 15,
                 fontWeight: tab === n.key ? 600 : 400, color: "var(--ed-ink)",
               }}
             >
-              <span style={{ fontSize: 16 }}>{n.icon}</span>
+              <span style={{ fontSize: 17 }}>{n.icon}</span>
               {n.label}
             </button>
           ))}
@@ -355,31 +355,31 @@ export default function App() {
             display: "flex", justifyContent: "space-between", alignItems: "baseline",
           }}>
             <div className="hide-md-up">
-              <span className="serif" style={{ fontSize: 18, fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
-              <span style={{ fontSize: 10, letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
+              <span className="serif" style={{ fontSize: 19, fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
+              <span style={{ fontSize: 12, letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
             </div>
-            <div style={{ fontSize: 13, color: "var(--ed-smoke)" }}>{pageTitle}</div>
+            <div style={{ fontSize: 14, color: "var(--ed-smoke)" }}>{pageTitle}</div>
           </div>
 
         <div className="content-col" style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: 13, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: 14, lineHeight: 1.7 }}>
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: 13 }}>重試</button>
+              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: 14 }}>重試</button>
               {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
-                <div style={{ marginTop: 6, fontSize: 12 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
+                <div style={{ marginTop: 6, fontSize: 13 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: 13.5, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: 15, lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: 12.5, color: "#777169" }}>
+              <div style={{ marginTop: 8, fontSize: 14, color: "#777169" }}>
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: 13, color: "#777169" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div style={{ marginBottom: 14, fontSize: 14, color: "#777169" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
@@ -410,11 +410,11 @@ export default function App() {
               style={{
                 flex: 1, border: "none", background: "transparent", padding: "6px 0 2px",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                color: tab === n.key ? "#000" : "#A59F97",
+                color: tab === n.key ? "#000" : "#7D776F",
               }}
             >
-              <span style={{ fontSize: 20, filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
-              <span style={{ fontSize: 11, fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
+              <span style={{ fontSize: 21, filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
+              <span style={{ fontSize: 12, fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
             </button>
           ))}
         </div>
@@ -422,7 +422,7 @@ export default function App() {
         {toast && (
           <div style={{
             position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: 13, maxWidth: "85%",
+            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: 14, maxWidth: "85%",
             animation: "printIn .2s ease-out", zIndex: 50, textAlign: "center",
           }}>
             {toast}

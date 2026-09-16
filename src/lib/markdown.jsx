@@ -30,7 +30,7 @@ export function renderMD(md) {
     if (/^#{2,3}\s/.test(line)) {
       const level = line.match(/^#+/)[0].length;
       blocks.push(
-        <div key={i} className="serif" style={{ fontSize: level === 2 ? 17 : 15, fontWeight: 500, color: "#000", margin: "14px 0 8px" }}>
+        <div key={i} className="serif" style={{ fontSize: level === 2 ? 18 : 16, fontWeight: 500, color: "#000", margin: "14px 0 8px" }}>
           {inlineMD(line.replace(/^#+\s/, ""))}
         </div>
       );
@@ -38,7 +38,7 @@ export function renderMD(md) {
     }
     if (line.trim().startsWith(">")) {
       blocks.push(
-        <div key={i} style={{ borderLeft: "3px solid #EBE8E4", paddingLeft: 10, color: "#777169", fontSize: 13, margin: "8px 0" }}>
+        <div key={i} style={{ borderLeft: "3px solid #EBE8E4", paddingLeft: 10, color: "#777169", fontSize: 14, margin: "8px 0" }}>
           {inlineMD(line.replace(/^>\s?/, ""))}
         </div>
       );
@@ -54,7 +54,7 @@ export function renderMD(md) {
       }
       blocks.push(
         <div key={i + "-tbl"} style={{ overflowX: "auto", margin: "10px 0" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12.5 }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 14 }}>
             <thead>
               <tr>
                 {rows[0].map((c, ci) => (
@@ -88,7 +88,7 @@ export function renderMD(md) {
       }
       blocks.push(
         <ul key={i + "-ul"} style={{ margin: "6px 0", paddingLeft: 20 }}>
-          {items.map((it, ii) => <li key={ii} style={{ fontSize: 13.5, lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
+          {items.map((it, ii) => <li key={ii} style={{ fontSize: 15, lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
         </ul>
       );
       continue;
@@ -101,12 +101,12 @@ export function renderMD(md) {
       }
       blocks.push(
         <ol key={i + "-ol"} style={{ margin: "6px 0", paddingLeft: 20 }}>
-          {items.map((it, ii) => <li key={ii} style={{ fontSize: 13.5, lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
+          {items.map((it, ii) => <li key={ii} style={{ fontSize: 15, lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
         </ol>
       );
       continue;
     }
-    blocks.push(<p key={i} style={{ fontSize: 13.5, lineHeight: 1.8, margin: "6px 0" }}>{inlineMD(line)}</p>);
+    blocks.push(<p key={i} style={{ fontSize: 15, lineHeight: 1.8, margin: "6px 0" }}>{inlineMD(line)}</p>);
     i++;
   }
   return blocks;

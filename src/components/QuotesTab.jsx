@@ -43,7 +43,7 @@ const productKey = (r) => (r.category || "其他") + "|" + (r.product || "未標
 
 function BestTag() {
   return (
-    <span style={{ fontSize: 10.5, padding: "1px 7px", borderRadius: 9999, background: "#000", color: "#fff", marginLeft: 6, whiteSpace: "nowrap" }}>最划算</span>
+    <span style={{ fontSize: 12, padding: "1px 7px", borderRadius: 9999, background: "#000", color: "#fff", marginLeft: 6, whiteSpace: "nowrap" }}>最划算</span>
   );
 }
 
@@ -52,7 +52,7 @@ function Pill({ active, onClick, children }) {
     <button
       onClick={onClick}
       style={{
-        fontSize: 12, padding: "6px 14px", borderRadius: 9999, border: "1px solid " + (active ? "#000" : "#EBE8E4"),
+        fontSize: 13, padding: "6px 14px", borderRadius: 9999, border: "1px solid " + (active ? "#000" : "#EBE8E4"),
         background: active ? "#000" : "transparent", color: active ? "#fff" : "#777169",
       }}
     >
@@ -74,18 +74,18 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy })
   return (
     <div className="row-hover" style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "9px 4px", borderBottom: "1px solid #EBE8E4", gap: 6, opacity: stale ? 0.45 : 1,
+      padding: "12px 4px", borderBottom: "1px solid #EBE8E4", gap: 6, opacity: stale ? 0.45 : 1,
     }}>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 13.5 }}>{title}{extra && <span style={{ color: "#A59F97", fontSize: 12 }}> · {extra}</span>}{best && <BestTag />}</div>
-        <div style={{ fontSize: 11, color: "#A59F97", overflowWrap: "anywhere" }}>
+        <div style={{ fontSize: 15 }}>{title}{extra && <span style={{ color: "#7D776F", fontSize: 13 }}> · {extra}</span>}{best && <BestTag />}</div>
+        <div style={{ fontSize: 12, color: "#7D776F", overflowWrap: "anywhere" }}>
           {r.date || "—"}{days != null ? `（${agoLabel(days)}）` : ""}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}
         </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
         <div style={{ textAlign: "right" }}>
-          <div className="mono" style={{ fontSize: 13.5, whiteSpace: "nowrap" }}>{fmt(r.price)}</div>
-          {up != null && <div className="mono" style={{ fontSize: 11, color: "#A59F97", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
+          <div className="mono" style={{ fontSize: 15, whiteSpace: "nowrap" }}>{fmt(r.price)}</div>
+          {up != null && <div className="mono" style={{ fontSize: 12, color: "#7D776F", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
         </div>
         <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
@@ -167,7 +167,7 @@ export function QuotesTab({ data, h }) {
   }, [filtered]);
 
   const rowProps = { editingId, setEditingId, h, onCopy: copyRow };
-  const empty = <div style={{ color: "#A59F97", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>;
+  const empty = <div style={{ color: "#7D776F", fontSize: 14, padding: 12 }}>找不到符合的紀錄</div>;
 
   return (
     <div>
@@ -195,11 +195,11 @@ export function QuotesTab({ data, h }) {
         <div>
           {Object.entries(grouped).map(([c, prods]) => (
             <div key={c} style={{ marginBottom: 18 }}>
-              <div className="serif" style={{ fontSize: 15, fontWeight: 500, color: "#000", borderBottom: "1px solid #EBE8E4", paddingBottom: 6, marginBottom: 8 }}>{c}</div>
+              <div className="serif" style={{ fontSize: 16, fontWeight: 500, color: "#000", borderBottom: "1px solid #EBE8E4", paddingBottom: 6, marginBottom: 8 }}>{c}</div>
               {Object.entries(prods).map(([prod, list]) => (
                 <div key={prod} style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 500, color: "#000", margin: "6px 0 2px" }}>
-                    {prod} <span style={{ fontWeight: 300, color: "#A59F97" }}>（{list.length} 筆）</span>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: "#000", margin: "6px 0 2px" }}>
+                    {prod} <span style={{ fontWeight: 400, color: "#7D776F" }}>（{list.length} 筆）</span>
                   </div>
                   {list.map((r) => (
                     <QuoteRow key={r.id} r={r} title={r.clinic} best={bestIds.has(r.id)} {...rowProps} />
@@ -217,8 +217,8 @@ export function QuotesTab({ data, h }) {
           {byClinic.map(([clinic, list, latest]) => (
             <div key={clinic} style={{ border: "1px solid #EBE8E4", borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
-                <div className="serif" style={{ fontSize: 15, fontWeight: 500, color: "#000" }}>{clinic}</div>
-                <div style={{ fontSize: 11, color: "#A59F97", whiteSpace: "nowrap" }}>
+                <div className="serif" style={{ fontSize: 16, fontWeight: 500, color: "#000" }}>{clinic}</div>
+                <div style={{ fontSize: 12, color: "#7D776F", whiteSpace: "nowrap" }}>
                   {list.length} 筆{latest ? ` · 最近詢價：${agoLabel(daysAgo(latest))}` : ""}
                 </div>
               </div>

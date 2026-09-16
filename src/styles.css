@@ -145,3 +145,77 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .clinic-card__name { font-size: var(--fs-xl); font-weight: 500; color: var(--ed-ink); }
 .clinic-card__info { font-size: var(--fs-xs); color: var(--ed-ash); white-space: nowrap; }
 .category-chips { margin-bottom: 14px; }
+
+/* ---- 總覽（Overview.jsx） ---- */
+.panel-label { font-size: var(--fs-md); color: var(--ed-smoke); }
+.passbook { background: #fff; color: var(--ed-ink); border: 1px solid var(--ed-stone); border-radius: var(--r-lg); padding: 20px 20px 18px; margin-bottom: 20px; }
+.passbook__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 10px; }
+.passbook__label { font-size: var(--fs-xs); color: var(--ed-smoke); font-weight: 400; }
+.passbook__big { font-size: var(--fs-4xl); font-weight: 500; }
+.passbook__small { font-size: var(--fs-2xl); font-weight: 500; color: var(--ed-smoke); }
+.passbook__progress { margin-top: 16px; }
+.bar-track { background: var(--ed-stone); border-radius: var(--r-sm); overflow: hidden; }
+.bar-track--thin { height: 4px; }
+.bar-track--ranking { height: 5px; }
+.bar-fill { height: 100%; }
+.passbook__fill { background: var(--ed-ink); }
+.passbook__caption { font-size: var(--fs-xs); color: var(--ed-ash); margin-top: 6px; text-align: right; }
+.main-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 10px; margin-bottom: 24px; }
+.main-card { border: 1px solid var(--ed-stone); border-radius: var(--r-lg); padding: 14px; background: #fff; }
+.main-card__head { display: flex; align-items: center; gap: 8px; }
+.main-card__dot { width: 7px; height: 7px; border-radius: var(--r-sm); }
+.main-card__name { font-size: var(--fs-md); color: var(--ed-smoke); font-weight: 400; }
+.main-card__amount { font-size: var(--fs-2xl); font-weight: 500; margin-top: 6px; }
+
+/* ---- 年度支出比較（TrendChart.jsx） ---- */
+.trend { margin-bottom: 26px; background: #fff; border: 1px solid var(--ed-stone); border-radius: var(--r-lg); padding: 13px 15px; }
+.trend__head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+.trend__legend { display: flex; gap: 10px; flex-wrap: wrap; }
+.trend__legend-item { font-size: var(--fs-xs); color: var(--ed-smoke); display: inline-flex; align-items: center; gap: 4px; }
+.legend-dot { width: 8px; height: 8px; border-radius: var(--r-sm); }
+.trend__card-name .legend-dot { flex-shrink: 0; }
+.trend__hint { font-size: var(--fs-xs); color: var(--ed-ash); margin-bottom: 8px; }
+.trend__bars { display: flex; align-items: flex-end; gap: 6px; overflow-x: auto; padding-top: 140px; }
+.trend__col { position: relative; flex: 1 0 40px; display: flex; flex-direction: column; align-items: center; }
+/* 明細卡：left/right/transform 依第一根、最後一根柱子在元件裡決定 */
+.trend__card {
+  position: absolute; bottom: 100%; margin-bottom: 8px; background: #fff; border: 1px solid var(--ed-stone);
+  border-radius: var(--r-lg); box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 12px 14px; min-width: 168px; z-index: 10;
+}
+.trend__card-year { font-size: var(--fs-lg); font-weight: 500; color: var(--ed-ink); margin-bottom: 8px; }
+.trend__card-list { display: flex; flex-direction: column; gap: 5px; }
+.trend__card-empty { font-size: var(--fs-md); color: var(--ed-ash); }
+.trend__card-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.trend__card-name { display: flex; align-items: center; gap: 6px; font-size: var(--fs-md); color: var(--ed-smoke); }
+.trend__card-amount { font-size: var(--fs-md); color: var(--ed-ink); }
+.trend__total { font-size: var(--fs-xs); color: var(--ed-smoke); margin-bottom: 4px; }
+.trend__bar { border: none; background: transparent; padding: 0; width: 100%; display: flex; flex-direction: column-reverse; cursor: pointer; }
+/* 高度、顏色在元件裡依資料計算 */
+.bar-seg { width: 100%; max-width: 24px; margin: 0 auto; }
+.bar-seg.is-stacked { margin-bottom: 2px; }
+.bar-seg.is-top { border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.trend__year { font-size: var(--fs-xs); color: var(--ed-ash); margin-top: 6px; }
+
+/* ---- 子分類佔比排行（SubcategoryRanking.jsx） ---- */
+.ranking { margin-bottom: 26px; }
+.ranking__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.ranking__range { display: flex; gap: 6px; }
+.ranking__list { display: flex; flex-direction: column; gap: 6px; }
+.ranking__item { font-size: var(--fs-md); }
+.ranking__row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+.ranking__text { color: var(--ed-smoke); }
+.ranking__empty { color: var(--ed-ash); font-size: var(--fs-md); }
+
+/* ---- 儲值金（VouchersPanel.jsx） ---- */
+.vouchers { margin-bottom: 26px; }
+.vouchers__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.iconbtn.vouchers__add { color: var(--ed-ink); font-weight: 500; }
+.vouchers__grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; }
+.vouchers__editing { grid-column: 1 / -1; }
+.voucher { border: 1px solid var(--ed-stone); border-radius: var(--r-lg); padding: 13px 15px; background: #fff; }
+.voucher__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 4px; }
+.voucher__body { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.voucher__value { font-size: var(--fs-3xl); font-weight: 500; margin-top: 4px; color: var(--ed-ink); }
+.voucher__unit { font-size: var(--fs-md); margin-left: 3px; color: var(--ed-smoke); }
+.iconbtn.voucher__use { border: 1px solid var(--ed-stone); border-radius: 9999px; padding: 2px 10px; font-size: var(--fs-sm); }
+.voucher__meta { font-size: var(--fs-xs); color: var(--ed-ash); margin-top: 4px; }

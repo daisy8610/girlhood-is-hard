@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 
 const MAX_BAR_PX = 140;
-const GAP = 2; // 2px surface gap between stacked segments
+const GAP = 2; // 疊加區段之間的 2px 間隔，要跟 styles.css 的 .bar-seg.is-stacked 一致
 
 export function TrendChart({ spending }) {
   const [openYear, setOpenYear] = useState(null);
@@ -26,20 +26,20 @@ export function TrendChart({ spending }) {
   }, [spending]);
 
   return (
-    <div style={{ marginBottom: 26, background: "#fff", border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", padding: "13px 15px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 6, marginBottom: 4 }}>
-        <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>年度支出比較</div>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+    <div className="trend">
+      <div className="trend__head">
+        <div className="panel-label">年度支出比較</div>
+        <div className="trend__legend">
           {data.mains.map((k) => (
-            <span key={k} style={{ fontSize: "var(--fs-xs)", color: "var(--ed-smoke)", display: "inline-flex", alignItems: "center", gap: 4 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "var(--r-sm)", background: MAIN_COLORS[k] }} />
+            <span key={k} className="trend__legend-item">
+              <span className="legend-dot" style={{ background: MAIN_COLORS[k] }} />
               {k}
             </span>
           ))}
         </div>
       </div>
-      <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", marginBottom: 8 }}>點一下柱子看該年明細</div>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 6, overflowX: "auto", paddingTop: 140 }}>
+      <div className="trend__hint">點一下柱子看該年明細</div>
+      <div className="trend__bars">
         {data.byYear.map((x, idx) => {
           const segments = data.mains.map((k) => ({ k, v: x.parts[k] })).filter((s) => s.v > 0);
           const isOpen = openYear === x.y;
@@ -51,39 +51,28 @@ export function TrendChart({ spending }) {
             ? { right: 0, transform: "none" }
             : { left: "50%", transform: "translateX(-50%)" };
           return (
-            <div key={x.y} style={{ position: "relative", flex: "1 0 40px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div key={x.y} className="trend__col">
               {isOpen && (
-                <div style={{
-                  position: "absolute", bottom: "100%", ...cardPos,
-                  marginBottom: 8, background: "#fff", border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                  padding: "12px 14px", minWidth: 168, zIndex: 10,
-                }}>
-                  <div style={{ fontSize: "var(--fs-lg)", fontWeight: 500, color: "var(--ed-ink)", marginBottom: 8 }}>{x.y}</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    {segments.length === 0 && <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-ash)" }}>這一年沒有紀錄</div>}
+                <div className="trend__card" style={cardPos}>
+                  <div className="trend__card-year">{x.y}</div>
+                  <div className="trend__card-list">
+                    {segments.length === 0 && <div className="trend__card-empty">這一年沒有紀錄</div>}
                     {[...segments].reverse().map((s) => (
-                      <div key={s.k} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
-                        <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>
-                          <span style={{ width: 8, height: 8, borderRadius: "var(--r-sm)", background: MAIN_COLORS[s.k], flexShrink: 0 }} />
+                      <div key={s.k} className="trend__card-row">
+                        <span className="trend__card-name">
+                          <span className="legend-dot" style={{ background: MAIN_COLORS[s.k] }} />
                           {s.k}
                         </span>
-                        <span className="mono" style={{ fontSize: "var(--fs-md)", color: "var(--ed-ink)" }}>{fmt(s.v)}</span>
+                        <span className="mono trend__card-amount">{fmt(s.v)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
               {x.total > 0 && (
-                <div className="mono" style={{ fontSize: "var(--fs-xs)", color: "var(--ed-smoke)", marginBottom: 4 }}>{Math.round(x.total / 1000)}k</div>
+                <div className="mono trend__total">{Math.round(x.total / 1000)}k</div>
               )}
-              <button
-                onClick={() => setOpenYear(isOpen ? null : x.y)}
-                style={{
-                  border: "none", background: "transparent", padding: 0, width: "100%",
-                  display: "flex", flexDirection: "column-reverse", height: MAX_BAR_PX,
-                  cursor: "pointer",
-                }}
-              >
+              <button className="trend__bar" onClick={() => setOpenYear(isOpen ? null : x.y)} style={{ height: MAX_BAR_PX }}>
                 {segments.map((s, idx) => {
                   const isTop = idx === segments.length - 1;
                   const isBottom = idx === 0;
@@ -91,17 +80,13 @@ export function TrendChart({ spending }) {
                   return (
                     <div
                       key={s.k}
-                      style={{
-                        width: "100%", maxWidth: 24, margin: "0 auto", height: h,
-                        marginBottom: isBottom ? 0 : GAP,
-                        background: MAIN_COLORS[s.k],
-                        borderTopLeftRadius: isTop ? 4 : 0, borderTopRightRadius: isTop ? 4 : 0,
-                      }}
+                      className={"bar-seg" + (isBottom ? "" : " is-stacked") + (isTop ? " is-top" : "")}
+                      style={{ height: h, background: MAIN_COLORS[s.k] }}
                     />
                   );
                 })}
               </button>
-              <div style={{ fontSize: "var(--fs-xs)", color: "var(--ed-ash)", marginTop: 6 }}>{x.y}</div>
+              <div className="trend__year">{x.y}</div>
             </div>
           );
         })}

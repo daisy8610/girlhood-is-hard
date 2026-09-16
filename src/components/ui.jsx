@@ -5,7 +5,7 @@ export function Tag({ children, color }) {
   return (
     <span
       style={{
-        display: "inline-block", fontSize: 12, padding: "2px 9px", borderRadius: 9999,
+        display: "inline-block", fontSize: "var(--fs-xs)", padding: "2px 9px", borderRadius: 9999,
         background: "#F5F3F1", color: "#000",
         border: "1px solid #EBE8E4", whiteSpace: "nowrap",
       }}
@@ -18,8 +18,8 @@ export function Tag({ children, color }) {
 export function SectionTitle({ children, sub }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <h2 className="serif" style={{ fontSize: 20, fontWeight: 500, margin: 0, color: "#000" }}>{children}</h2>
-      {sub && <div style={{ fontSize: 13, color: "#777169", marginTop: 3, fontWeight: 400 }}>{sub}</div>}
+      <h2 className="serif" style={{ fontSize: "var(--fs-3xl)", fontWeight: 500, margin: 0, color: "#000" }}>{children}</h2>
+      {sub && <div style={{ fontSize: "var(--fs-sm)", color: "#777169", marginTop: 3, fontWeight: 400 }}>{sub}</div>}
     </div>
   );
 }
@@ -30,7 +30,7 @@ export function AddButton({ onClick, label }) {
       onClick={onClick}
       style={{
         border: "1px solid #000", color: "#000", background: "transparent", borderRadius: 9999,
-        padding: "9px 18px", fontSize: 14, fontWeight: 500, marginBottom: 14,
+        padding: "9px 18px", fontSize: "var(--fs-md)", fontWeight: 500, marginBottom: 14,
       }}
     >
       + {label || "新增一筆"}
@@ -65,7 +65,7 @@ export function CategoryChips({ options, value, onChange }) {
         <button
           key={c} onClick={() => onChange(c)}
           style={{
-            padding: "6px 14px", borderRadius: 9999, fontSize: 13, border: "1px solid " + (value === c ? "#000" : "#EBE8E4"),
+            padding: "6px 14px", borderRadius: 9999, fontSize: "var(--fs-sm)", border: "1px solid " + (value === c ? "#000" : "#EBE8E4"),
             background: value === c ? "#000" : "transparent", color: value === c ? "#fff" : "#777169",
           }}
         >
@@ -105,7 +105,7 @@ function SuggestInput({ value, onChange, suggestions, placeholder, style }) {
               onMouseDown={(e) => e.preventDefault()}
               onTouchStart={(e) => e.preventDefault()}
               onClick={() => { onChange(s); setOpen(false); }}
-              style={{ padding: "8px 12px", fontSize: 14, cursor: "pointer" }}
+              style={{ padding: "8px 12px", fontSize: "var(--fs-md)", cursor: "pointer" }}
             >
               {s}
             </div>
@@ -122,7 +122,7 @@ export function SearchBox({ value, onChange, placeholder }) {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder || "搜尋…"}
-      style={{ width: "100%", padding: "10px 14px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: 14, marginBottom: 14, background: "#fff" }}
+      style={{ width: "100%", padding: "10px 14px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: "var(--fs-md)", marginBottom: 14, background: "#fff" }}
     />
   );
 }
@@ -164,13 +164,13 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
     onSubmit(out);
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 5, padding: "9px 10px", borderRadius: 10, border: "1px solid #EBE8E4", fontSize: 14, background: "#fff" };
+  const inputStyle = { display: "block", width: "100%", marginTop: 5, padding: "9px 10px", borderRadius: 10, border: "1px solid #EBE8E4", fontSize: "var(--fs-md)", background: "#fff" };
 
   return (
     <form onSubmit={submit} style={{ border: "1px solid #EBE8E4", borderRadius: 16, padding: 16, marginBottom: 14, background: "#fff" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
         {fields.map((f) => (
-          <label key={f.key} style={{ fontSize: 13, color: "#777169", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
+          <label key={f.key} style={{ fontSize: "var(--fs-sm)", color: "#777169", gridColumn: f.type === "textarea" || f.type === "date" ? "1 / -1" : "auto" }}>
             {f.label}{f.required && <span style={{ color: "#000", fontWeight: 700 }}> *</span>}
             {f.type === "select" ? (
               <select value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} style={inputStyle}>
@@ -183,7 +183,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   value={vals[f.key]} onChange={(e) => set(f.key, e.target.value)} rows={10}
                   placeholder={f.placeholder || ""} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                 />
-                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#F5F3F1", fontSize: 14 }}>
+                <div style={{ ...inputStyle, overflowY: "auto", maxHeight: 260, background: "#F5F3F1", fontSize: "var(--fs-md)" }}>
                   {vals[f.key] ? renderMD(vals[f.key]) : <span style={{ color: "#7D776F" }}>預覽</span>}
                 </div>
               </div>
@@ -213,7 +213,7 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
                   type={f.type}
                   value={vals[f.key] ?? ""} onChange={(e) => set(f.key, e.target.value)}
                   className="mono"
-                  style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px", border: "none", borderRadius: 10, background: "#fff", fontSize: 15, color: "#000" }}
+                  style={{ width: "100%", boxSizing: "border-box", padding: "9px 10px", border: "none", borderRadius: 10, background: "#fff", fontSize: "var(--fs-lg)", color: "#000" }}
                 />
               </div>
             ) : (
@@ -226,12 +226,12 @@ export function RecordForm({ fields, initial, onSubmit, onCancel, submitLabel })
           </label>
         ))}
       </div>
-      {err && <div style={{ marginTop: 10, fontSize: 13, color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "8px 12px" }}>⚠️ {err}</div>}
+      {err && <div style={{ marginTop: 10, fontSize: "var(--fs-sm)", color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "8px 12px" }}>⚠️ {err}</div>}
       <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
-        <button type="submit" style={{ background: "#000", color: "#fff", border: "none", borderRadius: 9999, padding: "9px 20px", fontSize: 14, fontWeight: 500 }}>
+        <button type="submit" style={{ background: "#000", color: "#fff", border: "none", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", fontWeight: 500 }}>
           {submitLabel || "儲存"}
         </button>
-        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #EBE8E4", borderRadius: 9999, padding: "9px 20px", fontSize: 14, color: "#777169" }}>
+        <button type="button" onClick={onCancel} style={{ background: "transparent", border: "1px solid #EBE8E4", borderRadius: 9999, padding: "9px 20px", fontSize: "var(--fs-md)", color: "#777169" }}>
           取消
         </button>
       </div>

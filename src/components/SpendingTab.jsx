@@ -54,21 +54,21 @@ export function SpendingTab({ data, h, onAdd }) {
               padding: "12px 4px", borderBottom: "1px solid #EBE8E4", gap: 6,
             }}>
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 15 }}>
+                <div style={{ fontSize: "var(--fs-lg)" }}>
                   <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: 7, background: MAIN_COLORS[r.main] || "#999", marginRight: 7 }} />
-                  {r.item} <span style={{ color: "#7D776F", fontSize: 13 }}>{r.sub ? `· ${r.sub}` : ""}</span>
+                  {r.item} <span style={{ color: "#7D776F", fontSize: "var(--fs-sm)" }}>{r.sub ? `· ${r.sub}` : ""}</span>
                 </div>
-                <div style={{ fontSize: 12, color: "#7D776F", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
+                <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", overflowWrap: "anywhere" }}>{r.date || "—"} · {r.place || "—"}{r.note ? ` · ${r.note}` : ""}</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="mono" style={{ fontSize: 15, whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
+                <span className="mono" style={{ fontSize: "var(--fs-lg)", whiteSpace: "nowrap" }}>{fmt(r.amount)}</span>
                 <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => copyRow(r)}>⧉</button>
                 <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
               </div>
             </div>
           )
         )}
-        {filtered.length === 0 && <div style={{ color: "#7D776F", fontSize: 14, padding: 12 }}>找不到符合的紀錄</div>}
+        {filtered.length === 0 && <div style={{ color: "#7D776F", fontSize: "var(--fs-md)", padding: 12 }}>找不到符合的紀錄</div>}
       </div>
     </div>
   );

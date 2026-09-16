@@ -5,8 +5,8 @@ import { SectionTitle } from "./ui";
 function SettingsCard({ title, sub, children }) {
   return (
     <div style={{ background: "#fff", border: "1px solid #EBE8E4", borderRadius: 16, padding: 18, marginBottom: 14 }}>
-      <div style={{ fontSize: 15, fontWeight: 500, color: "#000" }}>{title}</div>
-      {sub && <div style={{ fontSize: 13, color: "#777169", marginTop: 3, marginBottom: 12, fontWeight: 400 }}>{sub}</div>}
+      <div style={{ fontSize: "var(--fs-lg)", fontWeight: 500, color: "#000" }}>{title}</div>
+      {sub && <div style={{ fontSize: "var(--fs-sm)", color: "#777169", marginTop: 3, marginBottom: 12, fontWeight: 400 }}>{sub}</div>}
       {children}
     </div>
   );
@@ -47,7 +47,7 @@ export function SettingsPage({
     reader.readAsText(file);
   }
 
-  const btn = { border: "1px solid #EBE8E4", color: "#000", background: "#fff", borderRadius: 9999, padding: "9px 18px", fontSize: 14 };
+  const btn = { border: "1px solid #EBE8E4", color: "#000", background: "#fff", borderRadius: 9999, padding: "9px 18px", fontSize: "var(--fs-md)" };
   const btnPrimary = { ...btn, border: "1px solid #000", background: "#000", color: "#fff", fontWeight: 500 };
 
   return (
@@ -61,7 +61,7 @@ export function SettingsPage({
       <SettingsCard title="Google 日曆" sub="連結後，新增消費紀錄時勾選「同步到 Google 日曆」，就會在你的日曆建一筆行程">
         {googleLinked ? (
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <span style={{ fontSize: 14, color: "#000" }}>✓ 已連結</span>
+            <span style={{ fontSize: "var(--fs-md)", color: "#000" }}>✓ 已連結</span>
             <button onClick={disconnectGoogleCalendar} style={btn}>解除連結</button>
           </div>
         ) : (
@@ -71,10 +71,10 @@ export function SettingsPage({
 
       <SettingsCard title="年度預算上限" sub="總覽的進度條會以這個數字計算">
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <span style={{ fontSize: 15, color: "#777169" }}>NT$</span>
+          <span style={{ fontSize: "var(--fs-lg)", color: "#777169" }}>NT$</span>
           <input
             type="number" value={capInput} onChange={(e) => setCapInput(e.target.value)}
-            style={{ flex: 1, padding: "9px 12px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: 16, minWidth: 0 }} className="mono"
+            style={{ flex: 1, padding: "9px 12px", borderRadius: 9999, border: "1px solid #EBE8E4", fontSize: "var(--fs-xl)", minWidth: 0 }} className="mono"
           />
           <button onClick={() => { const v = Number(capInput); if (v > 0) saveCap(v); }} style={btnPrimary}>儲存</button>
         </div>
@@ -89,18 +89,18 @@ export function SettingsPage({
         </div>
 
         {importErr && (
-          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: 14 }}>
+          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: "var(--fs-md)" }}>
             ⚠️ 無法匯入：{importErr}
           </div>
         )}
 
         {pending && (
           <div style={{ marginTop: 12, border: "1px solid #EBE8E4", borderRadius: 14, padding: 14, background: "#F5F3F1" }}>
-            <div style={{ fontSize: 15, fontWeight: 500, color: "#000", marginBottom: 8 }}>
+            <div style={{ fontSize: "var(--fs-lg)", fontWeight: 500, color: "#000", marginBottom: 8 }}>
               還原預覽{pending.exportedAt ? `（備份於 ${String(pending.exportedAt).slice(0, 10)}）` : "（備份日期不明）"}
             </div>
             <div style={{ overflowX: "auto" }}>
-              <table style={{ borderCollapse: "collapse", fontSize: 13, width: "100%" }}>
+              <table style={{ borderCollapse: "collapse", fontSize: "var(--fs-sm)", width: "100%" }}>
                 <thead>
                   <tr>
                     <th style={{ textAlign: "left", padding: "4px 8px", borderBottom: "1px solid #EBE8E4" }}></th>
@@ -127,7 +127,7 @@ export function SettingsPage({
                 </tbody>
               </table>
             </div>
-            <div style={{ fontSize: 13, color: "#777169", margin: "10px 0" }}>
+            <div style={{ fontSize: "var(--fs-sm)", color: "#777169", margin: "10px 0" }}>
               確認後，雲端的消費/詢價/筆記/儲值資料會<strong>整份被備份檔取代</strong>（店家清單保留）；取代前會自動先下載一份現況備份。
               <br />⚠️ 還原過程中如果網路中斷或寫入失敗，雲端資料可能會處於「舊資料已清空、新資料沒補齊」的中間狀態；建議在網路穩定時操作，還原後可到各頁面確認筆數是否正確，若不對可用剛下載的現況備份再還原一次。
             </div>
@@ -144,7 +144,7 @@ export function SettingsPage({
       <SettingsCard title="清空所有資料" sub="清空後雲端會是空的；要重新放資料請用上方匯入或執行 SEED_DATA.sql（清空前會自動下載備份）">
         {clearConfirm ? (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <span style={{ fontSize: 14, color: "#000", fontWeight: 500 }}>確定要清空嗎？</span>
+            <span style={{ fontSize: "var(--fs-md)", color: "#000", fontWeight: 500 }}>確定要清空嗎？</span>
             <button onClick={() => { clearAllData(); setClearConfirm(false); }} style={btnPrimary}>
               確定清空
             </button>
@@ -156,14 +156,14 @@ export function SettingsPage({
       </SettingsCard>
 
       <SettingsCard title="關於">
-        <div style={{ fontSize: 14, color: "#777169", lineHeight: 1.8, fontWeight: 400 }}>
+        <div style={{ fontSize: "var(--fs-md)", color: "#777169", lineHeight: 1.8, fontWeight: 400 }}>
           「當女生好難」美容存摺・原始資料於 2026-07 從 Notion 匯出。<br />
           資料表：expenses / quotes / notes / vouchers / providers（目前 {providerCount} 家店家）。<br />
           全部受 Row Level Security 保護，只有你的登入身分讀得到。
         </div>
       </SettingsCard>
 
-      <div style={{ textAlign: "center", fontSize: 13, color: "#7D776F", marginTop: 8, lineHeight: 1.7 }}>
+      <div style={{ textAlign: "center", fontSize: "var(--fs-sm)", color: "#7D776F", marginTop: 8, lineHeight: 1.7 }}>
         資料只存在 Supabase，這個網頁不含任何資料副本。<br />記得偶爾用上面的「下載完整備份」存一份。
       </div>
     </div>

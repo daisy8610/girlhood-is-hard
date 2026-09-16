@@ -18,6 +18,15 @@ const DEFAULT_SETTINGS = { cap: 50000 };
 const GLOBAL_STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
   :root {
+    /* 字級：全站統一從這裡調整 */
+    --fs-xs: 12px;  /* 日期、備註、小標籤 */
+    --fs-sm: 13px;  /* 按鈕、次要文字 */
+    --fs-md: 14px;  /* 一般內文、列表 */
+    --fs-lg: 15px;  /* 金額、重點文字 */
+    --fs-xl: 16px;  /* 輸入框、小標題 */
+    --fs-2xl: 18px; /* 區塊標題 */
+    --fs-3xl: 21px; /* 頁面標題、導覽圖示 */
+    --fs-4xl: 26px; /* 大數字、登入頁標題 */
     --ed-bg: #fdfcfc; --ed-surface: #f5f3f1; --ed-ink: #000000;
     --ed-smoke: #777169; --ed-ash: #7D776F; --ed-stone: #ebe8e4;
   }
@@ -30,7 +39,7 @@ const GLOBAL_STYLES = `
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
   .row-hover:hover { background:#F5F3F1; }
-  .iconbtn { border:none; background:transparent; color:#7D776F; font-size:14px; padding:4px 6px; border-radius:6px; }
+  .iconbtn { border:none; background:transparent; color:#7D776F; font-size:var(--fs-md); padding:4px 6px; border-radius:6px; }
   .iconbtn:hover { background:#F5F3F1; color:#000; }
   input[type="date"], input[type="time"] { color-scheme: light; }
   input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
@@ -329,8 +338,8 @@ export default function App() {
           borderRight: "1px solid var(--ed-stone)", position: "sticky", top: 0, height: "100vh", gap: 4,
         }}>
           <div style={{ marginBottom: 28, paddingLeft: 4 }}>
-            <div style={{ fontSize: 12, letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
-            <div className="serif" style={{ fontSize: 21, fontWeight: 700 }}>當女生好難</div>
+            <div style={{ fontSize: "var(--fs-xs)", letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
+            <div className="serif" style={{ fontSize: "var(--fs-3xl)", fontWeight: 700 }}>當女生好難</div>
           </div>
           {NAV.map((n) => (
             <button
@@ -338,11 +347,11 @@ export default function App() {
               style={{
                 display: "flex", alignItems: "center", gap: 10, textAlign: "left",
                 border: "none", background: tab === n.key ? "var(--ed-surface)" : "transparent",
-                borderRadius: 9999, padding: "9px 14px", fontSize: 15,
+                borderRadius: 9999, padding: "9px 14px", fontSize: "var(--fs-lg)",
                 fontWeight: tab === n.key ? 600 : 400, color: "var(--ed-ink)",
               }}
             >
-              <span style={{ fontSize: 17 }}>{n.icon}</span>
+              <span style={{ fontSize: "var(--fs-2xl)" }}>{n.icon}</span>
               {n.label}
             </button>
           ))}
@@ -355,31 +364,31 @@ export default function App() {
             display: "flex", justifyContent: "space-between", alignItems: "baseline",
           }}>
             <div className="hide-md-up">
-              <span className="serif" style={{ fontSize: 19, fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
-              <span style={{ fontSize: 12, letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
+              <span className="serif" style={{ fontSize: "var(--fs-2xl)", fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
+              <span style={{ fontSize: "var(--fs-xs)", letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
             </div>
-            <div style={{ fontSize: 14, color: "var(--ed-smoke)" }}>{pageTitle}</div>
+            <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>{pageTitle}</div>
           </div>
 
         <div className="content-col" style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: 14, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 10, background: "#F5F3F1", color: "#000", fontSize: "var(--fs-md)", lineHeight: 1.7 }}>
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: 14 }}>重試</button>
+              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "#000", textDecoration: "underline", fontSize: "var(--fs-md)" }}>重試</button>
               {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
-                <div style={{ marginTop: 6, fontSize: 13 }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
+                <div style={{ marginTop: 6, fontSize: "var(--fs-sm)" }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: 15, lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: 14, background: "#fff", border: "1px solid #EBE8E4", fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: 14, color: "#777169" }}>
+              <div style={{ marginTop: 8, fontSize: "var(--fs-md)", color: "#777169" }}>
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: 14, color: "#777169" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div style={{ marginBottom: 14, fontSize: "var(--fs-md)", color: "#777169" }}>資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
@@ -413,8 +422,8 @@ export default function App() {
                 color: tab === n.key ? "#000" : "#7D776F",
               }}
             >
-              <span style={{ fontSize: 21, filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
-              <span style={{ fontSize: 12, fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
+              <span style={{ fontSize: "var(--fs-3xl)", filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
+              <span style={{ fontSize: "var(--fs-xs)", fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
             </button>
           ))}
         </div>
@@ -422,7 +431,7 @@ export default function App() {
         {toast && (
           <div style={{
             position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: 14, maxWidth: "85%",
+            background: "#000", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: "var(--fs-md)", maxWidth: "85%",
             animation: "printIn .2s ease-out", zIndex: 50, textAlign: "center",
           }}>
             {toast}

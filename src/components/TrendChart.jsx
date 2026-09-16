@@ -28,17 +28,17 @@ export function TrendChart({ spending }) {
   return (
     <div style={{ marginBottom: 26, background: "#fff", border: "1px solid #EBE8E4", borderRadius: 14, padding: "13px 15px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 6, marginBottom: 4 }}>
-        <div style={{ fontSize: 14, color: "#777169" }}>年度支出比較</div>
+        <div style={{ fontSize: "var(--fs-md)", color: "#777169" }}>年度支出比較</div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {data.mains.map((k) => (
-            <span key={k} style={{ fontSize: 12, color: "#777169", display: "inline-flex", alignItems: "center", gap: 4 }}>
+            <span key={k} style={{ fontSize: "var(--fs-xs)", color: "#777169", display: "inline-flex", alignItems: "center", gap: 4 }}>
               <span style={{ width: 8, height: 8, borderRadius: 8, background: MAIN_COLORS[k] }} />
               {k}
             </span>
           ))}
         </div>
       </div>
-      <div style={{ fontSize: 12, color: "#7D776F", marginBottom: 8 }}>點一下柱子看該年明細</div>
+      <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", marginBottom: 8 }}>點一下柱子看該年明細</div>
       <div style={{ display: "flex", alignItems: "flex-end", gap: 6, overflowX: "auto", paddingTop: 140 }}>
         {data.byYear.map((x, idx) => {
           const segments = data.mains.map((k) => ({ k, v: x.parts[k] })).filter((s) => s.v > 0);
@@ -58,23 +58,23 @@ export function TrendChart({ spending }) {
                   marginBottom: 8, background: "#fff", border: "1px solid #EBE8E4", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                   padding: "12px 14px", minWidth: 168, zIndex: 10,
                 }}>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: "#000", marginBottom: 8 }}>{x.y}</div>
+                  <div style={{ fontSize: "var(--fs-lg)", fontWeight: 500, color: "#000", marginBottom: 8 }}>{x.y}</div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    {segments.length === 0 && <div style={{ fontSize: 14, color: "#7D776F" }}>這一年沒有紀錄</div>}
+                    {segments.length === 0 && <div style={{ fontSize: "var(--fs-md)", color: "#7D776F" }}>這一年沒有紀錄</div>}
                     {[...segments].reverse().map((s) => (
                       <div key={s.k} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
-                        <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: "#777169" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "var(--fs-md)", color: "#777169" }}>
                           <span style={{ width: 8, height: 8, borderRadius: 8, background: MAIN_COLORS[s.k], flexShrink: 0 }} />
                           {s.k}
                         </span>
-                        <span className="mono" style={{ fontSize: 14, color: "#000" }}>{fmt(s.v)}</span>
+                        <span className="mono" style={{ fontSize: "var(--fs-md)", color: "#000" }}>{fmt(s.v)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
               {x.total > 0 && (
-                <div className="mono" style={{ fontSize: 12, color: "#777169", marginBottom: 4 }}>{Math.round(x.total / 1000)}k</div>
+                <div className="mono" style={{ fontSize: "var(--fs-xs)", color: "#777169", marginBottom: 4 }}>{Math.round(x.total / 1000)}k</div>
               )}
               <button
                 onClick={() => setOpenYear(isOpen ? null : x.y)}
@@ -101,7 +101,7 @@ export function TrendChart({ spending }) {
                   );
                 })}
               </button>
-              <div style={{ fontSize: 12, color: "#7D776F", marginTop: 6 }}>{x.y}</div>
+              <div style={{ fontSize: "var(--fs-xs)", color: "#7D776F", marginTop: 6 }}>{x.y}</div>
             </div>
           );
         })}

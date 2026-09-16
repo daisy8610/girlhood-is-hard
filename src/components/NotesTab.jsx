@@ -22,10 +22,10 @@ function NoteCard({ r, h, editingId, setEditingId }) {
     <div className="row-hover" style={{ border: "1px solid #EBE8E4", borderRadius: 14, overflow: "hidden", background: "#fff" }}>
       <div onClick={() => setOpen((o) => !o)} style={{ padding: "14px 16px", cursor: "pointer" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 6 }}>
-          <div style={{ fontSize: 16, fontWeight: 500 }}>{r.title}</div>
+          <div style={{ fontSize: "var(--fs-xl)", fontWeight: 500 }}>{r.title}</div>
           <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
             <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
-            <span style={{ fontSize: 13, color: "#7D776F" }}>{open ? "▲" : "▼"}</span>
+            <span style={{ fontSize: "var(--fs-sm)", color: "#7D776F" }}>{open ? "▲" : "▼"}</span>
           </div>
         </div>
         <div style={{ marginTop: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -36,7 +36,7 @@ function NoteCard({ r, h, editingId, setEditingId }) {
       </div>
       {open && (
         <div style={{ padding: "4px 16px 16px", borderTop: "1px solid #EBE8E4" }}>
-          {r.content ? renderMD(r.content) : <div style={{ fontSize: 14, color: "#7D776F" }}>（沒有內文）</div>}
+          {r.content ? renderMD(r.content) : <div style={{ fontSize: "var(--fs-md)", color: "#7D776F" }}>（沒有內文）</div>}
         </div>
       )}
     </div>

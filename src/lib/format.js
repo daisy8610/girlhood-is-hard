@@ -1,11 +1,12 @@
 export const fmt = (n) =>
   n == null ? "—" : (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString("zh-TW");
 
+// 莫蘭迪奶茶色。備選莫蘭迪粉霧色：醫美 #D4A5A5、頭髮 #9AAFC4、美容 #D9BD94、指甲 #A8BFA3
 export const MAIN_COLORS = {
-  "醫美": "#D9718A",
-  "頭髮": "#2A78D6",
-  "美容": "#D68A2E",
-  "指甲": "#1BAF7A",
+  "醫美": "#C99A9E",
+  "頭髮": "#8EA4BA",
+  "美容": "#CDAA7D",
+  "指甲": "#9DB59A",
 };
 
 export const MAIN_CATEGORIES = Object.keys(MAIN_COLORS);

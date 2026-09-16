@@ -61,7 +61,7 @@ function Pill({ active, onClick, children }) {
   );
 }
 
-function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onConvert, onCopy }) {
+function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy }) {
   if (editingId === r.id) {
     return (
       <RecordForm fields={QUOTE_FIELDS} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
@@ -88,14 +88,13 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onConvert
           {up != null && <div className="mono" style={{ fontSize: 11, color: "#A59F97", whiteSpace: "nowrap" }}>{fmt(Math.round(up))}/單位</div>}
         </div>
         <button className="iconbtn" title="複製這筆，帶入新增表單" onClick={() => onCopy(r)}>⧉</button>
-        <button className="iconbtn" title="轉為消費紀錄" onClick={() => onConvert(r)}>➜🧾</button>
         <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
       </div>
     </div>
   );
 }
 
-export function QuotesTab({ data, h, onConvert }) {
+export function QuotesTab({ data, h }) {
   const [view, setView] = useState("group");
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("全部");
@@ -167,7 +166,7 @@ export function QuotesTab({ data, h, onConvert }) {
       .sort((a, b) => b[2].localeCompare(a[2]));
   }, [filtered]);
 
-  const rowProps = { editingId, setEditingId, h, onConvert, onCopy: copyRow };
+  const rowProps = { editingId, setEditingId, h, onCopy: copyRow };
   const empty = <div style={{ color: "#A59F97", fontSize: 13, padding: 12 }}>找不到符合的紀錄</div>;
 
   return (

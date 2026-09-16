@@ -230,19 +230,6 @@ export default function App() {
     } catch (ex) { flash("儲存失敗：" + (ex.message || "")); }
   }
 
-  async function convertToExpense({ main = "", sub = "", item, place = "", amount, note = "" }) {
-    await spendH.add({
-      date: new Date().toISOString().slice(0, 10),
-      main, sub, item: item || "（未命名）", place, amount, note,
-    });
-  }
-
-  function convertQuoteToExpense(q) {
-    return convertToExpense({
-      main: "醫美", sub: q.category, item: q.product || q.category, place: q.clinic, amount: q.price, note: q.note,
-    });
-  }
-
   async function connectGoogleCalendar() {
     const { data } = await supa.auth.getSession();
     const token = data.session && data.session.access_token;
@@ -398,7 +385,7 @@ export default function App() {
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
           )}
           {tab === "spending" && <SpendingTab data={spending} h={spendH} onAdd={addExpenseItem} />}
-          {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} onConvert={convertQuoteToExpense} />}
+          {tab === "quotes" && <QuotesTab data={quotes} h={quoteH} />}
           {tab === "notes" && <NotesTab data={notes} h={noteH} />}
           {tab === "settings" && (
             <SettingsPage

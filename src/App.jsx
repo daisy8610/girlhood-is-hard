@@ -16,7 +16,7 @@ import { SettingsPage } from "./components/SettingsPage";
 const DEFAULT_SETTINGS = { cap: 50000 };
 
 const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
   :root {
     /* 字級：全站統一從這裡調整 */
     --fs-xs: 12px;  /* 日期、備註、小標籤 */

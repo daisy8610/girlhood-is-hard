@@ -19,24 +19,24 @@ function NoteCard({ r, h, editingId, setEditingId }) {
     );
   }
   return (
-    <div className="row-hover" style={{ border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", overflow: "hidden", background: "#fff" }}>
-      <div onClick={() => setOpen((o) => !o)} style={{ padding: "14px 16px", cursor: "pointer" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 6 }}>
-          <div style={{ fontSize: "var(--fs-xl)", fontWeight: 500 }}>{r.title}</div>
-          <div style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
+    <div className="row-hover note-card">
+      <div onClick={() => setOpen((o) => !o)} className="note-card__head">
+        <div className="note-card__top">
+          <div className="note-card__title">{r.title}</div>
+          <div className="note-card__actions">
             <RowActions onEdit={() => setEditingId(r.id)} onDelete={() => h.del(r.id)} />
-            <span style={{ fontSize: "var(--fs-sm)", color: "var(--ed-ash)" }}>{open ? "▲" : "▼"}</span>
+            <span className="note-card__toggle">{open ? "▲" : "▼"}</span>
           </div>
         </div>
-        <div style={{ marginTop: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <div className="note-card__tags">
           <Tag>{r.category}</Tag>
           <Tag>{r.status}</Tag>
           {(r.tags || []).map((t) => <Tag key={t}>{t}</Tag>)}
         </div>
       </div>
       {open && (
-        <div style={{ padding: "4px 16px 16px", borderTop: "1px solid var(--ed-stone)" }}>
-          {r.content ? renderMD(r.content) : <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-ash)" }}>（沒有內文）</div>}
+        <div className="note-card__body">
+          {r.content ? renderMD(r.content) : <div className="note-card__empty">（沒有內文）</div>}
         </div>
       )}
     </div>
@@ -55,7 +55,7 @@ export function NotesTab({ data, h }) {
         <RecordForm fields={NOTE_FIELDS} submitLabel="新增" onCancel={() => setAdding(false)}
           onSubmit={(r) => { h.add(r); setAdding(false); }} />
       )}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="notes">
         {data.map((r) => <NoteCard key={r.id} r={r} h={h} editingId={editingId} setEditingId={setEditingId} />)}
       </div>
     </div>

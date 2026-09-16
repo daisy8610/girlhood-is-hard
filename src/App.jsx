@@ -237,7 +237,7 @@ export default function App() {
   if (!supa) {
     return (
       <>
-        <div className="ed-sans" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-ink)", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
+        <div className="ed-sans fullscreen-msg fullscreen-msg--setup">
           還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
         </div>
       </>
@@ -246,7 +246,7 @@ export default function App() {
   if (session === undefined) {
     return (
       <>
-        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>存摺開啟中…</div>
+        <div className="serif fullscreen-msg">存摺開啟中…</div>
       </>
     );
   }
@@ -254,7 +254,7 @@ export default function App() {
   if (!ready) {
     return (
       <>
-        <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>資料同步中…</div>
+        <div className="serif fullscreen-msg">資料同步中…</div>
       </>
     );
   }
@@ -277,65 +277,50 @@ export default function App() {
     : tab === "notes" ? "筆記區" : "設定";
 
   return (
-    <div className="ed-sans" style={{ minHeight: "100vh", background: "var(--ed-bg)", color: "var(--ed-ink)" }}>
+    <div className="ed-sans app">
 
-      <div className="app-shell" style={{ paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))" }}>
-        <nav className="app-sidebar" style={{
-          flexDirection: "column", width: 220, flexShrink: 0, padding: "32px 16px",
-          borderRight: "1px solid var(--ed-stone)", position: "sticky", top: 0, height: "100vh", gap: 4,
-        }}>
-          <div style={{ marginBottom: 28, paddingLeft: 4 }}>
-            <div style={{ fontSize: "var(--fs-xs)", letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
-            <div className="serif" style={{ fontSize: "var(--fs-3xl)", fontWeight: 700 }}>當女生好難</div>
+      <div className="app-shell">
+        <nav className="app-sidebar">
+          <div className="app-sidebar__brand">
+            <div className="brand-kicker">PASSBOOK</div>
+            <div className="serif app-sidebar__title">當女生好難</div>
           </div>
           {NAV.map((n) => (
-            <button
-              key={n.key} onClick={() => goTab(n.key)}
-              style={{
-                display: "flex", alignItems: "center", gap: 10, textAlign: "left",
-                border: "none", background: tab === n.key ? "var(--ed-surface)" : "transparent",
-                borderRadius: 9999, padding: "9px 14px", fontSize: "var(--fs-lg)",
-                fontWeight: tab === n.key ? 600 : 400, color: "var(--ed-ink)",
-              }}
-            >
-              <span style={{ fontSize: "var(--fs-2xl)" }}>{n.icon}</span>
+            <button key={n.key} onClick={() => goTab(n.key)} className={"side-nav-btn" + (tab === n.key ? " is-active" : "")}>
+              <span className="side-nav-btn__icon">{n.icon}</span>
               {n.label}
             </button>
           ))}
         </nav>
 
         <div className="app-main-col">
-          <div style={{
-            background: "var(--ed-bg)", color: "var(--ed-ink)", borderBottom: "1px solid var(--ed-stone)",
-            padding: "calc(14px + env(safe-area-inset-top, 0px)) 18px 12px", position: "sticky", top: 0, zIndex: 20,
-            display: "flex", justifyContent: "space-between", alignItems: "baseline",
-          }}>
+          <div className="app-header">
             <div className="hide-md-up">
-              <span className="serif" style={{ fontSize: "var(--fs-2xl)", fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
-              <span style={{ fontSize: "var(--fs-xs)", letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
+              <span className="serif app-header__title">當女生好難</span>
+              <span className="app-header__kicker">PASSBOOK</span>
             </div>
-            <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>{pageTitle}</div>
+            <div className="app-header__page">{pageTitle}</div>
           </div>
 
-        <div className="content-col" style={{ padding: "16px 14px 24px" }}>
+        <div className="content-col">
           {loadErr && (
-            <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: "var(--r-md)", background: "var(--ed-surface)", color: "var(--ed-ink)", fontSize: "var(--fs-md)", lineHeight: 1.7 }}>
+            <div className="notice">
               ⚠️ {loadErr}
-              <button onClick={loadData} style={{ marginLeft: 8, border: "none", background: "none", color: "var(--ed-ink)", textDecoration: "underline", fontSize: "var(--fs-md)" }}>重試</button>
+              <button onClick={loadData} className="link-btn notice__retry">重試</button>
               {/vouchers|annual_budget_cap|category|tags/.test(loadErr) && (
-                <div style={{ marginTop: 6, fontSize: "var(--fs-sm)" }}>看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
+                <div className="notice__hint">看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
               )}
             </div>
           )}
           {missingKinds.length > 0 && !seeding && (
-            <div style={{ marginBottom: 14, padding: "14px 16px", borderRadius: "var(--r-lg)", background: "#fff", border: "1px solid var(--ed-stone)", fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>
+            <div className="notice-card">
               目前雲端還缺這些資料：<strong>{missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
-              <div style={{ marginTop: 8, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>
+              <div className="notice-card__sub">
                 請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
               </div>
             </div>
           )}
-          {seeding && <div style={{ marginBottom: 14, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>資料寫入中，請稍等…</div>}
+          {seeding && <div className="seeding-msg">資料寫入中，請稍等…</div>}
 
           {tab === "overview" && (
             <Overview totals={totals} cap={settings.cap} spending={spending} vouchers={vouchers} voucherH={voucherH} />
@@ -354,33 +339,17 @@ export default function App() {
         </div>
         </div>
 
-        <div className="app-bottom-nav" style={{
-          position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
-          width: "100%", maxWidth: 560, zIndex: 30,
-          background: "#fff", borderTop: "1px solid var(--ed-stone)",
-          padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
-        }}>
+        <div className="app-bottom-nav">
           {NAV.map((n) => (
-            <button
-              key={n.key} onClick={() => goTab(n.key)}
-              style={{
-                flex: 1, border: "none", background: "transparent", padding: "6px 0 2px",
-                display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-                color: tab === n.key ? "var(--ed-ink)" : "var(--ed-ash)",
-              }}
-            >
-              <span style={{ fontSize: "var(--fs-3xl)", filter: tab === n.key ? "none" : "grayscale(1) opacity(0.6)" }}>{n.icon}</span>
-              <span style={{ fontSize: "var(--fs-xs)", fontWeight: tab === n.key ? 600 : 400 }}>{n.label}</span>
+            <button key={n.key} onClick={() => goTab(n.key)} className={"bottom-nav-btn" + (tab === n.key ? " is-active" : "")}>
+              <span className="bottom-nav-btn__icon">{n.icon}</span>
+              <span className="bottom-nav-btn__label">{n.label}</span>
             </button>
           ))}
         </div>
 
         {toast && (
-          <div style={{
-            position: "fixed", bottom: "calc(86px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
-            background: "var(--ed-ink)", color: "#fff", padding: "10px 20px", borderRadius: 9999, fontSize: "var(--fs-md)", maxWidth: "85%",
-            animation: "printIn .2s ease-out", zIndex: 50, textAlign: "center",
-          }}>
+          <div className="toast">
             {toast}
           </div>
         )}

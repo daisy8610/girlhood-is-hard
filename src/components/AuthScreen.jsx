@@ -28,63 +28,52 @@ export function AuthScreen() {
     }
   }
 
-  const inputStyle = {
-    display: "block", width: "100%", marginTop: 6, padding: "12px 14px", borderRadius: "var(--r-md)",
-    border: "1px solid var(--ed-stone)", fontSize: "var(--fs-xl)", boxSizing: "border-box", background: "#fff",
-  };
-
   return (
-    <div className="ed-sans" style={{ minHeight: "100vh", background: "var(--ed-bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div style={{ width: "100%", maxWidth: 380 }}>
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div style={{ fontSize: "var(--fs-xs)", letterSpacing: 3, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
-          <div className="serif" style={{ fontSize: "var(--fs-4xl)", fontWeight: 500, color: "var(--ed-ink)", marginTop: 4 }}>當女生好難</div>
-          <div style={{ fontSize: "var(--fs-md)", color: "var(--ed-smoke)", marginTop: 4, fontWeight: 400 }}>美容・醫美・花費 一本通</div>
+    <div className="ed-sans auth">
+      <div className="auth__box">
+        <div className="auth__brand">
+          <div className="brand-kicker auth__kicker">PASSBOOK</div>
+          <div className="serif auth__title">當女生好難</div>
+          <div className="auth__tagline">美容・醫美・花費 一本通</div>
         </div>
-        <form onSubmit={go} style={{ background: "#fff", border: "1px solid var(--ed-stone)", borderRadius: "var(--r-lg)", padding: 22 }}>
-          <label style={{ fontSize: "var(--fs-sm)", color: "var(--ed-smoke)" }}>
+        <form onSubmit={go} className="auth__form">
+          <label className="auth__label">
             Email
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="auth__input" autoComplete="email" />
           </label>
-          <label style={{ fontSize: "var(--fs-sm)", color: "var(--ed-smoke)", display: "block", marginTop: 14 }}>
+          <label className="auth__label auth__label--block">
             密碼（至少 6 碼）
             <input
-              type="password" required minLength={6} value={pw} onChange={(e) => setPw(e.target.value)} style={inputStyle}
+              type="password" required minLength={6} value={pw} onChange={(e) => setPw(e.target.value)} className="auth__input"
               autoComplete={mode === "login" ? "current-password" : "new-password"}
             />
           </label>
           {err && (
-            <div style={{ marginTop: 12, fontSize: "var(--fs-md)", color: "var(--ed-ink)", background: "var(--ed-surface)", borderRadius: "var(--r-md)", padding: "10px 12px" }}>
+            <div className="auth__msg">
               ⚠️ {err}
             </div>
           )}
           {info && (
-            <div style={{ marginTop: 12, fontSize: "var(--fs-md)", color: "var(--ed-ink)", background: "var(--ed-surface)", borderRadius: "var(--r-md)", padding: "10px 12px" }}>
+            <div className="auth__msg">
               {info}
             </div>
           )}
-          <button
-            type="submit" disabled={busy}
-            style={{
-              width: "100%", marginTop: 18, background: "var(--ed-ink)", color: "#fff", border: "none",
-              borderRadius: 9999, padding: "13px", fontSize: "var(--fs-xl)", fontWeight: 500, opacity: busy ? 0.5 : 1,
-            }}
-          >
+          <button type="submit" disabled={busy} className="auth__submit">
             {busy ? "請稍等…" : mode === "login" ? "登入" : "註冊"}
           </button>
         </form>
-        <div style={{ textAlign: "center", marginTop: 16, fontSize: "var(--fs-md)", color: "var(--ed-smoke)" }}>
+        <div className="auth__switch">
           {mode === "login" ? (
             <>
               第一次用？
-              <button onClick={() => { setMode("signup"); setErr(null); }} style={{ border: "none", background: "none", color: "var(--ed-ink)", fontWeight: 500, fontSize: "var(--fs-md)", textDecoration: "underline" }}>
+              <button onClick={() => { setMode("signup"); setErr(null); }} className="link-btn auth__switch-btn">
                 註冊帳號
               </button>
             </>
           ) : (
             <>
               已有帳號？
-              <button onClick={() => { setMode("login"); setErr(null); }} style={{ border: "none", background: "none", color: "var(--ed-ink)", fontWeight: 500, fontSize: "var(--fs-md)", textDecoration: "underline" }}>
+              <button onClick={() => { setMode("login"); setErr(null); }} className="link-btn auth__switch-btn">
                 回登入
               </button>
             </>

@@ -24,13 +24,13 @@ export function renderMD(md) {
     const line = lines[i];
     if (line.trim() === "") { i++; continue; }
     if (line.trim() === "---") {
-      blocks.push(<hr key={i} style={{ border: "none", borderTop: "1px solid var(--ed-stone)", margin: "16px 0" }} />);
+      blocks.push(<hr key={i} className="md-hr" />);
       i++; continue;
     }
     if (/^#{2,3}\s/.test(line)) {
       const level = line.match(/^#+/)[0].length;
       blocks.push(
-        <div key={i} className="serif" style={{ fontSize: level === 2 ? "var(--fs-2xl)" : "var(--fs-xl)", fontWeight: 500, color: "var(--ed-ink)", margin: "14px 0 8px" }}>
+        <div key={i} className={"serif md-h md-h--" + level}>
           {inlineMD(line.replace(/^#+\s/, ""))}
         </div>
       );
@@ -38,7 +38,7 @@ export function renderMD(md) {
     }
     if (line.trim().startsWith(">")) {
       blocks.push(
-        <div key={i} style={{ borderLeft: "3px solid var(--ed-stone)", paddingLeft: 10, color: "var(--ed-smoke)", fontSize: "var(--fs-md)", margin: "8px 0" }}>
+        <div key={i} className="md-quote">
           {inlineMD(line.replace(/^>\s?/, ""))}
         </div>
       );
@@ -53,12 +53,12 @@ export function renderMD(md) {
         i++;
       }
       blocks.push(
-        <div key={i + "-tbl"} style={{ overflowX: "auto", margin: "10px 0" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", fontSize: "var(--fs-md)" }}>
+        <div key={i + "-tbl"} className="md-table-wrap">
+          <table className="md-table">
             <thead>
               <tr>
                 {rows[0].map((c, ci) => (
-                  <th key={ci} style={{ textAlign: "left", padding: "6px 10px", background: "var(--ed-surface)", borderBottom: "1px solid var(--ed-stone)", whiteSpace: "nowrap" }}>
+                  <th key={ci}>
                     {inlineMD(c)}
                   </th>
                 ))}
@@ -68,7 +68,7 @@ export function renderMD(md) {
               {rows.slice(1).map((r, ri) => (
                 <tr key={ri}>
                   {r.map((c, ci) => (
-                    <td key={ci} style={{ padding: "6px 10px", borderBottom: "1px solid var(--ed-stone)", verticalAlign: "top" }}>
+                    <td key={ci}>
                       {inlineMD(c)}
                     </td>
                   ))}
@@ -87,8 +87,8 @@ export function renderMD(md) {
         i++;
       }
       blocks.push(
-        <ul key={i + "-ul"} style={{ margin: "6px 0", paddingLeft: 20 }}>
-          {items.map((it, ii) => <li key={ii} style={{ fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
+        <ul key={i + "-ul"} className="md-list">
+          {items.map((it, ii) => <li key={ii}>{inlineMD(it)}</li>)}
         </ul>
       );
       continue;
@@ -100,13 +100,13 @@ export function renderMD(md) {
         i++;
       }
       blocks.push(
-        <ol key={i + "-ol"} style={{ margin: "6px 0", paddingLeft: 20 }}>
-          {items.map((it, ii) => <li key={ii} style={{ fontSize: "var(--fs-lg)", lineHeight: 1.7 }}>{inlineMD(it)}</li>)}
+        <ol key={i + "-ol"} className="md-list">
+          {items.map((it, ii) => <li key={ii}>{inlineMD(it)}</li>)}
         </ol>
       );
       continue;
     }
-    blocks.push(<p key={i} style={{ fontSize: "var(--fs-lg)", lineHeight: 1.8, margin: "6px 0" }}>{inlineMD(line)}</p>);
+    blocks.push(<p key={i} className="md-p">{inlineMD(line)}</p>);
     i++;
   }
   return blocks;

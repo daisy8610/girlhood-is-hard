@@ -28,22 +28,25 @@ export function AuthScreen() {
     }
   }
 
-  const inputStyle = { display: "block", width: "100%", marginTop: 4, padding: "11px 12px", borderRadius: 8, border: "1px solid #F3DCDF", fontSize: 15, boxSizing: "border-box" };
+  const inputStyle = {
+    display: "block", width: "100%", marginTop: 6, padding: "12px 14px", borderRadius: 10,
+    border: "1px solid #EBE8E4", fontSize: 15, boxSizing: "border-box", background: "#fff",
+  };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FBF3EE", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Noto Sans TC', sans-serif", padding: 20 }}>
+    <div className="ed-sans" style={{ minHeight: "100vh", background: "#FDFCFC", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div style={{ width: "100%", maxWidth: 380 }}>
-        <div style={{ textAlign: "center", marginBottom: 24 }}>
-          <div style={{ fontSize: 11, letterSpacing: 3, color: "#C58A9A", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
-          <div style={{ fontSize: 28, fontWeight: 900, color: "#AD455E", fontFamily: "'Noto Serif TC',serif" }}>當女生好難</div>
-          <div style={{ fontSize: 13, color: "#A88690", marginTop: 4 }}>美容・醫美・花費 一本通</div>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, color: "#A59F97", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
+          <div className="serif" style={{ fontSize: 26, fontWeight: 500, color: "#000", marginTop: 4 }}>當女生好難</div>
+          <div style={{ fontSize: 13, color: "#777169", marginTop: 4, fontWeight: 300 }}>美容・醫美・花費 一本通</div>
         </div>
-        <form onSubmit={go} style={{ background: "#FFF9F6", border: "1px solid #F3DCDF", borderRadius: 14, padding: 20 }}>
-          <label style={{ fontSize: 12, color: "#7A5560" }}>
+        <form onSubmit={go} style={{ background: "#fff", border: "1px solid #EBE8E4", borderRadius: 16, padding: 22 }}>
+          <label style={{ fontSize: 12, color: "#777169" }}>
             Email
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} autoComplete="email" />
           </label>
-          <label style={{ fontSize: 12, color: "#7A5560", display: "block", marginTop: 12 }}>
+          <label style={{ fontSize: 12, color: "#777169", display: "block", marginTop: 14 }}>
             密碼（至少 6 碼）
             <input
               type="password" required minLength={6} value={pw} onChange={(e) => setPw(e.target.value)} style={inputStyle}
@@ -51,34 +54,37 @@ export function AuthScreen() {
             />
           </label>
           {err && (
-            <div style={{ marginTop: 12, fontSize: 13, color: "#AD455E", background: "#D9718A14", border: "1px solid #D9718A55", borderRadius: 8, padding: "8px 12px" }}>
+            <div style={{ marginTop: 12, fontSize: 13, color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "10px 12px" }}>
               ⚠️ {err}
             </div>
           )}
           {info && (
-            <div style={{ marginTop: 12, fontSize: 13, color: "#5a6e5f", background: "#6E8E7614", border: "1px solid #6E8E7655", borderRadius: 8, padding: "8px 12px" }}>
+            <div style={{ marginTop: 12, fontSize: 13, color: "#000", background: "#F5F3F1", borderRadius: 10, padding: "10px 12px" }}>
               {info}
             </div>
           )}
           <button
             type="submit" disabled={busy}
-            style={{ width: "100%", marginTop: 16, background: "#D9718A", color: "#fff", border: "none", borderRadius: 8, padding: "12px", fontSize: 15, fontWeight: 700, opacity: busy ? 0.6 : 1 }}
+            style={{
+              width: "100%", marginTop: 18, background: "#000", color: "#fff", border: "none",
+              borderRadius: 9999, padding: "13px", fontSize: 15, fontWeight: 500, opacity: busy ? 0.5 : 1,
+            }}
           >
             {busy ? "請稍等…" : mode === "login" ? "登入" : "註冊"}
           </button>
         </form>
-        <div style={{ textAlign: "center", marginTop: 14, fontSize: 13, color: "#7A5560" }}>
+        <div style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "#777169" }}>
           {mode === "login" ? (
             <>
               第一次用？
-              <button onClick={() => { setMode("signup"); setErr(null); }} style={{ border: "none", background: "none", color: "#AD455E", fontWeight: 600, fontSize: 13, textDecoration: "underline" }}>
+              <button onClick={() => { setMode("signup"); setErr(null); }} style={{ border: "none", background: "none", color: "#000", fontWeight: 500, fontSize: 13, textDecoration: "underline" }}>
                 註冊帳號
               </button>
             </>
           ) : (
             <>
               已有帳號？
-              <button onClick={() => { setMode("login"); setErr(null); }} style={{ border: "none", background: "none", color: "#AD455E", fontWeight: 600, fontSize: 13, textDecoration: "underline" }}>
+              <button onClick={() => { setMode("login"); setErr(null); }} style={{ border: "none", background: "none", color: "#000", fontWeight: 500, fontSize: 13, textDecoration: "underline" }}>
                 回登入
               </button>
             </>

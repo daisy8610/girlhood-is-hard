@@ -16,12 +16,17 @@ import { SettingsPage } from "./components/SettingsPage";
 const DEFAULT_SETTINGS = { cap: 50000 };
 
 const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root {
+    --ed-bg: #fdfcfc; --ed-surface: #f5f3f1; --ed-ink: #000000;
+    --ed-smoke: #777169; --ed-ash: #a59f97; --ed-stone: #ebe8e4;
+  }
   * { box-sizing: border-box; }
   ::-webkit-scrollbar { width:8px; height:8px; }
   ::-webkit-scrollbar-thumb { background:#E8CFD2; border-radius:8px; }
   .mono { font-family:'IBM Plex Mono', monospace; }
   .serif { font-family:'Noto Serif TC', serif; }
+  .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
   button { font-family: inherit; cursor:pointer; }
   input, select, textarea { font-family: inherit; }
   .row-hover:hover { background:#FFF9F6; }
@@ -35,6 +40,20 @@ const GLOBAL_STYLES = `
   input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:#FBE3E9; }
   @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
   @media (max-width: 640px) { .hide-sm { display: none; } }
+
+  /* ---- RWD 外殼：手機底部導覽 / 桌機側邊欄，正式版重繪時逐頁套用新視覺 ---- */
+  .app-shell { max-width: 560px; margin: 0 auto; min-height: 100vh; position: relative; }
+  .app-sidebar { display: none; }
+  .app-bottom-nav { display: flex; }
+  .hide-md-up { display: block; }
+  @media (min-width: 900px) {
+    .app-shell { max-width: 1120px; display: flex; align-items: flex-start; }
+    .app-sidebar { display: flex; }
+    .app-bottom-nav { display: none; }
+    .app-main-col { flex: 1; min-width: 0; }
+    .hide-md-up { display: none; }
+    .content-col { max-width: 760px; margin: 0 auto; padding: 32px 24px !important; }
+  }
 `;
 
 export default function App() {
@@ -311,31 +330,52 @@ export default function App() {
     try { window.scrollTo({ top: 0 }); } catch (e) {}
   }
 
+  const pageTitle = tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "quotes" ? "詢價比較"
+    : tab === "notes" ? "筆記區" : "設定";
+
   return (
-    <div style={{ minHeight: "100vh", background: "#F7E9E3", color: "#2B2420", fontFamily: "'Noto Sans TC', sans-serif" }}>
+    <div className="ed-sans" style={{ minHeight: "100vh", background: "var(--ed-bg)", color: "var(--ed-ink)" }}>
       <style>{GLOBAL_STYLES}</style>
 
-      <div style={{
-        maxWidth: 560, margin: "0 auto", minHeight: "100vh", background: "#FBF3EE",
-        boxShadow: "0 0 40px rgba(90,60,50,0.12)", position: "relative",
-        paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))",
-      }}>
-        <div style={{
-          background: "linear-gradient(135deg,#C25B72,#D9718A 70%)", color: "#FFF3F6",
-          padding: "calc(14px + env(safe-area-inset-top, 0px)) 18px 12px", position: "sticky", top: 0, zIndex: 20,
-          display: "flex", justifyContent: "space-between", alignItems: "baseline",
+      <div className="app-shell" style={{ paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))" }}>
+        <nav className="app-sidebar" style={{
+          flexDirection: "column", width: 220, flexShrink: 0, padding: "32px 16px",
+          borderRight: "1px solid var(--ed-stone)", position: "sticky", top: 0, height: "100vh", gap: 4,
         }}>
-          <div>
-            <span className="serif" style={{ fontSize: 18, fontWeight: 900, letterSpacing: 1 }}>當女生好難</span>
-            <span style={{ fontSize: 10, letterSpacing: 2, opacity: 0.8, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
+          <div style={{ marginBottom: 28, paddingLeft: 4 }}>
+            <div style={{ fontSize: 10, letterSpacing: 2, color: "var(--ed-ash)", fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</div>
+            <div className="serif" style={{ fontSize: 20, fontWeight: 700 }}>當女生好難</div>
           </div>
-          <div style={{ fontSize: 12, opacity: 0.85 }}>
-            {tab === "overview" ? "總覽" : tab === "spending" ? "消費紀錄" : tab === "quotes" ? "詢價比較"
-              : tab === "notes" ? "筆記區" : "設定"}
-          </div>
-        </div>
+          {NAV.map((n) => (
+            <button
+              key={n.key} onClick={() => goTab(n.key)}
+              style={{
+                display: "flex", alignItems: "center", gap: 10, textAlign: "left",
+                border: "none", background: tab === n.key ? "var(--ed-surface)" : "transparent",
+                borderRadius: 9999, padding: "9px 14px", fontSize: 14,
+                fontWeight: tab === n.key ? 600 : 400, color: "var(--ed-ink)",
+              }}
+            >
+              <span style={{ fontSize: 16 }}>{n.icon}</span>
+              {n.label}
+            </button>
+          ))}
+        </nav>
 
-        <div style={{ padding: "16px 14px 24px" }}>
+        <div className="app-main-col">
+          <div style={{
+            background: "var(--ed-bg)", color: "var(--ed-ink)", borderBottom: "1px solid var(--ed-stone)",
+            padding: "calc(14px + env(safe-area-inset-top, 0px)) 18px 12px", position: "sticky", top: 0, zIndex: 20,
+            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+          }}>
+            <div className="hide-md-up">
+              <span className="serif" style={{ fontSize: 18, fontWeight: 700, letterSpacing: 1 }}>當女生好難</span>
+              <span style={{ fontSize: 10, letterSpacing: 2, opacity: 0.6, marginLeft: 8, fontFamily: "'IBM Plex Mono',monospace" }}>PASSBOOK</span>
+            </div>
+            <div style={{ fontSize: 13, color: "var(--ed-smoke)" }}>{pageTitle}</div>
+          </div>
+
+        <div className="content-col" style={{ padding: "16px 14px 24px" }}>
           {loadErr && (
             <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "#D9718A14", border: "1px solid #D9718A55", color: "#AD455E", fontSize: 13, lineHeight: 1.7 }}>
               ⚠️ {loadErr}
@@ -370,13 +410,14 @@ export default function App() {
             />
           )}
         </div>
+        </div>
 
-        <div style={{
+        <div className="app-bottom-nav" style={{
           position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
           width: "100%", maxWidth: 560, zIndex: 30,
           background: "#FFF9F6", borderTop: "1px solid #F3DCDF",
           boxShadow: "0 -4px 16px rgba(90,60,50,0.08)",
-          display: "flex", padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
+          padding: "6px 0 calc(8px + env(safe-area-inset-bottom, 0px))",
         }}>
           {NAV.map((n) => (
             <button

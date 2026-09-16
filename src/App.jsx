@@ -15,58 +15,6 @@ import { SettingsPage } from "./components/SettingsPage";
 
 const DEFAULT_SETTINGS = { cap: 50000 };
 
-const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-  :root {
-    /* 字級：全站統一從這裡調整 */
-    --fs-xs: 12px;  /* 日期、備註、小標籤 */
-    --fs-sm: 13px;  /* 按鈕、次要文字 */
-    --fs-md: 14px;  /* 一般內文、列表 */
-    --fs-lg: 15px;  /* 金額、重點文字 */
-    --fs-xl: 16px;  /* 輸入框、小標題 */
-    --fs-2xl: 18px; /* 區塊標題 */
-    --fs-3xl: 21px; /* 頁面標題、導覽圖示 */
-    --fs-4xl: 26px; /* 大數字、登入頁標題 */
-    /* 圓角 */
-    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
-    /* 主題色：全站統一從這裡調整 */
-    --ed-bg: #fdfcfc; --ed-surface: #f5f3f1; --ed-ink: #000000;
-    --ed-smoke: #777169; --ed-ash: #7d776f; --ed-stone: #ebe8e4;
-  }
-  * { box-sizing: border-box; }
-  ::-webkit-scrollbar { width:8px; height:8px; }
-  ::-webkit-scrollbar-thumb { background:var(--ed-stone); border-radius:8px; }
-  .mono { font-family:'IBM Plex Mono', monospace; }
-  .serif { font-family:'Noto Serif TC', serif; }
-  .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
-  button { font-family: inherit; cursor:pointer; }
-  input, select, textarea { font-family: inherit; }
-  .row-hover:hover { background:var(--ed-surface); }
-  .iconbtn { border:none; background:transparent; color:var(--ed-ash); font-size:var(--fs-md); padding:4px 6px; border-radius:6px; }
-  .iconbtn:hover { background:var(--ed-surface); color:var(--ed-ink); }
-  input[type="date"], input[type="time"] { color-scheme: light; }
-  input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
-    cursor: pointer; border-radius: 6px; padding: 3px; margin-left: 4px;
-  }
-  input[type="date"]::-webkit-calendar-picker-indicator:hover, input[type="time"]::-webkit-calendar-picker-indicator:hover { background:var(--ed-surface); }
-  @keyframes printIn { from { opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
-  @media (max-width: 640px) { .hide-sm { display: none; } }
-
-  /* ---- RWD 外殼：手機底部導覽 / 桌機側邊欄，正式版重繪時逐頁套用新視覺 ---- */
-  .app-shell { max-width: 560px; margin: 0 auto; min-height: 100vh; position: relative; }
-  .app-sidebar { display: none; }
-  .app-bottom-nav { display: flex; }
-  .hide-md-up { display: block; }
-  @media (min-width: 900px) {
-    .app-shell { max-width: 1120px; display: flex; align-items: flex-start; }
-    .app-sidebar { display: flex; }
-    .app-bottom-nav { display: none; }
-    .app-main-col { flex: 1; min-width: 0; }
-    .hide-md-up { display: none; }
-    .content-col { max-width: 760px; margin: 0 auto; padding: 32px 24px !important; }
-  }
-`;
-
 export default function App() {
   const [session, setSession] = useState(undefined);
   const [tab, setTab] = useState("overview");
@@ -289,7 +237,6 @@ export default function App() {
   if (!supa) {
     return (
       <>
-        <style>{GLOBAL_STYLES}</style>
         <div className="ed-sans" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-ink)", padding: 24, textAlign: "center", lineHeight: 1.8 }}>
           還沒設定 Supabase 連線。<br />請打開網站資料夾裡的 config.js，填入你的 Project URL 和 anon key。
         </div>
@@ -299,16 +246,14 @@ export default function App() {
   if (session === undefined) {
     return (
       <>
-        <style>{GLOBAL_STYLES}</style>
         <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>存摺開啟中…</div>
       </>
     );
   }
-  if (session === null) return (<><style>{GLOBAL_STYLES}</style><AuthScreen /></>);
+  if (session === null) return <AuthScreen />;
   if (!ready) {
     return (
       <>
-        <style>{GLOBAL_STYLES}</style>
         <div className="serif" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ed-bg)", color: "var(--ed-smoke)" }}>資料同步中…</div>
       </>
     );
@@ -333,7 +278,6 @@ export default function App() {
 
   return (
     <div className="ed-sans" style={{ minHeight: "100vh", background: "var(--ed-bg)", color: "var(--ed-ink)" }}>
-      <style>{GLOBAL_STYLES}</style>
 
       <div className="app-shell" style={{ paddingBottom: "calc(76px + env(safe-area-inset-bottom, 0px))" }}>
         <nav className="app-sidebar" style={{

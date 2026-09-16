@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-16（第十三次）
+樣式改用獨立 CSS 檔，第 1 批：
+
+- 新增 `src/styles.css`，把原本寫在 `App.jsx` 裡的全站 CSS 字串搬過去，build 時會另外產生 `app.css`，`index.html` 載入它
+- Google Fonts 改在 `index.html` 用 `<link>` 載入
+- 修正粉色時期的遺留：手機狀態列顏色 `theme-color` 從粉紅 `#B5445B` 改成 `#FDFCFC`，頁面底色從 `#EAE0D6` 改成 `#FDFCFC`
+- README 補上 `app.css`、`styles.css` 說明
+
 ## 2026-09-16（第十二次）
 - 字型載入拿掉已經沒用到的細體（300），Noto Sans TC 和 Inter 少下載一個字重
 

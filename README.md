@@ -26,6 +26,7 @@
 ```
 ├── index.html          網頁入口
 ├── app.js              打包後的執行檔（GitHub Pages 實際載入這個）
+├── app.css             打包後的樣式檔（由 src/styles.css 產生）
 ├── config.js            Supabase 連線設定（url + anon key）
 ├── manifest.json        PWA 設定，讓手機能「加到主畫面」
 ├── icon-*.png            App 圖示
@@ -38,6 +39,7 @@
 │       └── google-calendar-sync/    實際呼叫 Calendar API 新增事件
 └── src/                  原始碼
     ├── main.jsx          進入點
+    ├── styles.css        全站樣式（字級、圓角、主題色變數在最上面）
     ├── App.jsx           主要畫面邏輯、導覽列、狀態管理
     ├── lib/
     │   ├── supabaseClient.js   Supabase client 初始化
@@ -88,10 +90,10 @@
 
 ```bash
 npm install       # 安裝依賴
-npm run build     # 打包成 app.js
+npm run build     # 打包成 app.js 和 app.css
 ```
 
-改完程式碼、`npm run build` 之後，把新的 `app.js` 連同改過的 `src/` 一起
+改完程式碼、`npm run build` 之後，把新的 `app.js`、`app.css` 連同改過的 `src/` 一起
 commit、push 上去即可，GitHub Pages 會自動重新部署，網址不會變。
 
 如果改到 `supabase/functions/` 底下的 Edge Function，前端的 push 不會自動部署它，

@@ -14,7 +14,7 @@ const QUOTE_FIELDS = [
   { key: "note", label: "備註", type: "text" },
 ];
 
-const STALE_DAYS = 182; // 超過約 6 個月的報價淡化顯示
+const STALE_DAYS = 182; // 超過約 6 個月的報價標「舊報價」
 
 // 有填單位數量才算得出單位價
 function unitPrice(r) {
@@ -47,6 +47,12 @@ function BestTag() {
   );
 }
 
+function StaleTag() {
+  return (
+    <span style={{ fontSize: 10.5, padding: "0 7px", borderRadius: 9999, border: "1px solid #D6D1CB", color: "#777169", marginLeft: 6, whiteSpace: "nowrap" }}>舊報價</span>
+  );
+}
+
 function Pill({ active, onClick, children }) {
   return (
     <button
@@ -74,10 +80,10 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onConvert
   return (
     <div className="row-hover" style={{
       display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "9px 4px", borderBottom: "1px solid #EBE8E4", gap: 6, opacity: stale ? 0.45 : 1,
+      padding: "9px 4px", borderBottom: "1px solid #EBE8E4", gap: 6,
     }}>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 13.5 }}>{title}{extra && <span style={{ color: "#A59F97", fontSize: 12 }}> · {extra}</span>}{best && <BestTag />}</div>
+        <div style={{ fontSize: 13.5 }}>{title}{extra && <span style={{ color: "#A59F97", fontSize: 12 }}> · {extra}</span>}{best && <BestTag />}{stale && <StaleTag />}</div>
         <div style={{ fontSize: 11, color: "#A59F97", overflowWrap: "anywhere" }}>
           {r.date || "—"}{days != null ? `（${agoLabel(days)}）` : ""}{r.qty ? ` · ${r.qty} 單位` : ""}{r.note ? ` · ${r.note}` : ""}
         </div>
@@ -172,7 +178,7 @@ export function QuotesTab({ data, h, onConvert }) {
 
   return (
     <div>
-      <SectionTitle sub="有填單位數量會自動算單位價，同一產品近半年最便宜的標「最划算」；超過半年的報價會變淡">詢價比較</SectionTitle>
+      <SectionTitle sub="有填單位數量會自動算單位價，同一產品近半年最便宜的標「最划算」；超過半年的報價標「舊報價」">詢價比較</SectionTitle>
       {!adding && <AddButton onClick={() => { setCopyDraft(null); setAdding(true); }} label="新增詢價紀錄" />}
       {adding && (
         <RecordForm fields={QUOTE_FIELDS} initial={copyDraft} submitLabel="新增" onCancel={() => { setAdding(false); setCopyDraft(null); }}

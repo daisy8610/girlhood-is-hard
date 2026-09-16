@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { supa } from "./supabaseClient";
 import { download, toCSV } from "./format";
 import {
@@ -21,12 +21,21 @@ export function useAppData({ session, flash }) {
   const [missingKinds, setMissingKinds] = useState([]);
   const [seeding, setSeeding] = useState(false);
 
+  // 四種資料的最新版本。畫面的 state 要等重新渲染才更新，
+  // 修改時要從這裡取最新內容，才不會拿到舊資料或 undefined
+  const latest = useRef({ spending: [], quotes: [], notes: [], vouchers: [] });
+  const setters = { spending: setSpending, quotes: setQuotes, notes: setNotes, vouchers: setVouchers };
+  function setList(kind, next) {
+    latest.current[kind] = next;
+    setters[kind](next);
+  }
+
   async function loadData() {
     setReady(false); setLoadErr(null);
     try {
       const d = await fetchAll();
-      setSpending(d.spending); setQuotes(d.quotes);
-      setNotes(d.notes); setVouchers(d.vouchers);
+      setList("spending", d.spending); setList("quotes", d.quotes);
+      setList("notes", d.notes); setList("vouchers", d.vouchers);
       setSettings({ cap: d.cap });
       setProviderCount(getProviderCount());
 
@@ -45,22 +54,22 @@ export function useAppData({ session, flash }) {
 
   useEffect(() => { if (session) loadData(); }, [session]);
 
-  const mk = (kind, setter) => ({
+  const mk = (kind) => ({
     add: async (r) => {
       try {
         const saved = await insertOne(kind, r);
-        setter((prev) => [saved, ...prev]);
+        setList(kind, [saved, ...latest.current[kind]]);
         setProviderCount(getProviderCount());
         flash("已新增");
       } catch (ex) { flash("新增失敗：" + (ex.message || "")); }
     },
     update: async (id, patch) => {
-      let merged;
-      setter((prev) => prev.map((r) => {
-        if (r.id !== id) return r;
-        merged = { ...r, ...patch };
-        return merged;
-      }));
+      // 先算好要存的內容再更新畫面；原本在 setState 的更新函式裡順便算，
+      // React 延後執行時 merged 會是 undefined，資料庫就沒有真的存到
+      const current = latest.current[kind].find((r) => r.id === id);
+      if (!current) return;
+      const merged = { ...current, ...patch };
+      setList(kind, latest.current[kind].map((r) => (r.id === id ? merged : r)));
       try {
         await updateOne(kind, id, merged);
         setProviderCount(getProviderCount());
@@ -68,16 +77,16 @@ export function useAppData({ session, flash }) {
       } catch (ex) { flash("更新失敗：" + (ex.message || "")); loadData(); }
     },
     del: async (id) => {
-      setter((prev) => prev.filter((r) => r.id !== id));
+      setList(kind, latest.current[kind].filter((r) => r.id !== id));
       try { await deleteOne(kind, id); flash("已刪除"); }
       catch (ex) { flash("刪除失敗：" + (ex.message || "")); loadData(); }
     },
   });
 
-  const spendH = mk("spending", setSpending);
-  const quoteH = mk("quotes", setQuotes);
-  const noteH = mk("notes", setNotes);
-  const voucherH = mk("vouchers", setVouchers);
+  const spendH = mk("spending");
+  const quoteH = mk("quotes");
+  const noteH = mk("notes");
+  const voucherH = mk("vouchers");
 
   const totals = useMemo(() => {
     const now = new Date();

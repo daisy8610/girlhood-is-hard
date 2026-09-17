@@ -68,16 +68,13 @@ export default function App() {
         <div className="notice">
           ⚠️ {d.loadErr}
           <button onClick={d.loadData} className="link-btn notice__retry">重試</button>
-          {/vouchers|annual_budget_cap|category|tags/.test(d.loadErr) && (
-            <div className="notice__hint">看起來 PATCH.sql 還沒跑完，請到 Supabase 的 SQL Editor 執行一次。</div>
-          )}
         </div>
       )}
       {d.missingKinds.length > 0 && !d.seeding && (
         <div className="notice-card">
           目前雲端還缺這些資料：<strong>{d.missingKinds.map((k) => BACKUP_LABELS[k]).join("、")}</strong>
           <div className="notice-card__sub">
-            請到 Supabase SQL Editor 執行一次性匯入腳本（不經過這個網頁），或到「設定」用 JSON 備份匯入。
+            如果有之前下載的備份，可以到「設定」用「匯入備份還原」放回來。
           </div>
         </div>
       )}

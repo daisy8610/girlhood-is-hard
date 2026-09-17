@@ -252,7 +252,6 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .notice { margin-bottom: 14px; padding: 10px 14px; border-radius: var(--r-md); background: var(--ed-surface); color: var(--ed-ink); font-size: var(--fs-md); line-height: 1.7; }
 .link-btn { border: none; background: none; color: var(--ed-ink); text-decoration: underline; font-size: var(--fs-md); }
 .notice__retry { margin-left: 8px; }
-.notice__hint { margin-top: 6px; font-size: var(--fs-sm); }
 .notice-card { margin-bottom: 14px; padding: 14px 16px; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--ed-stone); font-size: var(--fs-lg); line-height: 1.7; }
 .notice-card__sub { margin-top: 8px; font-size: var(--fs-md); color: var(--ed-smoke); }
 .seeding-msg { margin-bottom: 14px; font-size: var(--fs-md); color: var(--ed-smoke); }

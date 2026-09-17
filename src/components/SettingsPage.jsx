@@ -138,7 +138,7 @@ export function SettingsPage({
         )}
       </SettingsCard>
 
-      <SettingsCard title="清空所有資料" sub="清空後雲端會是空的；要重新放資料請用上方匯入或執行 SEED_DATA.sql（清空前會自動下載備份）">
+      <SettingsCard title="清空所有資料" sub="清空後雲端會是空的；要把資料放回來，請用上方的「匯入備份還原」（清空前會自動下載備份）">
         {clearConfirm ? (
           <div className="settings__row settings__row--wrap">
             <span className="settings__status settings__status--strong">確定要清空嗎？</span>

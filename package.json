@@ -2,7 +2,7 @@
   "name": "girlhood-is-hard",
   "version": "1.0.0",
   "private": true,
-  "description": "當女生好難 · 美容存摺 — 個人美容/醫美消費與預算追蹤 App",
+  "description": "當女生好難 · 美容存摺 — 美容・醫美・花費 一本通",
   "scripts": {
     "build": "esbuild src/main.jsx --bundle --minify --loader:.jsx=jsx --define:process.env.NODE_ENV='\"production\"' --outfile=app.js",
     "dev": "esbuild src/main.jsx --bundle --loader:.jsx=jsx --outfile=app.js --servedir=. --watch"

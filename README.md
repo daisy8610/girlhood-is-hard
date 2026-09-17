@@ -12,9 +12,9 @@
 覺得 Notion 在手機上不夠直覺，所以做成獨立的網頁 App。
 
 ### 功能
-- 📔 **總覽**：分類支出統計、近 12 個月趨勢圖、年度預算使用進度（今年累積支出 ÷ 預算上限）、儲值金與剩餘堂數
-- 🧾 **消費紀錄**：搜尋、篩選、新增／編輯／刪除，可選填時間、勾選同步到 Google 日曆
-- 💉 **詢價比較**：同一產品跨診所比價，自動標示最低價
+- 📔 **總覽**：今年／歷年支出、年度預算使用進度（今年累積支出 ÷ 預算上限）、分類支出統計、年度支出比較圖（點柱子看明細）、子分類佔比排行、儲值金與剩餘堂數
+- 🧾 **消費紀錄**：搜尋、分類篩選、新增／編輯／複製／刪除，可選填時間、勾選同步到 Google 日曆
+- 💉 **詢價比較**：自動算單位價，同一產品近半年最便宜的標「最划算」；可依療程類別篩選，並切換「依產品／依診所／依日期列表」三種檢視；超過半年的報價會變淡
 - 🩺 **筆記區**：保養／健康相關的長文筆記，支援簡單 markdown（表格、清單、粗體）
 - ⚙️ **設定**：年度預算上限、備份／還原（JSON）、清空資料、Google 日曆連結
 - 📅 **Google 日曆同步**：新增消費紀錄時勾選「同步到 Google 日曆」，就會依填的日期/時間建一筆行程（有時間就是 1 小時定時行程，沒填就是全天事件），說明欄自動帶入備註、金額，並固定加上 `#漂亮` 標籤方便日後搜尋
@@ -24,13 +24,16 @@
 ## 專案結構
 
 ```
-├── index.html          網頁入口
+├── index.html          網頁入口（也在這裡載入 Google Fonts）
 ├── app.js              打包後的執行檔（GitHub Pages 實際載入這個）
 ├── app.css             打包後的樣式檔（由 src/styles.css 產生）
 ├── config.js            Supabase 連線設定（url + anon key）
 ├── manifest.json        PWA 設定，讓手機能「加到主畫面」
 ├── icon-*.png            App 圖示
 ├── package.json
+├── CHANGELOG.md         變更紀錄（每天一筆）
+├── .github/workflows/
+│   └── keep-alive.yml    每 4 小時查一次資料庫，避免 Supabase 免費方案自動暫停
 ├── supabase/
 │   ├── config.toml       Edge Function 設定（哪幾支不驗證 JWT）
 │   └── functions/
@@ -67,11 +70,19 @@
 
 ## 技術架構
 
-- **前端**：React 18，esbuild 打包成單一 `app.js`
+- **前端**：React 18，esbuild 打包成 `app.js` 和 `app.css`
 - **後端／資料庫**：[Supabase](https://supabase.com)（PostgreSQL + Auth + Edge Functions）
 - **部署**：GitHub Pages（純靜態網站，這個 repo 本身）
 - **Google 日曆整合**：Supabase Edge Functions 處理 OAuth 授權與 Calendar API 呼叫，
   Client ID/Secret 等敏感資訊存在 Supabase Function Secrets，不進 repo
+
+### 外觀
+
+- 樣式都在 `src/styles.css`，最上面的 `:root` 集中了字級（`--fs-*`）、圓角（`--r-*`）、主題色（`--ed-*`），想調整外觀先改這裡
+- 字體：英文與數字用 Inter（金額用等寬數字 `tabular-nums`，上下對齊），中文內文用思源黑體（Noto Sans TC），標題用昭源圓體（Chiron GoRound TC）
+- 分類識別色在 `src/lib/format.js` 的 `MAIN_COLORS`（醫美、頭髮、美容、指甲），會隨資料變動，所以不放在 CSS
+
+### 資料庫
 
 資料表：`expenses`（消費）、`quotes`（詢價）、
 `notes`（筆記）、`vouchers`（儲值金堂數）、`providers`（店家／診所）、`profiles`（個人設定）、
@@ -93,11 +104,14 @@
 
 ```bash
 npm install       # 安裝依賴
-npm run build     # 打包成 app.js 和 app.css
+npm run dev       # 本機預覽：開 http://localhost:8000，改程式碼會自動重新打包
+npm run build     # 打包成 app.js 和 app.css（正式上線用，會壓縮）
 ```
 
 改完程式碼、`npm run build` 之後，把新的 `app.js`、`app.css` 連同改過的 `src/` 一起
 commit、push 上去即可，GitHub Pages 會自動重新部署，網址不會變。
+沒有自動 build 的流程，**push 前一定要先跑 `npm run build`**，不然網站上還是舊的 `app.js`／`app.css`。
+每次改動記得同步更新 `CHANGELOG.md`。
 
 如果改到 `supabase/functions/` 底下的 Edge Function，前端的 push 不會自動部署它，
 要另外手動跑（哪支改了就跑哪支）：

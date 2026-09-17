@@ -154,7 +154,6 @@ export async function fetchAll() {
     notes: (nt.data || []).map(noteToApp),
     vouchers: (vo.data || []).map(voucherToApp),
     cap: pf.data && pf.data.annual_budget_cap != null ? Number(pf.data.annual_budget_cap) : 50000,
-    profileId: pf.data ? pf.data.id : null,
   };
 }
 

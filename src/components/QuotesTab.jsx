@@ -169,7 +169,7 @@ export function QuotesTab({ data, h }) {
       )}
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋診所、產品、備註…" />
       <div className="chip-row quotes__views">
-        {[["group", "分組比價"], ["clinic", "依診所"], ["list", "依日期列表"]].map(([k, label]) => (
+        {[["group", "依產品"], ["clinic", "依診所"], ["list", "依日期列表"]].map(([k, label]) => (
           <Chip key={k} active={view === k} onClick={() => setView(k)}>{label}</Chip>
         ))}
       </div>

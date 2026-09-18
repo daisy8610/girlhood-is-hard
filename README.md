@@ -79,7 +79,7 @@
 ### 外觀
 
 - 樣式都在 `src/styles.css`，最上面的 `:root` 集中了字級（`--fs-*`）、圓角（`--r-*`）、主題色（`--ed-*`），想調整外觀先改這裡
-- 字體：英文與數字用 Inter（金額用等寬數字 `tabular-nums`，上下對齊），中文內文用思源黑體（Noto Sans TC），標題用昭源圓體（Chiron GoRound TC）
+- 字體：英文與數字用 Inter（金額用等寬數字 `tabular-nums`，上下對齊），中文內文用思源黑體（Noto Sans TC），標題用昭源環方（Chiron GoRound TC）
 - 分類識別色在 `src/lib/format.js` 的 `MAIN_COLORS`（醫美、頭髮、美容、指甲），會隨資料變動，所以不放在 CSS
 
 ### 資料庫

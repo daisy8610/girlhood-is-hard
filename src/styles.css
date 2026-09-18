@@ -20,7 +20,7 @@
 ::-webkit-scrollbar-thumb { background:var(--ed-stone); border-radius:8px; }
 /* 金額、統計數字：用 Inter 的等寬數字，上下行的位數才會對齊 */
 .num { font-variant-numeric: tabular-nums; }
-/* 標題字體：昭源圓體 */
+/* 標題字體：昭源環方 */
 .title-font { font-family:'Chiron GoRound TC','Noto Sans TC',sans-serif; }
 .ed-sans { font-family:'Inter','Noto Sans TC',sans-serif; }
 button { font-family: inherit; cursor:pointer; }

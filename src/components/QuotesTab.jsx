@@ -77,7 +77,7 @@ function QuoteRow({ r, title, extra, best, editingId, setEditingId, h, onCopy })
   );
 }
 
-export function QuotesTab({ data, h }) {
+export function QuotesTab({ data, h, spending = [] }) {
   const [view, setView] = useState("group");
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("全部");
@@ -149,6 +149,19 @@ export function QuotesTab({ data, h }) {
       .sort((a, b) => b[2].localeCompare(a[2]));
   }, [filtered]);
 
+  // 消費紀錄的「地點」跟詢價的「診所名稱」完全相同才算同一間
+  const visits = useMemo(() => {
+    const map = {};
+    spending.forEach((r) => {
+      const place = String(r.place || "").trim();
+      if (!place) return;
+      const v = (map[place] = map[place] || { count: 0, total: 0 });
+      v.count += 1;
+      v.total += Number(r.amount) || 0;
+    });
+    return map;
+  }, [spending]);
+
   const rowProps = { editingId, setEditingId, h, onCopy: copyRow };
   const empty = <div className="list-empty">找不到符合的紀錄</div>;
 
@@ -205,6 +218,11 @@ export function QuotesTab({ data, h }) {
                   {list.length} 筆{latest ? ` · 最近詢價：${agoLabel(daysAgo(latest))}` : ""}
                 </div>
               </div>
+              {visits[clinic.trim()] && (
+                <div className="clinic-card__visits">
+                  消費過 {visits[clinic.trim()].count} 次・共 <span className="num">{fmt(visits[clinic.trim()].total)}</span>
+                </div>
+              )}
               {list.map((r) => (
                 <QuoteRow key={r.id} r={r} title={r.product || "未標示"} extra={r.category} best={bestIds.has(r.id)} {...rowProps} />
               ))}

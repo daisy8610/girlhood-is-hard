@@ -360,3 +360,4 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .month-head:first-child { padding-top: 4px; }
 .month-head__label { font-size: var(--fs-md); font-weight: 500; color: var(--ed-ink); }
 .month-head__sum { font-size: var(--fs-sm); color: var(--ed-smoke); white-space: nowrap; }
+.clinic-card__visits { font-size: var(--fs-sm); color: var(--ed-smoke); margin-bottom: 4px; }

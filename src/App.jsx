@@ -90,7 +90,7 @@ export default function App() {
         <Overview totals={d.totals} cap={d.settings.cap} spending={d.spending} vouchers={d.vouchers} voucherH={d.voucherH} />
       )}
       {tab === "spending" && <SpendingTab data={d.spending} h={d.spendH} onAdd={addExpenseItem} />}
-      {tab === "quotes" && <QuotesTab data={d.quotes} h={d.quoteH} />}
+      {tab === "quotes" && <QuotesTab data={d.quotes} h={d.quoteH} spending={d.spending} />}
       {tab === "notes" && <NotesTab data={d.notes} h={d.noteH} />}
       {tab === "settings" && (
         <SettingsPage

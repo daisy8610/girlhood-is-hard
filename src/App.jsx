@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supa } from "./lib/supabaseClient";
 import { BACKUP_LABELS } from "./lib/backup";
 import { useAppData } from "./lib/useAppData";
@@ -24,7 +24,13 @@ export default function App() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  function flash(msg) { setToast(msg); setTimeout(() => setToast(null), 2600); }
+  // 新訊息出現時取消上一則的計時，避免上一則到期時把新訊息一起關掉
+  const toastTimer = useRef(null);
+  function flash(msg) {
+    clearTimeout(toastTimer.current);
+    setToast(msg);
+    toastTimer.current = setTimeout(() => setToast(null), 2600);
+  }
 
   const d = useAppData({ session, flash });
   const cal = useGoogleCalendar({ session, flash });

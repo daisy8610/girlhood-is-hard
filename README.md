@@ -31,6 +31,8 @@
 ├── manifest.json        PWA 設定，讓手機能「加到主畫面」
 ├── icon-*.png            App 圖示
 ├── package.json
+├── scripts/
+│   └── stamp.js          build 後依檔案內容算版本號，寫進 index.html（app.js?v=…），推上線後瀏覽器會自動抓新檔
 ├── CHANGELOG.md         變更紀錄（每天一筆）
 ├── .github/workflows/
 │   └── keep-alive.yml    每 4 小時查一次資料庫，避免 Supabase 免費方案自動暫停
@@ -105,7 +107,7 @@
 ```bash
 npm install       # 安裝依賴
 npm run dev       # 本機預覽：開 http://localhost:8000，改程式碼會自動重新打包
-npm run build     # 打包成 app.js 和 app.css（正式上線用，會壓縮）
+npm run build     # 打包成 app.js 和 app.css（正式上線用，會壓縮），並在 index.html 寫入版本號
 ```
 
 改完程式碼、`npm run build` 之後，把新的 `app.js`、`app.css` 連同改過的 `src/` 一起

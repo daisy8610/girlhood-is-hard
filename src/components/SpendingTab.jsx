@@ -3,6 +3,24 @@ import { fmt, MAIN_COLORS, MAIN_CATEGORIES } from "../lib/format";
 import { useCategoryFilter } from "../lib/useCategoryFilter";
 import { SectionTitle, AddButton, RecordForm, RowActions, SearchBox, CategoryChips } from "./ui";
 
+// 依月份分組，新的月份在前；同月內依日期由新到舊；沒填日期的放最後一組
+function groupByMonth(rows) {
+  const groups = new Map();
+  [...rows]
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    .forEach((r) => {
+      const key = r.date ? r.date.slice(0, 7) : "";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(r);
+    });
+  return [...groups.entries()].map(([key, list]) => ({
+    key,
+    label: key ? `${key.slice(0, 4)} 年 ${Number(key.slice(5, 7))} 月` : "未填日期",
+    list,
+    total: list.reduce((sum, r) => sum + (Number(r.amount) || 0), 0),
+  }));
+}
+
 function uniqueValues(data, key) {
   return Array.from(new Set(data.map((r) => r[key]).filter(Boolean))).sort();
 }
@@ -44,7 +62,13 @@ export function SpendingTab({ data, h, onAdd }) {
       <SearchBox value={search} onChange={setSearch} placeholder="搜尋項目、地點、備註…" />
       <CategoryChips options={cats} value={filter} onChange={setFilter} />
       <div className="list">
-        {filtered.map((r) =>
+        {groupByMonth(filtered).map((g) => (
+          <React.Fragment key={g.key || "none"}>
+            <div className="month-head">
+              <span className="month-head__label">{g.label}</span>
+              <span className="month-head__sum">{g.list.length} 筆・<span className="num">{fmt(g.total)}</span></span>
+            </div>
+        {g.list.map((r) =>
           editingId === r.id ? (
             <RecordForm key={r.id} fields={fields} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
               onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
@@ -65,6 +89,8 @@ export function SpendingTab({ data, h, onAdd }) {
             </div>
           )
         )}
+          </React.Fragment>
+        ))}
         {filtered.length === 0 && <div className="list-empty">找不到符合的紀錄</div>}
       </div>
     </div>

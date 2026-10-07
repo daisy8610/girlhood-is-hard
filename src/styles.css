@@ -351,3 +351,12 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .md-list { margin: 6px 0; padding-left: 20px; }
 .md-list li { font-size: var(--fs-lg); line-height: 1.7; }
 .md-p { font-size: var(--fs-lg); line-height: 1.8; margin: 6px 0; }
+
+/* ---- 消費紀錄的月份分組（SpendingTab.jsx） ---- */
+.month-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: 18px 4px 6px; border-bottom: 1px solid var(--ed-ink);
+}
+.month-head:first-child { padding-top: 4px; }
+.month-head__label { font-size: var(--fs-md); font-weight: 500; color: var(--ed-ink); }
+.month-head__sum { font-size: var(--fs-sm); color: var(--ed-smoke); white-space: nowrap; }

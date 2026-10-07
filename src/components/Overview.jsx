@@ -1,6 +1,9 @@
 import React from "react";
 import { fmt, MAIN_COLORS } from "../lib/format";
 import { TrendChart } from "./TrendChart";
+import { MonthlyChart } from "./MonthlyChart";
+import { StoreRanking } from "./StoreRanking";
+import { AvgPerVisit } from "./AvgPerVisit";
 import { SubcategoryRanking } from "./SubcategoryRanking";
 import { VouchersPanel } from "./VouchersPanel";
 
@@ -52,6 +55,9 @@ export function Overview({ totals, cap, spending, vouchers, voucherH }) {
       </div>
 
       <TrendChart spending={spending} />
+      <MonthlyChart spending={spending} />
+      <StoreRanking spending={spending} />
+      <AvgPerVisit spending={spending} />
       <SubcategoryRanking spending={spending} />
       <VouchersPanel data={vouchers} h={voucherH} />
     </div>

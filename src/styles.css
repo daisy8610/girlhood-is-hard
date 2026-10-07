@@ -361,3 +361,24 @@ textarea.field { resize: vertical; line-height: 1.6; }
 .month-head__label { font-size: var(--fs-md); font-weight: 500; color: var(--ed-ink); }
 .month-head__sum { font-size: var(--fs-sm); color: var(--ed-smoke); white-space: nowrap; }
 .clinic-card__visits { font-size: var(--fs-sm); color: var(--ed-smoke); margin-bottom: 4px; }
+
+/* ---- 今年每月花費（MonthlyChart.jsx） ---- */
+.monthly__avg { font-size: var(--fs-xs); color: var(--ed-ash); }
+.monthly__bars { display: flex; align-items: flex-end; gap: 5px; padding-top: 26px; }
+.monthly__col { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.monthly__total { font-size: 10px; color: var(--ed-smoke); margin-bottom: 3px; white-space: nowrap; }
+/* 高度、顏色在元件裡依資料計算 */
+.monthly__stack { width: 100%; display: flex; flex-direction: column-reverse; gap: 2px; }
+.monthly__stack .bar-seg { max-width: 20px; }
+.monthly__empty { width: 100%; max-width: 20px; height: 2px; margin: 0 auto; background: var(--ed-stone); }
+.monthly__label { font-size: var(--fs-xs); color: var(--ed-ash); margin-top: 6px; }
+.monthly__label.is-current { color: var(--ed-ink); font-weight: 500; }
+
+/* ---- 平均每次花費（AvgPerVisit.jsx） ---- */
+.avg { margin-bottom: 26px; }
+.avg__title { margin-bottom: 8px; }
+.avg__grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(110px,1fr)); gap: 10px; }
+.avg__card { border: 1px solid var(--ed-stone); border-radius: var(--r-lg); padding: 12px 14px; background: #fff; }
+.avg__card.is-all { background: var(--ed-surface); }
+.avg__value { font-size: var(--fs-2xl); font-weight: 500; margin-top: 4px; }
+.avg__count { font-size: var(--fs-xs); color: var(--ed-ash); }

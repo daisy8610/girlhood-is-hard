@@ -40,6 +40,13 @@ export default function App() {
     if (r.syncCalendar) cal.syncToCalendar(r);
   }
 
+  // 勾選框跟時間只給日曆用、不存資料庫，不放進畫面上的紀錄，免得下次編輯時勾選框預設就是勾的
+  async function updateExpenseItem(id, patch) {
+    const { syncCalendar, time, ...rest } = patch;
+    await d.spendH.update(id, rest);
+    if (syncCalendar) cal.syncToCalendar(patch);
+  }
+
   async function logout() { await supa.auth.signOut(); }
 
   // ---------- 畫面 ----------
@@ -89,7 +96,7 @@ export default function App() {
       {tab === "overview" && (
         <Overview totals={d.totals} cap={d.settings.cap} spending={d.spending} vouchers={d.vouchers} voucherH={d.voucherH} />
       )}
-      {tab === "spending" && <SpendingTab data={d.spending} h={d.spendH} onAdd={addExpenseItem} />}
+      {tab === "spending" && <SpendingTab data={d.spending} h={d.spendH} onAdd={addExpenseItem} onUpdate={updateExpenseItem} />}
       {tab === "quotes" && <QuotesTab data={d.quotes} h={d.quoteH} spending={d.spending} />}
       {tab === "notes" && <NotesTab data={d.notes} h={d.noteH} />}
       {tab === "settings" && (

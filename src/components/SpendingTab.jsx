@@ -25,7 +25,7 @@ function uniqueValues(data, key) {
   return Array.from(new Set(data.map((r) => r[key]).filter(Boolean))).sort();
 }
 
-export function SpendingTab({ data, h, onAdd }) {
+export function SpendingTab({ data, h, onAdd, onUpdate }) {
   const { filter, setFilter, search, setSearch, cats, filtered } = useCategoryFilter(data, {
     searchKeys: ["item", "place", "note", "sub", "main"],
   });
@@ -71,7 +71,7 @@ export function SpendingTab({ data, h, onAdd }) {
         {g.list.map((r) =>
           editingId === r.id ? (
             <RecordForm key={r.id} fields={fields} initial={r} submitLabel="更新" onCancel={() => setEditingId(null)}
-              onSubmit={(patch) => { h.update(r.id, patch); setEditingId(null); }} />
+              onSubmit={(patch) => { onUpdate(r.id, patch); setEditingId(null); }} />
           ) : (
             <div key={r.id} className="row-hover list-row">
               <div className="list-row__main">

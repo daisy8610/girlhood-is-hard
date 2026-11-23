@@ -47,6 +47,7 @@ const expenseToApp = (r) => ({
   place: providerName(r.provider_id),
   amount: num(r.amount),
   note: r.notes || "",
+  calendarEventId: r.calendar_event_id || null,
 });
 const expenseToDb = (o, providerId) => ({
   spent_on: o.date || null,
@@ -56,6 +57,7 @@ const expenseToDb = (o, providerId) => ({
   provider_id: providerId,
   amount: num(o.amount),
   notes: o.note || null,
+  calendar_event_id: o.calendarEventId || null,
 });
 
 // ---- quotes <-> 詢價比較 ----

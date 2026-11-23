@@ -38,23 +38,31 @@ export function useGoogleCalendar({ session, flash }) {
     } catch (ex) { flash("解除失敗：" + (ex.message || "")); }
   }
 
+  // 回傳日曆行程 ID（成功時），讓呼叫端存回消費紀錄；下次同步帶著它就會改原本那筆，不會重複新增
   async function syncToCalendar(r) {
-    if (!googleLinked || !r.date) return;
+    if (!googleLinked || !r.date) return null;
     try {
       const { data, error } = await supa.functions.invoke("google-calendar-sync", {
-        body: { item: r.item, date: r.date, time: r.time, place: r.place, note: r.note, amount: r.amount },
+        body: {
+          item: r.item, date: r.date, time: r.time, place: r.place, note: r.note, amount: r.amount,
+          eventId: r.calendarEventId || null,
+        },
       });
-      if (error) { flash("同步日曆失敗：" + (error.message || "")); return; }
-      if (data && data.ok) { flash("已同步到 Google 日曆"); return; }
+      if (error) { flash("同步日曆失敗：" + (error.message || "")); return null; }
+      if (data && data.ok) {
+        flash(data.updated ? "已更新 Google 日曆行程" : "已同步到 Google 日曆");
+        return data.eventId || null;
+      }
       if (data && data.reason === "refresh_failed") {
         const { data: u } = await supa.auth.getUser();
         if (u.user) await supa.from("google_calendar_tokens").delete().eq("user_id", u.user.id);
         setGoogleLinked(false);
         flash("Google 日曆授權已過期，請重新連結");
-        return;
+        return null;
       }
       if (data) flash("同步日曆失敗：" + (data.reason || "未知原因"));
     } catch (ex) { flash("同步日曆失敗：" + (ex.message || "")); }
+    return null;
   }
 
   return { googleLinked, connectGoogleCalendar, disconnectGoogleCalendar, syncToCalendar };

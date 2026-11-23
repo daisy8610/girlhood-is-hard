@@ -1,5 +1,5 @@
 // 前端呼叫這支，帶著使用者的登入 JWT（supabase.functions.invoke 會自動帶）。
-// 用存好的 refresh_token 換一個新的 access_token，然後在使用者的主要日曆新增一筆全天事件。
+// 用存好的 refresh_token 換 access_token，在使用者的主要日曆新增行程；帶了 eventId 就改原本那筆。
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -55,16 +55,20 @@ Deno.serve(async (req) => {
 
   let body;
   try { body = await req.json(); } catch { body = {}; }
-  const { item, date, time, place, note, amount } = body;
+  const { item, date, time, place, note, amount, eventId } = body;
   if (!date) return json({ error: "missing_date" }, 400);
 
   const amountText = amount != null ? (amount < 0 ? "-$" : "$") + Math.abs(amount).toLocaleString("zh-TW") : null;
   const firstLine = [note, amountText].filter(Boolean).join(" ");
   const description = [firstLine, "#漂亮"].filter(Boolean).join("\n");
 
-  // 有填時間就開一個帶時區的 1 小時行程，沒填時間維持全天事件
+  // 有填時間就開一個帶時區的 1 小時行程，沒填時間維持全天事件。
+  // 沒用到的那組明確給 null：修改既有行程時（PATCH）才能從定時切成全天、或反過來
   const timeZone = "Asia/Taipei";
-  let timeFields = { start: { date }, end: { date } };
+  let timeFields = {
+    start: { date, dateTime: null, timeZone: null },
+    end: { date, dateTime: null, timeZone: null },
+  };
   if (time) {
     const [y, mo, d] = date.split("-").map(Number);
     const [h, mi] = time.split(":").map(Number);
@@ -73,24 +77,36 @@ Deno.serve(async (req) => {
     const pad = (n) => String(n).padStart(2, "0");
     const endStr = `${end.getUTCFullYear()}-${pad(end.getUTCMonth() + 1)}-${pad(end.getUTCDate())}T${pad(end.getUTCHours())}:${pad(end.getUTCMinutes())}:00`;
     timeFields = {
-      start: { dateTime: `${date}T${time}:00`, timeZone },
-      end: { dateTime: endStr, timeZone },
+      start: { dateTime: `${date}T${time}:00`, timeZone, date: null },
+      end: { dateTime: endStr, timeZone, date: null },
     };
   }
 
-  const eventRes = await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${refreshData.access_token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      summary: item || "（未命名計畫）",
-      location: place || undefined,
-      description,
-      ...timeFields,
-    }),
+  const eventBody = JSON.stringify({
+    summary: item || "（未命名計畫）",
+    location: place || "",
+    description,
+    ...timeFields,
   });
+  const headers = {
+    Authorization: `Bearer ${refreshData.access_token}`,
+    "Content-Type": "application/json",
+  };
+  const eventsUrl = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+
+  // 帶了行程 ID 就改原本那筆；那筆已在日曆上被刪掉（找不到或已取消）就改成新建
+  if (eventId) {
+    const patchRes = await fetch(`${eventsUrl}/${encodeURIComponent(eventId)}`, { method: "PATCH", headers, body: eventBody });
+    const patchData = await patchRes.json();
+    if (patchRes.ok && patchData.status !== "cancelled") {
+      return json({ ok: true, eventId: patchData.id, updated: true });
+    }
+    if (patchRes.ok === false && patchRes.status !== 404 && patchRes.status !== 410) {
+      return json({ ok: false, reason: "calendar_update_failed", detail: patchData });
+    }
+  }
+
+  const eventRes = await fetch(eventsUrl, { method: "POST", headers, body: eventBody });
   const eventData = await eventRes.json();
   if (!eventRes.ok) {
     return json({ ok: false, reason: "calendar_insert_failed", detail: eventData });

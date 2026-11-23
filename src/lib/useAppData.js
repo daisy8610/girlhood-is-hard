@@ -61,9 +61,11 @@ export function useAppData({ session, flash }) {
         setList(kind, [saved, ...latest.current[kind]]);
         setProviderCount(getProviderCount());
         flash("已新增");
+        return saved;
       } catch (ex) { flash("新增失敗：" + (ex.message || "")); }
     },
-    update: async (id, patch) => {
+    // silent：背景補存欄位（例如日曆行程 ID）時不跳「已更新」，免得蓋掉同步結果的提示
+    update: async (id, patch, { silent = false } = {}) => {
       // 先算好要存的內容再更新畫面；原本在 setState 的更新函式裡順便算，
       // React 延後執行時 merged 會是 undefined，資料庫就沒有真的存到
       const current = latest.current[kind].find((r) => r.id === id);
@@ -73,7 +75,7 @@ export function useAppData({ session, flash }) {
       try {
         await updateOne(kind, id, merged);
         setProviderCount(getProviderCount());
-        flash("已更新");
+        if (!silent) flash("已更新");
       } catch (ex) { flash("更新失敗：" + (ex.message || "")); loadData(); }
     },
     del: async (id) => {

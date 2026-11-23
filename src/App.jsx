@@ -35,16 +35,25 @@ export default function App() {
   const d = useAppData({ session, flash });
   const cal = useGoogleCalendar({ session, flash });
 
+  // 同步成功後把日曆行程 ID 存回紀錄，下次編輯再勾就是改同一筆行程
+  async function syncExpense(id, r) {
+    const eventId = await cal.syncToCalendar(r);
+    if (eventId && eventId !== r.calendarEventId) {
+      await d.spendH.update(id, { calendarEventId: eventId }, { silent: true });
+    }
+  }
+
   async function addExpenseItem(r) {
-    await d.spendH.add(r);
-    if (r.syncCalendar) cal.syncToCalendar(r);
+    const saved = await d.spendH.add(r);
+    if (saved && r.syncCalendar) syncExpense(saved.id, r);
   }
 
   // 勾選框跟時間只給日曆用、不存資料庫，不放進畫面上的紀錄，免得下次編輯時勾選框預設就是勾的
   async function updateExpenseItem(id, patch) {
     const { syncCalendar, time, ...rest } = patch;
+    const current = d.spending.find((x) => x.id === id);
     await d.spendH.update(id, rest);
-    if (syncCalendar) cal.syncToCalendar(patch);
+    if (syncCalendar) syncExpense(id, { ...patch, calendarEventId: current && current.calendarEventId });
   }
 
   async function logout() { await supa.auth.signOut(); }

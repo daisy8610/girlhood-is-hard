@@ -41,6 +41,7 @@ async function ensureProvider(name, kind) {
 const expenseToApp = (r) => ({
   id: r.id,
   date: r.spent_on,
+  time: r.spent_time || "",
   main: r.primary_category,
   sub: r.subcategory,
   item: r.title,
@@ -51,6 +52,7 @@ const expenseToApp = (r) => ({
 });
 const expenseToDb = (o, providerId) => ({
   spent_on: o.date || null,
+  spent_time: o.time || null,
   primary_category: o.main || null,
   subcategory: o.sub || null,
   title: o.item || "（未命名）",

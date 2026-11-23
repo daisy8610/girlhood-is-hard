@@ -48,9 +48,9 @@ export default function App() {
     if (saved && r.syncCalendar) syncExpense(saved.id, r);
   }
 
-  // 勾選框跟時間只給日曆用、不存資料庫，不放進畫面上的紀錄，免得下次編輯時勾選框預設就是勾的
+  // 勾選框不存資料庫，也不放進畫面上的紀錄，免得下次編輯時勾選框預設就是勾的
   async function updateExpenseItem(id, patch) {
-    const { syncCalendar, time, ...rest } = patch;
+    const { syncCalendar, ...rest } = patch;
     const current = d.spending.find((x) => x.id === id);
     await d.spendH.update(id, rest);
     if (syncCalendar) syncExpense(id, { ...patch, calendarEventId: current && current.calendarEventId });
